@@ -2,9 +2,190 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>测试网站</title>
+		<title>Q币余额实时显示</title>
+		<style>
+			table {
+				width: 904px;
+				margin: 100px auto;
+				white-space: 0;
+				border-spacing: 0;
+			}
+
+			td {
+				height: 100px;
+				font-size: 60px;
+				line-height: 100px;
+				text-align: center;
+				border: 2px green solid;
+				background-color: aliceblue;
+			}
+
+			td:first-child {
+				width: 600px;
+			}
+
+			td:last-child {
+				width: 300px;
+			}
+
+			.red {
+				color: red;
+			}
+
+			.blue {
+				color: blue;
+			}
+			
+			#tip {
+				width: 720px;
+				margin: 50px auto;
+			}
+
+			#clock {
+				width: 800px;
+				margin: 0 auto;
+			}
+			
+			#copyright {
+				width: 440px;
+				margin: 0 auto;
+			}
+			
+			#reload, #reload button {
+				border: 0;
+				color: blue;
+				width: 240px;
+				margin: 0 auto;
+				font-size: 50px;
+				text-decoration: none;
+				background-color: yellow;
+			}
+		</style>
 	</head>
-	<body>
-		测试网站
+	<body onload="gettime()">
+		<h1 id="tip">重新打开网页或点击下面按钮即可<span class="red">刷新</span>页面数据！</h1>
+		<div id="reload"><button onclick="location.reload()">刷新数据</button></div>
+		<table>
+			<tr>
+				<td>QQ</td>
+				<td>Q币余额</td>
+			</tr>
+			<tr>
+				<td class="red"><a onclick="javascript: alert('这位是帅哥的QQ！')">1930502098</a></td>
+				<td class="blue" id="q1930502098"></td>
+			</tr>
+			<tr>
+				<td class="red"><a onclick="javascript: alert('这位是帅哥的QQ小号！')">2016664317</a></td>
+				<td class="blue" id="q2016664317"></td>
+			</tr>
+			<tr>
+				<td class="red"><a onclick="javascript: alert('这位是帅哥的QQ小号！')">3332942285</a></td>
+				<td class="blue" id="q3332942285"></td>
+			</tr>
+			<tr>
+				<td class="red"><a onclick="javascript: alert('这位是？')">2295139854</a></td>
+				<td class="blue" id="q2295139854"></td>
+			</tr>
+			<tr>
+				<td class="red"><a onclick="javascript: alert('总共才这么点资产，太丢脸了！')">总计</a></td>
+				<td class="blue" id="total">0</td>
+			</tr>
+		</table>
+		<div id="clock"></div>
+		<h1 id="copyright"><span class="red">Mr. Gao</span> ©Copyright <span class="red">2023</span></h1>
+		<script>
+			function gettime() {
+				var time = new Date();
+				var year = time.getFullYear();
+				var month = time.getMonth() + 1;
+				var weeks = time.getDay();
+				var week = "";
+				switch (weeks) {
+					case 1:
+						week = "星期一";
+						break;
+					case 2:
+						week = "星期二";
+						break;
+					case 3:
+						week = "星期三";
+						break;
+					case 4:
+						week = "星期四";
+						break;
+					case 5:
+						week = "星期五";
+						break;
+					case 6:
+						week = "星期六";
+						break;
+					case 0:
+						week = "星期日";
+						break;
+				}
+				var day = time.getDate();
+				var apm = "上午";
+				var hours = time.getHours();
+				if (hours > 12) {
+					hours = hours - 12;
+					apm = "下午";
+				}
+				var minutes = time.getMinutes();
+				var seconds = time.getSeconds();
+				document.getElementById("clock").innerHTML = "<h1>当前日期时间：" + year + "年" + (month < 10 ? "0" : "") + month + "月" + (day < 10 ? "0" : "") + day + "日&nbsp;" + 
+				apm + (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds + "&nbsp;" + week + "</h1>";
+				var dy = setTimeout("gettime()", 1000);
+			}
+		</script>
+		<script>
+			const q1930502098 = function(data) {
+				if (!data.ret) {
+					document.getElementById('q1930502098').innerText = (data.qb_balance / 100).toFixed(2);
+					document.getElementById('total').innerText = (parseFloat(document.getElementById('total').innerText) +
+						data.qb_balance / 100).toFixed(2)
+				} else {
+					document.getElementById('q1930502098').innerText = "出错了，未获取到数据！";
+				}
+			};
+			const q2016664317 = function(data) {
+				if (!data.ret) {
+					document.getElementById('q2016664317').innerText = (data.qb_balance / 100).toFixed(2);
+					document.getElementById('total').innerText = (parseFloat(document.getElementById('total').innerText) +
+						data.qb_balance / 100).toFixed(2)
+				} else {
+					document.getElementById('q2016664317').innerText = "出错了，未获取到数据！";
+				}
+			};
+			const q3332942285 = function(data) {
+				if (!data.ret) {
+					document.getElementById('q3332942285').innerText = (data.qb_balance / 100).toFixed(2);
+					document.getElementById('total').innerText = (parseFloat(document.getElementById('total').innerText) +
+						data.qb_balance / 100).toFixed(2)
+				} else {
+					document.getElementById('q3332942285').innerText = "出错了，未获取到数据！";
+				}
+			};
+			const q2295139854 = function(data) {
+				if (!data.ret) {
+					document.getElementById('q2295139854').innerText = (data.qb_balance / 100).toFixed(2);
+					document.getElementById('total').innerText = (parseFloat(document.getElementById('total').innerText) +
+						data.qb_balance / 100).toFixed(2)
+				} else {
+					document.getElementById('q2295139854').innerText = "出错了，未获取到数据！";
+				}
+			};
+		</script>
+		<script
+			src="https://api.unipay.qq.com/v1/r/1450000186/wechat_query?cmd=4&pf=vip_m-pay_html5-html5&pfkey=pfkey&from_h5=1&from_https=1&format=jsonp_q1930502098&openid=3558405252BC1A7F00CABCC50925D7E1&openkey=9F12626C332203D70987D95B77FE45B9&session_id=openid&session_type=kp_accesstoken&qq_appid=101477677">
+		</script>
+		<script
+			src="https://api.unipay.qq.com/v1/r/1450000186/wechat_query?cmd=4&pf=vip_m-pay_html5-html5&pfkey=pfkey&from_h5=1&from_https=1&format=jsonp_q2016664317&openid=FEDB0A5E6FED6C85EC04DB7456D18700&openkey=86DD6B05EE4BD3BA494EAE355ECA386C&session_id=openid&session_type=kp_accesstoken&qq_appid=101477677">
+		</script>
+		<script
+			src="https://api.unipay.qq.com/v1/r/1450000186/wechat_query?cmd=4&pf=vip_m-pay_html5-html5&pfkey=pfkey&from_h5=1&from_https=1&format=jsonp_q3332942285&openid=A0BDD0140654C8F375A47187D4A73EE0&openkey=AAD2554F16917A3D37ADA1C8F2F24AA8&session_id=openid&session_type=kp_accesstoken&qq_appid=101477677">
+		</script>
+		<script
+			src="https://api.unipay.qq.com/v1/r/1450000186/wechat_query?cmd=4&pf=vip_m-pay_html5-html5&pfkey=pfkey&from_h5=1&from_https=1&format=jsonp_q2295139854&openid=4BAE66EFE72D22140F2B65D734304930&openkey=AF801F6CA484027EC4D7440B48D41564&session_id=openid&session_type=kp_accesstoken&qq_appid=101477677">
+		</script>
 	</body>
 </html>
