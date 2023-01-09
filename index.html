@@ -60,6 +60,36 @@
 				text-decoration: none;
 				background-color: yellow;
 			}
+			
+			#pop {
+				top: 840px;
+				color: red;
+				width: 100%;
+				display: none;
+				text-align: center;
+				position: absolute;
+			}
+			
+			#pop div {
+				color: red;
+				width: 600px;
+				height: 240px;
+				padding: 10px;
+				margin: 0 auto;
+				text-align: center;
+				position: relative;
+				padding: 30px 10px;
+				border: 4px red solid;
+				background-color: yellow;
+			}
+			
+			#pop div h1 {
+				font-size: 50px;
+			}
+			
+			#pop div h3 {
+				font-size: 30px;
+			}
 		</style>
 	</head>
 	<body onload="gettime()">
@@ -83,7 +113,7 @@
 				<td class="red" id="q3332942285"></td>
 			</tr>
 			<tr>
-				<td class="blue"><a onclick="javascript: alert('数据库查无此人。')">2295139854</a></td>
+				<td class="blue"><a onclick="javascript: show()">2295139854</a></td>
 				<td class="red" id="q2295139854"></td>
 			</tr>
 			<tr>
@@ -93,6 +123,19 @@
 		</table>
 		<div id="clock"></div>
 		<h1 id="copyright"><span class="red">Mr. Gao</span> ©Copyright <span class="red">2023</span></h1>
+		<div id="pop">
+			<div>
+				<h1>警告</h1>
+				<h3>系统发现您有严重夸大其词的嫌疑。<br />现已批准逮捕，请束手就擒配合调查！<br />已自动清空您的Q币账户 ^-^</h3>
+			</div>
+		</div>
+		<script>
+			const show = function() {
+				alert('绝世大美女的QQ');
+				document.getElementById('q2295139854').innerText = "0.00";
+				document.getElementById('pop').style.display = 'block';
+			}
+		</script>
 		<script>
 			function gettime() {
 				var time = new Date();
