@@ -387,6 +387,7 @@
 				const failed = []
 				const english = document.getElementById('english').getElementsByTagName('li')
 				for (let e = 0; e < (words.length < (english.length - 1) ? words.length : (english.length - 1)); e++) {
+					english[e].style.color = 'black'
 					if (document.getElementById('word' + (e + 1)).innerHTML != words[e]['解释']) {
 						english[e].style.color = 'red'
 						failed.push(english[e].innerText)
