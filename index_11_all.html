@@ -148,6 +148,11 @@
 							span.style.lineHeight = '25px'
 							span.style.whiteSpace = 'normal'
 						}
+						for (let e = 0; e < (words.length < (english.length - 1) ? words.length : (english.length - 1)); e++) {
+							if (_words[e]['解释'] == words[e]['解释']) {
+								words[e]['解释'] = td.innerHTML
+							}
+						}
 					} else {
 						td.style.fontSize = '32px'
 						td.style.lineHeight = '60px'
@@ -408,19 +413,19 @@
 
 			function drop(event) {
 				// const word = document.getElementById(event.dataTransfer.getData('word'))
-				// const targetText = event.target.innerText
-				// event.target.innerText = word.innerText
-				// word.innerText = targetText
+				// const targetText = event.target.innerHTML
+				// event.target.innerHTML = word.innerHTML
+				// word.innerHTML = targetText
 				const word = document.getElementById(event.dataTransfer.getData('word'))
-				const targetText = event.target.innerText
+				const targetHTML = event.target.innerHTML
 				const font_size = event.target.style.fontSize
 				const line_height = event.target.style.lineHeight
 				const white_space = event.target.style.whiteSpace
-				event.target.innerText = word.innerText
+				event.target.innerHTML = word.innerHTML
 				event.target.style.fontSize = word.style.fontSize
 				event.target.style.lineHeight = word.style.lineHeight
 				event.target.style.whiteSpace = word.style.whiteSpace
-				word.innerText = targetText
+				word.innerHTML = targetHTML
 				word.style.fontSize = font_size
 				word.style.lineHeight = line_height
 				word.style.whiteSpace = white_space
