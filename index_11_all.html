@@ -132,6 +132,7 @@
 				const width = document.getElementById('word1').scrollWidth
 				const english = document.getElementById('english').getElementsByTagName('li')
 				for (let e = 0; e < (_words.length < (english.length - 1) ? _words.length : (english.length - 1)); e++) {
+					english[e].style.color = 'black'
 					// document.getElementById('word' + (e + 1)).innerHTML = _words[e]['解释']
 					const td = document.getElementById('word' + (e + 1))
 					const temp = document.createElement('div')
