@@ -1,0 +1,285 @@
+<html>
+ <head>
+  <title>
+   app安全之安卓native层安全分析（五）：unidbg黑盒调用
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    app安全之安卓native层安全分析（五）：unidbg黑盒调用
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <li title="分析">
+    <a href="#user-content-分析">
+     分析
+    </a>
+   </li>
+   <li title="调试">
+    <a href="#user-content-调试">
+     调试
+    </a>
+   </li>
+   <ul>
+    <li title="1.搭架子">
+     <a href="#user-content-1搭架子">
+      1.搭架子
+     </a>
+    </li>
+    <li title="2.ida找地址">
+     <a href="#user-content-2ida找地址">
+      2.ida找地址
+     </a>
+    </li>
+    <li title="3.黑盒调用\&amp;补环境">
+     <a href="#user-content-3黑盒调用\&amp;补环境">
+      3.黑盒调用\&amp;补环境
+     </a>
+    </li>
+   </ul>
+   <li title="知识点总结">
+    <a href="#user-content-知识点总结">
+     知识点总结
+    </a>
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h2>
+  <p>
+   继续跟着龙哥的unidbg学习：
+   <a href="https://blog.csdn.net/qq_38851536/article/details/117828334" rel="nofollow" title="SO逆向入门实战教程五：qxs_白龙~的博客-CSDN博客">
+    SO逆向入门实战教程五：qxs_白龙~的博客-CSDN博客
+   </a>
+  </p>
+  <p>
+   还是那句，我会借鉴龙哥的文章，以一个初学者的角度，加上自己的理解，把内容丰富一下，尽量做到不在龙哥的基础上画蛇添足，哈哈。感谢观看的朋友
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#分析" id="user-content-分析">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   分析
+  </h2>
+  <p>
+   首先，安装app，发现龙哥给的apk包已经安装不上，网上重新找了个最新版，安装后，正常打开，然后，抓个包：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/fca5589d28b1462bcdc3c337b0070807.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，这个sfsecurity参数就是今天的重点了。
+  </p>
+  <p>
+   这个app有ajm的壳，没事，脱壳手段上，结果搞半天没脱出来，卧槽了，而且还有 frida反调试
+  </p>
+  <p>
+   脱壳机也不在身边，那没法，直接黑盒调用，unidbg就是干这个的。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#调试" id="user-content-调试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   调试
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1搭架子" id="user-content-1搭架子">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.搭架子
+  </h3>
+  <p>
+   运行没问题
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/c6a0db8849283722ad75d4afaab95ff4.png" style="max-width: 100%;">
+  </p>
+  <p>
+   不过这里，unidbg并没有打印出来我们要的方法和地址
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2ida找地址" id="user-content-2ida找地址">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.ida找地址
+  </h3>
+  <p>
+   这时候就需要用ida找地址了，结果发现，这个so文件有点奇怪，搜不到，但是在导出表里看得到，这就很奇怪了，根据分析，猜测是有一定的保护，也没办法通过F5反编译
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/d4b1fb00644e523559e021af107cfb6e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   很快就找到这里了，【0xAB2C】 ，注意，这里我用的是最新版，所以地址跟龙哥博客的地址不一样
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#3黑盒调用补环境" id="user-content-3黑盒调用补环境">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.黑盒调用&amp;补环境
+  </h3>
+  <p>
+   这里，我选用的是32位，所以得加1，因为我把apk解包，从lib\armeabi-v7a里找的这个so文件，所以他一定是32位的（根据安卓开发规范）
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/bbcd83a02e0dd5135fe7fb595505b017.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，报了个环境的错，补一补：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/ca009678e527a25849c16c9d79ba0ac9.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，又有新的报错，继续补：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/580e0c28933358bdb1798b5c4d0b8284.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，搞定
+  </p>
+  <p>
+   这里，由于我是根据龙哥的博客，知道是哪个so方法，所以直接黑盒调用，也没有用objection hook，它有frida反调试（objection基于frida），那就尴尬了，所以这里没法验证hook值和主动调用值是否一致了。那就暂时这样，反正值是有了
+  </p>
+  <p>
+   完整代码：
+  </p>
+  <pre class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>qxs</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulator</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">Module</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulatorBuilder</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidResolver</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span>dvm<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span>dvm<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Binder</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span>dvm<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">ServiceManager</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>memory<span class="token punctuation">.</span></span><span class="token class-name">Memory</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">File</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>security<span class="token punctuation">.</span></span><span class="token class-name">MessageDigest</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>security<span class="token punctuation">.</span></span><span class="token class-name">NoSuchAlgorithmException</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>security<span class="token punctuation">.</span>cert<span class="token punctuation">.</span></span><span class="token class-name">CertificateException</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>security<span class="token punctuation">.</span>cert<span class="token punctuation">.</span></span><span class="token class-name">CertificateFactory</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Locale</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">UUID</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> qxs <span class="token keyword">extends</span> <span class="token class-name">AbstractJni</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AndroidEmulator</span> emulator<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">VM</span> vm<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Module</span> <span class="token keyword">module</span><span class="token punctuation">;</span>
+
+    <span class="token function">qxs</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 创建模拟器实例,进程名建议依照实际进程名填写，可以规避针对进程名的校验</span>
+        emulator <span class="token operator">=</span> <span class="token class-name">AndroidEmulatorBuilder</span><span class="token punctuation">.</span><span class="token function">for32Bit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setProcessName</span><span class="token punctuation">(</span><span class="token string">"com.sina.oasis"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 获取模拟器的内存操作接口</span>
+        <span class="token keyword">final</span> <span class="token class-name">Memory</span> memory <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 设置系统类库解析</span>
+        memory<span class="token punctuation">.</span><span class="token function">setLibraryResolver</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AndroidResolver</span><span class="token punctuation">(</span><span class="token number">23</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 创建Android虚拟机,传入APK，Unidbg可以替我们做部分签名校验的工作</span>
+        vm <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">createDalvikVM</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\qxs\\com.sfacg.apk"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 加载目标SO</span>
+        <span class="token class-name">DalvikModule</span> dm <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\qxs\\libsfdata.so"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 加载so到虚拟内存</span>
+        <span class="token comment">//获取本SO模块的句柄,后续需要用它</span>
+        <span class="token keyword">module</span> <span class="token operator">=</span> dm<span class="token punctuation">.</span><span class="token function">getModule</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        vm<span class="token punctuation">.</span><span class="token function">setJni</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置JNI</span>
+        vm<span class="token punctuation">.</span><span class="token function">setVerbose</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 打印日志</span>
+
+        dm<span class="token punctuation">.</span><span class="token function">callJNI_OnLoad</span><span class="token punctuation">(</span>emulator<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 调用JNI OnLoad</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        qxs test <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">qxs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>test<span class="token punctuation">.</span><span class="token function">sfsecurity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">sfsecurity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">getJNIEnv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> context <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">resolveClass</span><span class="token punctuation">(</span><span class="token string">"android/content/Context"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newObject</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addGlobalObject</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span><span class="token string">"test"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Number</span> number <span class="token operator">=</span>  <span class="token keyword">module</span><span class="token punctuation">.</span><span class="token function">callFunction</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span><span class="token number">0xAB2C</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">,</span>list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">getObject</span><span class="token punctuation">(</span>number<span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> <span class="token function">callStaticObjectMethodV</span><span class="token punctuation">(</span><span class="token class-name">BaseVM</span> vm<span class="token punctuation">,</span> <span class="token class-name">DvmClass</span> dvmClass<span class="token punctuation">,</span> <span class="token class-name">String</span> signature<span class="token punctuation">,</span> <span class="token class-name">VaList</span> vaList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>signature<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> <span class="token string">"java/util/UUID-&gt;randomUUID()Ljava/util/UUID;"</span><span class="token operator">:</span>
+                <span class="token keyword">return</span> dvmClass<span class="token punctuation">.</span><span class="token function">newObject</span><span class="token punctuation">(</span><span class="token constant">UUID</span><span class="token punctuation">.</span><span class="token function">randomUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">callStaticObjectMethodV</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> dvmClass<span class="token punctuation">,</span> signature<span class="token punctuation">,</span> vaList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> <span class="token function">callObjectMethodV</span><span class="token punctuation">(</span><span class="token class-name">BaseVM</span> vm<span class="token punctuation">,</span> <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> dvmObject<span class="token punctuation">,</span> <span class="token class-name">String</span> signature<span class="token punctuation">,</span> <span class="token class-name">VaList</span> vaList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>signature<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> <span class="token string">"java/util/UUID-&gt;toString()Ljava/lang/String;"</span><span class="token operator">:</span>
+                <span class="token class-name">String</span> uuid <span class="token operator">=</span> dvmObject<span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> uuid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">callObjectMethodV</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> dvmObject<span class="token punctuation">,</span> signature<span class="token punctuation">,</span> vaList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#知识点总结" id="user-content-知识点总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   知识点总结
+  </h2>
+  <p>
+   本篇和上一篇感觉的挺简单的，所以没有啥总结的
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

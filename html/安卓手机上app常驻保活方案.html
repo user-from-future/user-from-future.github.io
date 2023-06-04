@@ -1,0 +1,244 @@
+<html>
+ <head>
+  <title>
+   安卓手机上app常驻保活方案
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    安卓手机上app常驻保活方案
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <li title="使用场景">
+    <a href="#user-content-使用场景">
+     使用场景
+    </a>
+   </li>
+   <li title="shell代码">
+    <a href="#user-content-shell代码">
+     shell代码
+    </a>
+   </li>
+   <li title="注意">
+    <a href="#user-content-注意">
+     注意
+    </a>
+   </li>
+   <li title="启动">
+    <a href="#user-content-启动">
+     启动
+    </a>
+   </li>
+   <li title="结语">
+    <a href="#user-content-结语">
+     结语
+    </a>
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h2>
+  <p>
+   搞安卓安全分析和正向开发，可能会有这样的需求，要保持某个或者多个app常驻手机，而不管国内还是国外的手机，我都遇到过会有所谓的节省手机资源或者省电的默认策略，会在后台杀死进程，而这样就会导致，我们的任务没了。就很尴尬
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#使用场景" id="user-content-使用场景">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   使用场景
+  </h2>
+  <ul>
+   <li>
+    用sekiro部署了一个主动调用方案
+   </li>
+   <li>
+    需要某个app常驻监听某个活动，比如app作为服务端
+   </li>
+   <li>
+    app需要在某个时间段定时启动
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#shell代码" id="user-content-shell代码">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   shell代码
+  </h2>
+  <p>
+   在给代码之前，你需要知道，你要启动的app的activity名字，用以下终端命令可知
+  </p>
+  <pre class="language-shell">adb shell dumpsys window <span class="token operator">|</span> findstr mCurrentFocus  <span class="token comment"># windows</span>
+adb shell dumpsys window <span class="token operator">|</span> <span class="token function">grep</span> mCurrentFocus     <span class="token comment"># linux,macos</span></pre>
+  <p>
+   注意，以下的代码可能都需要root权限，我没在未root手机上试过。
+  </p>
+  <p>
+   代码：这段代码是保证某两个app能一直常驻在手机上，force-stop是杀死进程的意思，am start是启动app并进入指定activity界面的意思
+  </p>
+  <pre class="language-shell"><span class="token shebang important">#!/bin/bash</span>
+
+
+
+
+
+<span class="token keyword">while</span> <span class="token boolean">true</span>
+
+<span class="token keyword">do</span>
+
+    am force-stop com.geekbyte.nft18hook
+
+    <span class="token function">sleep</span> <span class="token number">2</span>
+
+    am force-stop art.geekbyte.slhn
+
+    <span class="token function">sleep</span> <span class="token number">2</span>
+
+    am start <span class="token parameter variable">-n</span> com.geekbyte.xxx/com.geekbyte.xxx.MainActivity
+
+    <span class="token function">sleep</span> <span class="token number">2</span>
+
+    am start <span class="token parameter variable">-n</span> art.geekbyte.xxx/com.geekbyte.art.app.activity.AppMainActivity
+
+    <span class="token function">sleep</span> <span class="token number">1800</span>
+
+<span class="token keyword">done</span></pre>
+  <p>
+   代码2：这段代码是保证指定的两个app能在早上8点、9点的时间里，启动app，保活1800秒，其他时间则不启动， 每300间隔启动一次
+  </p>
+  <pre class="language-shell"><span class="token shebang important">#!/bin/bash</span>
+
+
+
+<span class="token assign-left variable">targetTime</span><span class="token operator">=</span><span class="token string">"8"</span>
+
+<span class="token assign-left variable">targetTime2</span><span class="token operator">=</span><span class="token string">"08"</span>
+
+<span class="token assign-left variable">targetTime3</span><span class="token operator">=</span><span class="token string">"9"</span>
+
+<span class="token assign-left variable">targetTime4</span><span class="token operator">=</span><span class="token string">"09"</span>
+
+
+
+<span class="token keyword">while</span> <span class="token boolean">true</span>
+
+<span class="token keyword">do</span>
+
+  <span class="token assign-left variable">ctime</span><span class="token operator">=</span><span class="token variable"><span class="token variable">`</span><span class="token function">date</span> +<span class="token string">"%H"</span><span class="token variable">`</span></span>
+
+  <span class="token builtin class-name">echo</span> <span class="token variable">$targetTime</span>
+
+  <span class="token builtin class-name">echo</span> <span class="token variable">$targetTime2</span>
+
+  <span class="token builtin class-name">echo</span> <span class="token variable">$targetTime3</span>
+
+  <span class="token builtin class-name">echo</span> <span class="token variable">$targetTime4</span>
+
+  <span class="token builtin class-name">echo</span> <span class="token variable"><span class="token variable">`</span><span class="token function">date</span> +<span class="token string">"%H:%M:%S"</span><span class="token variable">`</span></span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">[</span><span class="token punctuation">[</span> <span class="token string">"<span class="token variable">${ctime}</span>"</span> <span class="token operator">==</span> <span class="token string">"<span class="token variable">${targetTime}</span>"</span> <span class="token operator">||</span> <span class="token string">"<span class="token variable">${ctime}</span>"</span> <span class="token operator">==</span> <span class="token string">"<span class="token variable">${targetTime2}</span>"</span> <span class="token operator">||</span> <span class="token string">"<span class="token variable">${ctime}</span>"</span> <span class="token operator">==</span> <span class="token string">"<span class="token variable">${targetTime3}</span>"</span> <span class="token operator">||</span> <span class="token string">"<span class="token variable">${ctime}</span>"</span> <span class="token operator">==</span> <span class="token string">"<span class="token variable">${targetTime4}</span>"</span> <span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">then</span>
+
+      am force-stop com.geekbyte.xxx
+
+      <span class="token function">sleep</span> <span class="token number">2</span>
+
+      am force-stop com.tencent.xxx
+
+      <span class="token function">sleep</span> <span class="token number">2</span>
+
+      am start <span class="token parameter variable">-n</span> com.geekbyte.xxx/com.geekbyte.xxx.MainActivity
+
+      <span class="token function">sleep</span> <span class="token number">2</span>
+
+      am start <span class="token parameter variable">-n</span> com.tencent.xxx/com.tencent.xxx.ui.LauncherUI
+
+      <span class="token function">sleep</span> <span class="token number">1800</span>
+
+  <span class="token keyword">else</span>
+
+    <span class="token builtin class-name">echo</span> <span class="token string">"the time is wrong, it is forbidden to run"</span>
+
+  <span class="token keyword">fi</span>
+
+  <span class="token function">sleep</span> <span class="token number">300</span>
+
+<span class="token keyword">done</span></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#注意" id="user-content-注意">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   注意
+  </h2>
+  <p>
+   以上的代码，如果你启动的app界面，有可能是带参数的Intent，那么以上的代码则不适用，会报错，你需要去逆向找出参数，如果参数很复杂，比如是一个实例化的安卓对象，那需要用其他模式了
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#启动" id="user-content-启动">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   启动
+  </h2>
+  <p>
+   在你手机上，装一个termux终端软件，这个app启动shell命令需要root权限，然后用termux进入到你的shell脚本目录，用 【sh&nbsp; xx.sh】 启动即可
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#结语" id="user-content-结语">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   结语
+  </h2>
+  <p>
+   然后你就可以愉快的专注到你的业务逻辑了
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

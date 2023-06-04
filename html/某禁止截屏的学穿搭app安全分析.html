@@ -1,0 +1,337 @@
+<html>
+ <head>
+  <title>
+   某禁止截屏的学穿搭app安全分析
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    某禁止截屏的学穿搭app安全分析
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="声明">
+    <a href="#user-content-声明">
+     声明
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <li title="分析">
+    <a href="#user-content-分析">
+     分析
+    </a>
+   </li>
+   <ul>
+    <li title="1.抓包">
+     <a href="#user-content-1抓包">
+      1.抓包
+     </a>
+    </li>
+    <li title="2.防截屏/录屏">
+     <a href="#user-content-2防截屏/录屏">
+      2.防截屏/录屏
+     </a>
+    </li>
+   </ul>
+   <li title="调试">
+    <a href="#user-content-调试">
+     调试
+    </a>
+   </li>
+   <ul>
+    <li title="1.加密参数算法">
+     <a href="#user-content-1加密参数算法">
+      1.加密参数算法
+     </a>
+    </li>
+    <li title="2.防录屏逻辑">
+     <a href="#user-content-2防录屏逻辑">
+      2.防录屏逻辑
+     </a>
+    </li>
+   </ul>
+   <li title="算法还原">
+    <a href="#user-content-算法还原">
+     算法还原
+    </a>
+   </li>
+   <li title="结语">
+    <a href="#user-content-结语">
+     结语
+    </a>
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#声明" id="user-content-声明">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   声明
+  </h2>
+  <p>
+   以下只是搬运下我公众号的东西。很早就发过了。原帖地址：
+  </p>
+  <p>
+   <a href="https://mp.weixin.qq.com/s/el5LEOKR88sNa3bgUQ2jEQ" rel="nofollow" title="某禁止截屏的学穿搭app安全分析">
+    某禁止截屏的学穿搭app安全分析
+   </a>
+  </p>
+  <p>
+   已经发公众号的为什么还发csdn
+   <br>
+   有的圈内朋友，不经过我的允许，删减摘录我公众号的内容，这里就不提谁了，心里清楚，还能获得一些关注和流量。很无语，所以我还不如自己也发发。【猛男落泪】
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h2>
+  <p>
+   兴趣使然，发现了某app，有点意思，所以记录下来
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#分析" id="user-content-分析">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   分析
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1抓包" id="user-content-1抓包">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.抓包
+  </h3>
+  <p>
+   首先就是打开这个学习穿搭的app，页面展示如下，为了防止不必要的事呢，我就把脸打码了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/062fad21b892cfd7b5127bb7d32c213b.png" style="max-width: 100%;">
+  </p>
+  <p>
+   里面有很多知识点，感兴趣、喜欢的朋友可以自己去学习穿搭
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/4382e11ec8b0d44018602ee9de1c8b14.png" style="max-width: 100%;">
+  </p>
+  <p>
+   回到正题，刷下页面，抓个包，看看加密参数，
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/598ebf24c8a3e6facdf9862d40fbf4b6.png" style="max-width: 100%;">
+  </p>
+  <p>
+   加密的参数就是标注的几个了，token是登录返回的，就不用去研究了
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2防截屏录屏" id="user-content-2防截屏录屏">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.防截屏/录屏
+  </h3>
+  <p>
+   有朋友可能要问了，你这是手机拍的照片啊，怎么不截屏？
+  </p>
+  <p>
+   因为这个app有防截屏，就很骚了，录制也不行，我已经试过了：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/643cdfd8b9f8e73ef79b7d28051352ff.png" style="max-width: 100%;">
+  </p>
+  <p>
+   qtscrcpy投屏也不行
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/3f16d12d0c93009846a7c96809a57c1f.png" style="max-width: 100%;">
+  </p>
+  <p>
+   好的，本篇文章的目的就是解决这两个问题，一个加密参数，一个防录屏
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#调试" id="user-content-调试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   调试
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1加密参数算法" id="user-content-1加密参数算法">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.加密参数算法
+  </h3>
+  <p>
+   先看加密参数，用jadx查看，拖进去，卧槽，有壳，gg
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/c5a859b500c980378aa977b06978154f.png" style="max-width: 100%;">
+  </p>
+  <p>
+   问题不大，使用点手段，脱壳之后，继续分析，怎么定位加密逻辑和怎么分析一个app，我之前总结过，不清楚的朋友可以移步：
+   <a href="http://mp.weixin.qq.com/s?__biz=MzU0MjUwMTA2OQ==&amp;mid=2247484968&amp;idx=1&amp;sn=5dfc98c11270394b85e085cfc94590ff&amp;chksm=fb18f78acc6f7e9cb23c077424e009b52738ebf4beb9123f5fdfec9ba812e5487b2ecfad5873&amp;scene=21#wechat_redirect" rel="nofollow" title="移动安全分析流程">
+    移动安全分析流程
+   </a>
+  </p>
+  <p>
+   用jadx 打开脱壳后的文件，按照之前的路子，主要找sign的位置：
+  </p>
+  <p>
+   找的顺序，如下图片顺序
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b91db64f3111b701187c2b22c5ac5b30.png" style="max-width: 100%;">
+  </p>
+  <p>
+   那几个加密参数都在这里了：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/0818ca29c904a605f7c8f578f44d536c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/77a35b8f58c0debaca1da0376b2101cb.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/962bcc174bf9bff6e7f3bdd246eda920.png" style="max-width: 100%;">
+  </p>
+  <p>
+   就是这么快速，定位到位置，一看这个算法，盲猜是没有魔改的，看着偶读没咋改动，就是标准的sha256（当然也不一定）
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2防录屏逻辑" id="user-content-2防录屏逻辑">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.防录屏逻辑
+  </h3>
+  <p>
+   关于这个呢，其实查资料就可以知道了，原理主要是对当前启动的activity，设置一段代码：
+  </p>
+  <pre class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span><span class="token class-name">Bundle</span> savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 主要就是下面这一行代码</span>
+        <span class="token function">getWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setFlags</span><span class="token punctuation">(</span><span class="token class-name">WindowManager<span class="token punctuation">.</span>LayoutParams</span><span class="token punctuation">.</span><span class="token constant">FLAG_SECURE</span><span class="token punctuation">,</span> <span class="token class-name">WindowManager<span class="token punctuation">.</span>LayoutParams</span><span class="token punctuation">.</span><span class="token constant">FLAG_SECURE</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">initView</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></pre>
+  <p>
+   那么原理都知道，用frida hook 看看
+  </p>
+  <p>
+   代码：
+  </p>
+  <pre class="language-js"><span class="token keyword">function</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">var</span> v <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.view.Window"</span><span class="token punctuation">)</span>
+        v<span class="token punctuation">.</span>setFlags<span class="token punctuation">.</span><span class="token function">overload</span><span class="token punctuation">(</span><span class="token string">'int'</span><span class="token punctuation">,</span> <span class="token string">'int'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function-variable function">implementation</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">arg1<span class="token punctuation">,</span> arg2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> arg1<span class="token punctuation">)</span>
+            console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setFlags</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment">// 有的会用这个</span>
+        <span class="token comment">// var s = Java.use("android.view.SurfaceView")</span>
+        <span class="token comment">// s.setSecure.overload('java.lang.Boolean').implementation = function (arg) {</span>
+        <span class="token comment">//     this.setSecure(false)</span>
+        <span class="token comment">// }</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">setTimeout</span><span class="token punctuation">(</span>main<span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">)</span></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/36a091fd98be38a6b85f982879ba3c96.png" style="max-width: 100%;">
+  </p>
+  <p>
+   标注区域就是他传递的本来的参数，它这有一堆的这个参数设置，我猜应该每个activity他都设置了这个，然后根据我上面的代码，把参数修改了，改成两个【1】，就可以截屏了：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/ef1c0d46cecf91b8a2ad50dcc355d51e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   qtscrcpy也好使了：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/de493272cfbcd8e9a5e1919d3646050a.png" style="max-width: 100%;">
+  </p>
+  <p>
+   其实有关防录屏解决方案，早就有个大佬写好了一个xp插件，我试了下，我不知道为啥没生效，具体我就没深究了，frida hook是可以的
+  </p>
+  <pre><code>https://github.com/ilanyu/BlockSecureFlag
+</code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#算法还原" id="user-content-算法还原">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   算法还原
+  </h2>
+  <p>
+   过程就不展示了，直接看结果吧：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/41eb09b872d7c937d7df4d2bb2e28d30.png" style="max-width: 100%;">
+  </p>
+  <p>
+   完美！！！
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#结语" id="user-content-结语">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   结语
+  </h2>
+  <p>
+   这个app加密算法还是在java层，所以很简单的，防止截屏也是java层，所以轻松搞定
+  </p>
+  <p>
+   技术交流、商务合作、工作避坑&amp;内推(仅成都)、爬虫课优惠、技术交流群
+  </p>
+  <p>
+   扫码或者搜ID：
+   <strong>
+    geekbyte
+   </strong>
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

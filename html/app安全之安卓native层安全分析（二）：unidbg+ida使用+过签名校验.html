@@ -1,0 +1,1149 @@
+<html>
+ <head>
+  <title>
+   app安全之安卓native层安全分析（二）：unidbg+ida使用+过签名校验
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    app安全之安卓native层安全分析（二）：unidbg+ida使用+过签名校验
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <li title="分析">
+    <a href="#user-content-分析">
+     分析
+    </a>
+   </li>
+   <li title="调试">
+    <a href="#user-content-调试">
+     调试
+    </a>
+   </li>
+   <li title="unidbg调试">
+    <a href="#user-content-unidbg调试">
+     unidbg调试
+    </a>
+   </li>
+   <ul>
+    <li title="1.ida分析">
+     <a href="#user-content-1ida分析">
+      1.ida分析
+     </a>
+    </li>
+    <li title="2.搭架子">
+     <a href="#user-content-2搭架子">
+      2.搭架子
+     </a>
+    </li>
+    <li title="2.地址调用">
+     <a href="#user-content-2地址调用">
+      2.地址调用
+     </a>
+    </li>
+    <li title="3.找异常执行原因&mdash;&mdash;签名校验，以及绕过">
+     <a href="#user-content-3找异常执行原因&mdash;&mdash;签名校验，以及绕过">
+      3.找异常执行原因&mdash;&mdash;签名校验，以及绕过
+     </a>
+    </li>
+    <li title="4.符号调用">
+     <a href="#user-content-4符号调用">
+      4.符号调用
+     </a>
+    </li>
+   </ul>
+   <li title="部署">
+    <a href="#user-content-部署">
+     部署
+    </a>
+   </li>
+   <li title="知识点总结">
+    <a href="#user-content-知识点总结">
+     知识点总结
+    </a>
+   </li>
+   <li title="结语">
+    <a href="#user-content-结语">
+     结语
+    </a>
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h2>
+  <p>
+   继续跟着龙哥的unidbg学习：
+   <a href="https://blog.csdn.net/qq_38851536/article/details/117419041" rel="nofollow" title="SO入门实战教程二：calculateS_so _白龙~的博客-CSDN博客">
+    SO入门实战教程二：calculateS_so _白龙~的博客-CSDN博客
+   </a>
+  </p>
+  <p>
+   还是那句，我会借鉴龙哥的文章，以一个初学者的角度，加上自己的理解，把内容丰富一下，尽量做到不在龙哥的基础上画蛇添足，哈哈。感谢观看的朋友
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#分析" id="user-content-分析">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   分析
+  </h2>
+  <p>
+   首先抓包分析：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/44fd71dbf0823c407060837a6d7a0cd2.png" style="max-width: 100%;">
+  </p>
+  <p>
+   其中，里面的s就是今天的需要分析的加密参数了。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#调试" id="user-content-调试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   调试
+  </h2>
+  <p>
+   老样子，打开jadx，发现没壳，可以的，直接看吧，拿着这几个参数一顿搜，直接搜【p】
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/89961751354610ce7761f0063bea5543.png" style="max-width: 100%;">
+  </p>
+  <p>
+   感觉有两个地方很可疑，进去一看：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f339906dec44f804760ab360b4596d04.png" style="max-width: 100%;">
+  </p>
+  <p>
+   跟下调用栈，很快就找到这里：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/024f228fa13bad998a576bacd32bce09.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，用objection hook下，发现确实调用了这里
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/76eb70b2af4df9d6053597797fdc9279.png" style="max-width: 100%;">
+  </p>
+  <p>
+   再仔细看看这里，明显这里很奇怪了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/9dfdbf1499179f7c91ba93b70ac4eb3d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/0427a2d08df424b9605f2204a3095414.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，终于到这里了，这里就跟龙哥给的位置一致了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a44237fd9b4f704c8356191473bcfb73.png" style="max-width: 100%;">
+  </p>
+  <p>
+   先不急着用unidbg，先调试下，hook下这个方法，哎哟，我擦，这直接就对上了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/962a23d2b9822a1960482996d57b25dc.png" style="max-width: 100%;">
+  </p>
+  <p>
+   看看这三个参数 ，一个是context，上下文，又叫寄存器，第二个是账号密码加起来，第三个就是一个特殊的值，大概率是加的盐，刺激。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#unidbg调试" id="user-content-unidbg调试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   unidbg调试
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1ida分析" id="user-content-1ida分析">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.ida分析
+  </h3>
+  <p>
+   先用ida打开看看：发现是静态注册的，可以的
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/fd0cf19d8454924b04c47843f05ffdc0.png" style="max-width: 100%;">
+  </p>
+  <p>
+   选中a1
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/299e3912e09e7230e210b254b41e76ee.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后按键盘【y】&nbsp;，把第一个参数的类型改成JNIEnv *，这样就可以更好的反编译c代码：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/ef991328508d6c80fccdcda06a61a898.png" style="max-width: 100%;">
+  </p>
+  <p>
+   点ok，瞬间这段代码的可读性就更强了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/859e9b0a734030dec30c652576e02393.png" style="max-width: 100%;">
+  </p>
+  <p>
+   大概看了一眼，反正前面有个if判断，然后就进入主逻辑，然后返回
+  </p>
+  <p>
+   选到这个函数
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/2509b23829b3de25659357311f0012b8.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后按【tab】 键：这个0x1E7C就是这个函数的地址了。记一下，后面会用到
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/dcf9963af495dff9629cd72f03e51bbe.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2搭架子" id="user-content-2搭架子">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.搭架子
+  </h3>
+  <p>
+   开始搭建unidbg的架子，新建一个文件，然后把apk和目标so文件放进去
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/fc40459ec109cba742d2cd5bb8c8b304.png" style="max-width: 100%;">
+  </p>
+  <p>
+   先把架子搭起来，这里我们直接复制前面oasis的：
+  </p>
+  <pre class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>weibo</span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulator</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">Module</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulatorBuilder</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidResolver</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span>dvm<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>memory<span class="token punctuation">.</span></span><span class="token class-name">Memory</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>pointer<span class="token punctuation">.</span></span><span class="token class-name">UnidbgPointer</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>utils<span class="token punctuation">.</span></span><span class="token class-name">Inspector</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>jna<span class="token punctuation">.</span></span><span class="token class-name">Pointer</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">Keystone</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneArchitecture</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneEncoded</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneMode</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">File</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> international <span class="token keyword">extends</span> <span class="token class-name">AbstractJni</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AndroidEmulator</span> emulator<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">VM</span> vm<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Module</span> <span class="token keyword">module</span><span class="token punctuation">;</span>
+
+
+
+    <span class="token function">international</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 创建模拟器实例,进程名建议依照实际进程名填写，可以规避针对进程名的校验</span>
+
+        emulator <span class="token operator">=</span> <span class="token class-name">AndroidEmulatorBuilder</span><span class="token punctuation">.</span><span class="token function">for32Bit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setProcessName</span><span class="token punctuation">(</span><span class="token string">"com.weibo.international"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 获取模拟器的内存操作接口</span>
+
+        <span class="token keyword">final</span> <span class="token class-name">Memory</span> memory <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置系统类库解析</span>
+
+        memory<span class="token punctuation">.</span><span class="token function">setLibraryResolver</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AndroidResolver</span><span class="token punctuation">(</span><span class="token number">23</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 创建Android虚拟机,传入APK，Unidbg可以替我们做部分签名校验的工作</span>
+
+        vm <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">createDalvikVM</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\weibo\\sinaInternational.apk"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 加载目标SO</span>
+
+        <span class="token class-name">DalvikModule</span> dm <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\weibo\\libutility.so"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 加载so到虚拟内存</span>
+
+        <span class="token comment">//获取本SO模块的句柄,后续需要用它</span>
+
+        <span class="token keyword">module</span> <span class="token operator">=</span> dm<span class="token punctuation">.</span><span class="token function">getModule</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        vm<span class="token punctuation">.</span><span class="token function">setJni</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置JNI</span>
+
+        vm<span class="token punctuation">.</span><span class="token function">setVerbose</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 打印日志</span>
+
+<span class="token comment">//        dm.callJNI_OnLoad(emulator); // 调用JNI OnLoad</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        international test <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">international</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>test<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+     
+
+
+
+<span class="token punctuation">}</span></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/c5c57201b8f1393a72cc0d7518360952.png" style="max-width: 100%;">
+  </p>
+  <p>
+   运行下，没啥问题
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/35de8ebd886a35377054580a3d504c2f.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2地址调用" id="user-content-2地址调用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.地址调用
+  </h3>
+  <p>
+   方法先写好，参数还是用list，然后用vm.addLocalObject包装一下添加进去，第一个参数是context，直接给个空就行，剩下的参数直接复制hook到的放进去
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b617e753041d431487bcf03f71401c28.png" style="max-width: 100%;">
+  </p>
+  <p>
+   好的，现在运行一下
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a7ff7fead1eacf229289651b5109a4c3.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#3找异常执行原因签名校验以及绕过" id="user-content-3找异常执行原因签名校验以及绕过">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.找异常执行原因&mdash;&mdash;签名校验，以及绕过
+  </h3>
+  <p>
+   可以的，跟龙哥的博客一样，报错了，然后找找日志，看看上面的一个
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/414a33790c8c702cfb4ea30dcffe5d02.png" style="max-width: 100%;">
+  </p>
+  <p>
+   复制这个地址，ida里，按键盘【g】输入地址跳转过去
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/bba3af724ec2e200bf20d4c7f87964c0.png" style="max-width: 100%;">
+  </p>
+  <p>
+   跳转到这里：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f225682528bf72d97cb358dc7ff3bd27.png" style="max-width: 100%;">
+  </p>
+  <p>
+   改下JNIEnv
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b37a92b154a04da74d5f273b3830b1d2.png" style="max-width: 100%;">
+  </p>
+  <p>
+   好的，根据龙哥说的，有packagemanagger之类的，大概率是签名检测
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/fccda9b22d39c592e41c9a4c98d92078.png" style="max-width: 100%;">
+  </p>
+  <p>
+   选中这个方法，按【x】找交叉引用
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/bbf6ac2f8ceb8eab9d24f217567f2ddf.png" style="max-width: 100%;">
+  </p>
+  <p>
+   很有缘分的又看到了这个sub_1c60
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/5263d90f2045c78d925799e6e177ce48.png" style="max-width: 100%;">
+  </p>
+  <p>
+   进去看：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/954bea68912febb71a5910b83f21adb6.png" style="max-width: 100%;">
+  </p>
+  <p>
+   再回到这里，应该就是这个判断了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/1dfc94efccce6f86a9da6ac08fbf2d67.png" style="max-width: 100%;">
+  </p>
+  <p>
+   按下tab键，记住地址，就是这个0xFFF7EBFE了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/8f7323427c56d4961de07c30cba03a91.png" style="max-width: 100%;">
+  </p>
+  <p>
+   要能返回是true才给过，ok，直接把这里hook下，也就是直接这么改下，
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/d4e5eaeb9066252f0acd38cdb9f22807.png" style="max-width: 100%;">
+  </p>
+  <p>
+   在java层里，我们直接hook这个方法修改返回值为1就行，但是在这里，是在so里面，怎么搞呢？根据龙哥说的，用arm指令修改就行
+  </p>
+  <blockquote>
+   <p>
+    <a href="https://armconverter.com/?code=mov%20R0,1" rel="nofollow" title="Online ARM to HEX Converter (armconverter.com)">
+     Online ARM to HEX Converter (armconverter.com)
+    </a>
+   </p>
+  </blockquote>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/690447d7a949ee85e79ab7b3011d0acb.png" style="max-width: 100%;">
+  </p>
+  <p>
+   用上面的地址，写个过验证的：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e35965d34a229ba47f21c22a6c2e9188.png" style="max-width: 100%;">
+  </p>
+  <p>
+   龙哥还给了另一种patch的方法：
+  </p>
+  <pre class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">patchverfify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token keyword">int</span> patchCode <span class="token operator">=</span> <span class="token number">0x4FF00100</span><span class="token punctuation">;</span>
+
+        emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pointer</span><span class="token punctuation">(</span><span class="token keyword">module</span><span class="token punctuation">.</span>base<span class="token operator">+</span><span class="token number">0x1E86</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setInt</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>patchCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">patchVerify1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token class-name">Pointer</span> pointer <span class="token operator">=</span> <span class="token class-name">UnidbgPointer</span><span class="token punctuation">.</span><span class="token function">pointer</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span> <span class="token keyword">module</span><span class="token punctuation">.</span>base <span class="token operator">+</span> <span class="token number">0x1E86</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">assert</span> pointer <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> code <span class="token operator">=</span> pointer<span class="token punctuation">.</span><span class="token function">getByteArray</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span><span class="token number">0xFF</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xF7</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xEB</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xFE</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// BL sub_1C60</span>
+
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token class-name">Inspector</span><span class="token punctuation">.</span><span class="token function">inspectString</span><span class="token punctuation">(</span>code<span class="token punctuation">,</span> <span class="token string">"patch32 code="</span> <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">Keystone</span> keystone <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Keystone</span><span class="token punctuation">(</span><span class="token class-name">KeystoneArchitecture<span class="token punctuation">.</span>Arm</span><span class="token punctuation">,</span> <span class="token class-name">KeystoneMode<span class="token punctuation">.</span>ArmThumb</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token class-name">KeystoneEncoded</span> encoded <span class="token operator">=</span> keystone<span class="token punctuation">.</span><span class="token function">assemble</span><span class="token punctuation">(</span><span class="token string">"mov r0,1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> patch <span class="token operator">=</span> encoded<span class="token punctuation">.</span><span class="token function">getMachineCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>patch<span class="token punctuation">.</span>length <span class="token operator">!=</span> code<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token class-name">Inspector</span><span class="token punctuation">.</span><span class="token function">inspectString</span><span class="token punctuation">(</span>patch<span class="token punctuation">,</span> <span class="token string">"patch32 length="</span> <span class="token operator">+</span> patch<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span>
+
+            pointer<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> patch<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> patch<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span></pre>
+  <p>
+   然后执行下，ok，这就出来了，舒服：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/972b4fef300dd65927890e2a5398ef57.png" style="max-width: 100%;">
+  </p>
+  <p>
+   但是好像跟hook到的返回不一样：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f4bd8acd80a52c13486d03c4e5213370.png" style="max-width: 100%;">
+  </p>
+  <p>
+   不急，再来看看，擦，复制的时候，激动了，把逗号复制进去了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/62ac520f3a72407a0fd350d564a0c326.png" style="max-width: 100%;">
+  </p>
+  <p>
+   ok，这下对上了，跟hook的结果一致
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/4416ce09d73921a65eb6ef7f1ca40da5.png" style="max-width: 100%;">
+  </p>
+  <p>
+   代码
+  </p>
+  <pre class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>weibo</span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulator</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">Module</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulatorBuilder</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidResolver</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span>dvm<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>memory<span class="token punctuation">.</span></span><span class="token class-name">Memory</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>pointer<span class="token punctuation">.</span></span><span class="token class-name">UnidbgPointer</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>utils<span class="token punctuation">.</span></span><span class="token class-name">Inspector</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>jna<span class="token punctuation">.</span></span><span class="token class-name">Pointer</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">Keystone</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneArchitecture</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneEncoded</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneMode</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">File</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> international <span class="token keyword">extends</span> <span class="token class-name">AbstractJni</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AndroidEmulator</span> emulator<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">VM</span> vm<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Module</span> <span class="token keyword">module</span><span class="token punctuation">;</span>
+
+
+
+    <span class="token function">international</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 创建模拟器实例,进程名建议依照实际进程名填写，可以规避针对进程名的校验</span>
+
+        emulator <span class="token operator">=</span> <span class="token class-name">AndroidEmulatorBuilder</span><span class="token punctuation">.</span><span class="token function">for32Bit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setProcessName</span><span class="token punctuation">(</span><span class="token string">"com.weibo.international"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 获取模拟器的内存操作接口</span>
+
+        <span class="token keyword">final</span> <span class="token class-name">Memory</span> memory <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置系统类库解析</span>
+
+        memory<span class="token punctuation">.</span><span class="token function">setLibraryResolver</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AndroidResolver</span><span class="token punctuation">(</span><span class="token number">23</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 创建Android虚拟机,传入APK，Unidbg可以替我们做部分签名校验的工作</span>
+
+        vm <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">createDalvikVM</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\weibo\\sinaInternational.apk"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 加载目标SO</span>
+
+        <span class="token class-name">DalvikModule</span> dm <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\weibo\\libutility.so"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 加载so到虚拟内存</span>
+
+        <span class="token comment">//获取本SO模块的句柄,后续需要用它</span>
+
+        <span class="token keyword">module</span> <span class="token operator">=</span> dm<span class="token punctuation">.</span><span class="token function">getModule</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        vm<span class="token punctuation">.</span><span class="token function">setJni</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置JNI</span>
+
+        vm<span class="token punctuation">.</span><span class="token function">setVerbose</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 打印日志</span>
+
+<span class="token comment">//        dm.callJNI_OnLoad(emulator); // 调用JNI OnLoad</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        international test <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">international</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        test<span class="token punctuation">.</span><span class="token function">patchverfify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>test<span class="token punctuation">.</span><span class="token function">calculateS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">patchverfify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token keyword">int</span> patchCode <span class="token operator">=</span> <span class="token number">0x4FF00100</span><span class="token punctuation">;</span>
+
+        emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pointer</span><span class="token punctuation">(</span><span class="token keyword">module</span><span class="token punctuation">.</span>base<span class="token operator">+</span><span class="token number">0x1E86</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setInt</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>patchCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">patchVerify1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+        <span class="token class-name">Pointer</span> pointer <span class="token operator">=</span> <span class="token class-name">UnidbgPointer</span><span class="token punctuation">.</span><span class="token function">pointer</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span> <span class="token keyword">module</span><span class="token punctuation">.</span>base <span class="token operator">+</span> <span class="token number">0x1E86</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">assert</span> pointer <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> code <span class="token operator">=</span> pointer<span class="token punctuation">.</span><span class="token function">getByteArray</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span><span class="token number">0xFF</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xF7</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xEB</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xFE</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// BL sub_1C60</span>
+
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token class-name">Inspector</span><span class="token punctuation">.</span><span class="token function">inspectString</span><span class="token punctuation">(</span>code<span class="token punctuation">,</span> <span class="token string">"patch32 code="</span> <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">Keystone</span> keystone <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Keystone</span><span class="token punctuation">(</span><span class="token class-name">KeystoneArchitecture<span class="token punctuation">.</span>Arm</span><span class="token punctuation">,</span> <span class="token class-name">KeystoneMode<span class="token punctuation">.</span>ArmThumb</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token class-name">KeystoneEncoded</span> encoded <span class="token operator">=</span> keystone<span class="token punctuation">.</span><span class="token function">assemble</span><span class="token punctuation">(</span><span class="token string">"mov r0,1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> patch <span class="token operator">=</span> encoded<span class="token punctuation">.</span><span class="token function">getMachineCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>patch<span class="token punctuation">.</span>length <span class="token operator">!=</span> code<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token class-name">Inspector</span><span class="token punctuation">.</span><span class="token function">inspectString</span><span class="token punctuation">(</span>patch<span class="token punctuation">,</span> <span class="token string">"patch32 length="</span> <span class="token operator">+</span> patch<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span>
+
+            pointer<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> patch<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> patch<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">calculateS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">getJNIEnv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// arg1,env</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// arg2,jobject</span>
+
+        <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> context <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">resolveClass</span><span class="token punctuation">(</span><span class="token string">"android/content/Context"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newObject</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addGlobalObject</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"135691695686123456789"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"CypCHG2kSlRkdvr2RG1QF8b2lCWXl7k7"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Number</span> number <span class="token operator">=</span> <span class="token keyword">module</span><span class="token punctuation">.</span><span class="token function">callFunction</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span> <span class="token number">0x1E7C</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+        <span class="token class-name">String</span> result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">getObject</span><span class="token punctuation">(</span>number<span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+
+
+<span class="token punctuation">}</span></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#4符号调用" id="user-content-4符号调用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   4.符号调用
+  </h3>
+  <p>
+   前面都是地址调用，而龙哥自己也说过，他喜欢用地址调用。不过这里，总要学习下，怎么符号调用
+  </p>
+  <p>
+   怎么找符号，首选选中这个方法：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a3e9a949c5936a101e47d7ff9ebee8a5.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后按tab键，进入汇编页面：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/28b1bf69b419e84e87d5e868aa8eed95.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后再按空格，然后这个export就是要用的符号表了，注意了，这是只是刚好都一样，很多时候，这三个，不一样的，找准export的才行
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/3db5bf4e77c42eeaf20c11e9d6552ec2.png" style="max-width: 100%;">
+  </p>
+  <p>
+   开始调用，就换了下名字，其他都没变，对比两个不同的调用方式，结果一样，没毛病
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/eed011a180e404517dc522543cebda50.png" style="max-width: 100%;">
+  </p>
+  <p>
+   代码：
+  </p>
+  <pre class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>weibo</span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulator</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span></span><span class="token class-name">Module</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidEmulatorBuilder</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span></span><span class="token class-name">AndroidResolver</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>linux<span class="token punctuation">.</span>android<span class="token punctuation">.</span>dvm<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>memory<span class="token punctuation">.</span></span><span class="token class-name">Memory</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>pointer<span class="token punctuation">.</span></span><span class="token class-name">UnidbgPointer</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>github<span class="token punctuation">.</span>unidbg<span class="token punctuation">.</span>utils<span class="token punctuation">.</span></span><span class="token class-name">Inspector</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>jna<span class="token punctuation">.</span></span><span class="token class-name">Pointer</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">Keystone</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneArchitecture</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneEncoded</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">keystone<span class="token punctuation">.</span></span><span class="token class-name">KeystoneMode</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">File</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Arrays</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> international <span class="token keyword">extends</span> <span class="token class-name">AbstractJni</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">AndroidEmulator</span> emulator<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">VM</span> vm<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Module</span> <span class="token keyword">module</span><span class="token punctuation">;</span>
+
+
+
+    <span class="token function">international</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">// 创建模拟器实例,进程名建议依照实际进程名填写，可以规避针对进程名的校验</span>
+
+        emulator <span class="token operator">=</span> <span class="token class-name">AndroidEmulatorBuilder</span><span class="token punctuation">.</span><span class="token function">for32Bit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setProcessName</span><span class="token punctuation">(</span><span class="token string">"com.weibo.international"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 获取模拟器的内存操作接口</span>
+
+        <span class="token keyword">final</span> <span class="token class-name">Memory</span> memory <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 设置系统类库解析</span>
+
+        memory<span class="token punctuation">.</span><span class="token function">setLibraryResolver</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AndroidResolver</span><span class="token punctuation">(</span><span class="token number">23</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 创建Android虚拟机,传入APK，Unidbg可以替我们做部分签名校验的工作</span>
+
+        vm <span class="token operator">=</span> emulator<span class="token punctuation">.</span><span class="token function">createDalvikVM</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\weibo\\sinaInternational.apk"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 加载目标SO</span>
+
+        <span class="token class-name">DalvikModule</span> dm <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"unidbg-android\\src\\test\\java\\com\\weibo\\libutility.so"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 加载so到虚拟内存</span>
+
+        <span class="token comment">//获取本SO模块的句柄,后续需要用它</span>
+
+        <span class="token keyword">module</span> <span class="token operator">=</span> dm<span class="token punctuation">.</span><span class="token function">getModule</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        vm<span class="token punctuation">.</span><span class="token function">setJni</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 设置JNI</span>
+
+        vm<span class="token punctuation">.</span><span class="token function">setVerbose</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 打印日志</span>
+
+<span class="token comment">//        dm.callJNI_OnLoad(emulator); // 调用JNI OnLoad</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        international test <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">international</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        test<span class="token punctuation">.</span><span class="token function">patchverfify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"offset===&gt;:"</span> <span class="token operator">+</span> test<span class="token punctuation">.</span><span class="token function">calculateS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"symbol===&gt;:"</span> <span class="token operator">+</span> test<span class="token punctuation">.</span><span class="token function">calculateS1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+     
+
+     
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">calculateS1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">getJNIEnv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// arg1,env</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// arg2,jobject</span>
+
+        <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> context <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">resolveClass</span><span class="token punctuation">(</span><span class="token string">"android/content/Context"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newObject</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addGlobalObject</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"135691695686123456789"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"CypCHG2kSlRkdvr2RG1QF8b2lCWXl7k7"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Number</span> number <span class="token operator">=</span> <span class="token keyword">module</span><span class="token punctuation">.</span><span class="token function">callFunction</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span> <span class="token string">"Java_com_sina_weibo_security_WeiboSecurityUtils_calculateS"</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">String</span> result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">getObject</span><span class="token punctuation">(</span>number<span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">patchverfify</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">int</span> patchCode <span class="token operator">=</span> <span class="token number">0x4FF00100</span><span class="token punctuation">;</span>
+
+        emulator<span class="token punctuation">.</span><span class="token function">getMemory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">pointer</span><span class="token punctuation">(</span><span class="token keyword">module</span><span class="token punctuation">.</span>base <span class="token operator">+</span> <span class="token number">0x1E86</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setInt</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> patchCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">patchVerify1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">Pointer</span> pointer <span class="token operator">=</span> <span class="token class-name">UnidbgPointer</span><span class="token punctuation">.</span><span class="token function">pointer</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span> <span class="token keyword">module</span><span class="token punctuation">.</span>base <span class="token operator">+</span> <span class="token number">0x1E86</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">assert</span> pointer <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> code <span class="token operator">=</span> pointer<span class="token punctuation">.</span><span class="token function">getByteArray</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>code<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xFF</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xF7</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xEB</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token number">0xFE</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// BL sub_1C60</span>
+
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token class-name">Inspector</span><span class="token punctuation">.</span><span class="token function">inspectString</span><span class="token punctuation">(</span>code<span class="token punctuation">,</span> <span class="token string">"patch32 code="</span> <span class="token operator">+</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">(</span><span class="token class-name">Keystone</span> keystone <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Keystone</span><span class="token punctuation">(</span><span class="token class-name">KeystoneArchitecture<span class="token punctuation">.</span>Arm</span><span class="token punctuation">,</span> <span class="token class-name">KeystoneMode<span class="token punctuation">.</span>ArmThumb</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token class-name">KeystoneEncoded</span> encoded <span class="token operator">=</span> keystone<span class="token punctuation">.</span><span class="token function">assemble</span><span class="token punctuation">(</span><span class="token string">"mov r0,1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> patch <span class="token operator">=</span> encoded<span class="token punctuation">.</span><span class="token function">getMachineCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>patch<span class="token punctuation">.</span>length <span class="token operator">!=</span> code<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token class-name">Inspector</span><span class="token punctuation">.</span><span class="token function">inspectString</span><span class="token punctuation">(</span>patch<span class="token punctuation">,</span> <span class="token string">"patch32 length="</span> <span class="token operator">+</span> patch<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span>
+
+            pointer<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> patch<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> patch<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">calculateS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">getJNIEnv</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// arg1,env</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// arg2,jobject</span>
+
+        <span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> context <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">resolveClass</span><span class="token punctuation">(</span><span class="token string">"android/content/Context"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newObject</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addGlobalObject</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"135691695686123456789"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringObject</span><span class="token punctuation">(</span>vm<span class="token punctuation">,</span> <span class="token string">"CypCHG2kSlRkdvr2RG1QF8b2lCWXl7k7"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token class-name">Number</span> number <span class="token operator">=</span> <span class="token keyword">module</span><span class="token punctuation">.</span><span class="token function">callFunction</span><span class="token punctuation">(</span>emulator<span class="token punctuation">,</span> <span class="token number">0x1E7C</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+        <span class="token class-name">String</span> result <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">getObject</span><span class="token punctuation">(</span>number<span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+
+
+<span class="token punctuation">}</span></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#部署" id="user-content-部署">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   部署
+  </h2>
+  <p>
+   有没有想过，搞的这个，如果想部署成一个web服务，以供后续的业务代码调用呢？不然这么个项目，部署在服务器上，然后 每次启动都调用unidbg，说实话不是太现实，所以这里就需要把unidbg打包成jar包：
+  </p>
+  <p>
+   最实用且简单的方法:
+  </p>
+  <ol>
+   <li>
+   </li>
+  </ol>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/90c0d249a9338850c0150a9371dbbac4.png" style="max-width: 100%;">
+  </p>
+  <ol start="2">
+   <li>
+   </li>
+  </ol>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/dc617b1c88a02790198503a417b95e01.png" style="max-width: 100%;">
+  </p>
+  <ol start="3">
+   <li>
+   </li>
+  </ol>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/add128ca644683f231c2100e6c7dd61e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/af2a69030b2fd60596d61ffe6f712e73.png" style="max-width: 100%;">
+  </p>
+  <ol start="4">
+   <li>
+   </li>
+  </ol>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b0fb337480e907bb5a7868bdb496a472.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f9c9870c4366d667c8b217f0d39a6f6f.png" style="max-width: 100%;">
+  </p>
+  <ol start="5">
+   <li>
+   </li>
+  </ol>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/42e333994a080f1c34e5df87757fc26c.png" style="max-width: 100%;">
+  </p>
+  <ol start="6">
+   <li>
+   </li>
+  </ol>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/49ef2879aaab4be27556381aafbea2f8.png" style="max-width: 100%;">
+  </p>
+  <p>
+   等待结果：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/9964fd3a8f839bc7ee62a408fb9a832d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后根目录就会多一个out目录：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b8bc258e148899960298a3bee323ab7c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   7.这个文件就是最后能直接通过java执行的：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/90b020dab4c88051911a4919982f0857.png" style="max-width: 100%;">
+  </p>
+  <p>
+   但是有个问题，我们写的apk和so文件，给定的地址是unidgb-android/src里的
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/40f264566acd4c3b9c9e4c9688a120a3.png" style="max-width: 100%;">
+  </p>
+  <p>
+   要打包的话，就得改下路径，改成相对路径
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/2cd7bd9cc7c26b11410214abd3e4c3b3.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后删除out文件夹，重新上面的打包操作，然后把apk和so放到跟unidbg-jar同级的目录：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e6beff6cf23035866c97d063ca437a44.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这样就好了， 终端执行看看，很好，结果也有的，这样就可以把这个out包整个打包 ，然后部署到服务器上就行了。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/80c0daf9c9ec808c85f7bde5d0c751cd.png" style="max-width: 100%;">
+  </p>
+  <p>
+   还有更多的打包方式：
+  </p>
+  <blockquote>
+   <p>
+    <a href="https://blog.csdn.net/Palmer9/article/details/125220599" rel="nofollow" title="Unidbg打Jar包方式_unidbg打包成jar_Forgo7ten的博客-CSDN博客">
+     Unidbg打Jar包方式_unidbg打包成jar_Forgo7ten的博客-CSDN博客
+    </a>
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#知识点总结" id="user-content-知识点总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   知识点总结
+  </h2>
+  <p>
+   1.ida，按y修改JNIEnv，IDA 7.5之前，JNIEnv需要导入jni.h，7.5之后不需要导入jni.h文件
+  </p>
+  <p>
+   2.ida，按g 输入地址跳转
+  </p>
+  <p>
+   3.ida，按x，查看交叉引用
+  </p>
+  <p>
+   4.ida，optional-&gt;generel，把这个改成4，可以查看架构模式，arm架构是固定4位，thumb架构是混合的
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/838c4ae23436b697d8e1a493105c634d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   5. 有签名校验的需要去patch，patch的时候不能+1，只有运行和hook的时候才+1
+  </p>
+  <p>
+   6.setJNIload方法只有动态注册方法的时候才执行，静态注册的不用执行
+  </p>
+  <p>
+   7.keystone，是将汇编语言转成地址的。capstone是将地址转成汇编语言的
+  </p>
+  <p>
+   8.在线汇编和地址互转的网站：
+   <a href="https://armconverter.com/" rel="nofollow">
+    https://armconverter.com/
+   </a>
+  </p>
+  <p>
+   9.参数的基本类型，比如int，long等，其他的对象类型一律要手动 addLocalObject，其中context对象用：
+  </p>
+  <pre class="language-java"><span class="token class-name">DvmObject</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> context <span class="token operator">=</span> vm<span class="token punctuation">.</span><span class="token function">resolveClass</span><span class="token punctuation">(</span><span class="token string">"android/content/Context"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newObject</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// context</span>
+
+list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>vm<span class="token punctuation">.</span><span class="token function">addLocalObject</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span></pre>
+  <p>
+   10.找准一行汇编，Alt+G快捷键，查看架构类型，值为1则是thumb，为0则是arm，如果ida解析有误，可以手动修改这个值
+  </p>
+  <p>
+   11.RM调用约定，入参前四个分别通过R0-R3调用，返回值通过R0返回
+  </p>
+  <p>
+   12.unidbg的项目可以打包成java包执行
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#结语" id="user-content-结语">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   结语
+  </h2>
+  <p>
+   说实话，目前来说，不难，得后续的大厂项目才会很难
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

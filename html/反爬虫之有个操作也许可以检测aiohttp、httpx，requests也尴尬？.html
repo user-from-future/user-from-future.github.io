@@ -1,0 +1,1295 @@
+<html>
+ <head>
+  <title>
+   反爬虫之有个操作也许可以检测aiohttp、httpx，requests也尴尬？
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    反爬虫之有个操作也许可以检测aiohttp、httpx，requests也尴尬？
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title=" ">
+    <a href="#user-content- ">
+    </a>
+   </li>
+   <ul>
+    <li title="前言">
+     <a href="#user-content-前言">
+      前言
+     </a>
+    </li>
+    <li title="分析">
+     <a href="#user-content-分析">
+      分析
+     </a>
+    </li>
+    <ul>
+     <li title="1.httpx">
+      <a href="#user-content-1httpx">
+       1.httpx
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="h11._readers.header_field_re = re.compile(b">
+    [-!#$%&amp;'*+.^`/|~0-9a-zA-Z]+):[ \t](?P
+    <field_value>
+     ([^\\x00\\s]+(?:[ \t]+[^\\x00\\s]+))?)[ \t]*")"&gt;
+     <a href="#user-content-h11_readersheader_field_re = recompile(b">
+      [-!#$%&amp;'*+^`/|~0-9a-zA-Z]+):[ \t](?P
+      <field_value>
+       ([^\\x00\\s]+(?:[ \t]+[^\\x00\\s]+))?)[ \t]*")"&gt;h11._readers.header_field_re = re.compile(b"(?P
+       <field_name>
+        [-!#$%&amp;'*+.^`/|~0-9a-zA-Z]+):[ \t](?P
+        <field_value>
+         ([^\\x00\\s]+(?:[ \t]+[^\\x00\\s]+))?)[ \t]*")
+        </field_value>
+       </field_name>
+      </field_value>
+     </a>
+    </field_value>
+   </li>
+   <li title="url = 'https://club.xxxxxx/thread-26829078-1-1.html'">
+    <a href="#user-content-url = 'https://clubxxxxxx/thread-26829078-1-1html'">
+     url = 'https://club.xxxxxx/thread-26829078-1-1.html'
+    </a>
+   </li>
+   <ul>
+    <li title=" ">
+     <a href="#user-content- ">
+     </a>
+    </li>
+    <ul>
+     <li title="2.aiohttp">
+      <a href="#user-content-2aiohttp">
+       2.aiohttp
+      </a>
+     </li>
+    </ul>
+    <li title="针对的解决方案">
+     <a href="#user-content-针对的解决方案">
+      针对的解决方案
+     </a>
+    </li>
+    <ul>
+     <li title="1.用requests">
+      <a href="#user-content-1用requests">
+       1.用requests
+      </a>
+     </li>
+     <li title="2.用正则表达式替换">
+      <a href="#user-content-2用正则表达式替换">
+       2.用正则表达式替换
+      </a>
+     </li>
+     <li title="3.用urllib3处理">
+      <a href="#user-content-3用urllib3处理">
+       3.用urllib3处理
+      </a>
+     </li>
+    </ul>
+    <li title="用非常规的请求库尝试">
+     <a href="#user-content-用非常规的请求库尝试">
+      用非常规的请求库尝试
+     </a>
+    </li>
+    <ul>
+     <li title="1.用tls-client试试">
+      <a href="#user-content-1用tls-client试试">
+       1.用tls-client试试
+      </a>
+     </li>
+     <li title="2.用curl\_cffi试试">
+      <a href="#user-content-2用curl\_cffi试试">
+       2.用curl\_cffi试试
+      </a>
+     </li>
+    </ul>
+    <li title="实现一个anti aiohttp、httpx的服务">
+     <a href="#user-content-实现一个anti aiohttp、httpx的服务">
+      实现一个anti aiohttp、httpx的服务
+     </a>
+    </li>
+    <ul>
+     <li title="1.用httpx请求">
+      <a href="#user-content-1用httpx请求">
+       1.用httpx请求
+      </a>
+     </li>
+     <li title="2.用aiohttp请求">
+      <a href="#user-content-2用aiohttp请求">
+       2.用aiohttp请求
+      </a>
+     </li>
+     <li title="2.用http.client请求">
+      <a href="#user-content-2用httpclient请求">
+       2.用http.client请求
+      </a>
+     </li>
+     <li title="3.用urllib3、requests测试">
+      <a href="#user-content-3用urllib3、requests测试">
+       3.用urllib3、requests测试
+      </a>
+     </li>
+     <li title="4.用node的request请求看看">
+      <a href="#user-content-4用node的request请求看看">
+       4.用node的request请求看看
+      </a>
+     </li>
+     <li title="5.用golang 看看">
+      <a href="#user-content-5用golang 看看">
+       5.用golang 看看
+      </a>
+     </li>
+     <li title="6.用postman看看">
+      <a href="#user-content-6用postman看看">
+       6.用postman看看
+      </a>
+     </li>
+     <li title="7.用安卓看看">
+      <a href="#user-content-7用安卓看看">
+       7.用安卓看看
+      </a>
+     </li>
+    </ul>
+    <li title="配置将服务强制http2.0协议">
+     <a href="#user-content-配置将服务强制http20协议">
+      配置将服务强制http2.0协议
+     </a>
+    </li>
+    <ul>
+     <li title="1.配置服务端">
+      <a href="#user-content-1配置服务端">
+       1.配置服务端
+      </a>
+     </li>
+     <li title="2.请求测试">
+      <a href="#user-content-2请求测试">
+       2.请求测试
+      </a>
+     </li>
+    </ul>
+    <li title="解惑">
+     <a href="#user-content-解惑">
+      解惑
+     </a>
+    </li>
+    <li title="结语">
+     <a href="#user-content-结语">
+      结语
+     </a>
+    </li>
+   </ul>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h2>
+  <p>
+   最近行业市场不太景气啊，趁着有时间多学学吧，武装自己，等机会
+   <br>
+   刚好，发现一个很6的东西。这个问题是在差不多半个月前，群友&nbsp;@十一&nbsp;发现的，然后在群里跟大家讨论。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/8d747b7b0c6d482043fb8f75e8726dc3.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这个网站，请求的时候，requests正常：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/4023f39eab717e87e0f5fe67e795b600.png" style="max-width: 100%;">
+  </p>
+  <p>
+   原始的curl也可以：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/d8c7e94e917427e71759dd0ed3170363.png" style="max-width: 100%;">
+  </p>
+  <p>
+   aiohttp，直接报错
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/44114696d182876a8b08042b98fd0196.png" style="max-width: 100%;">
+  </p>
+  <p>
+   httpx，也直接报错：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a0f98fad34cbf8965415d3cd2c8d01a1.png" style="max-width: 100%;">
+  </p>
+  <p>
+   不过httpx的报错要明显点，这就进入了有意思的环节
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#分析" id="user-content-分析">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   分析
+  </h2>
+  <p>
+   看到这里，估计就有朋友开始冷笑了：搞爬虫大部分不都用requests的吗，谁会用httpx和aiohttp这些啊，感觉这个是不是没啥用啊。
+   <br>
+   别急，朋友，在文章的下面会说这个，当然如果你赶时间或者觉得没啥意思，那就没必要浪费时间继续看了
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1httpx" id="user-content-1httpx">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.httpx
+  </h3>
+  <p>
+   拿着上面的报错，去网上搜，找到如下issues:
+  </p>
+  <blockquote>
+   <p>
+    <a href="https://github.com/encode/httpx/issues/1561">
+     https://github.com/encode/httpx/issues/1561
+    </a>
+   </p>
+   <p>
+    <a href="https://github.com/encode/httpx/issues/1363">
+     https://github.com/encode/httpx/issues/1363
+    </a>
+   </p>
+  </blockquote>
+  <p>
+   看完里面各位大佬的一顿分析，说是hyper库的问题：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a2406feb3f5215f193bfeb0e220d5ab9.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/2cbc459cac7d00117b8a03b6a2164595.png" style="max-width: 100%;">
+  </p>
+  <p>
+   然后hyper库的开发者，如下链接回复：
+  </p>
+  <blockquote>
+   <p>
+    <a href="https://github.com/python-hyper/h11/issues/113" title="Should we support looser header name validation? &middot; Issue #113 &middot; python-hyper/h11 &middot; GitHub">
+     Should we support looser header name validation? &middot; Issue #113 &middot; python-hyper/h11 &middot; GitHub
+    </a>
+   </p>
+  </blockquote>
+  <p>
+   大概意思是这个不是一个问题，而是http请求的严格性判断问题，请求头的协议，按国际标准，是不能出现 &ldquo;[Cache-Control]&rdquo; 这种带有特殊符号作为响应头的键名的，所以报错
+   <br>
+   而requests却可以，或许是因为requests的校验不严格，直接就放过了：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/434aac3722a9556a7a72aa643c1fdeb1.png" style="max-width: 100%;">
+  </p>
+  <p>
+   而，浏览器访问也是可以的：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e0f9a8f8d0bfa0f1207a0266d0b1d836.png" style="max-width: 100%;">
+  </p>
+  <p>
+   那么我个人就有理由认为
+  </p>
+  <p>
+   <strong>
+    这是一个bug，httpx和aiohttp都存在的bug
+   </strong>
+  </p>
+  <p>
+   httpx的作者，对这个问题那段时间确实在尝试解决，github机器人都想关闭了，httpx作者还不想放弃：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/dae70e87a42814843a2b6b28fed3a19a.png" style="max-width: 100%;">
+  </p>
+  <p>
+   且至今没解决，遇到的人还不少，至少，上个月都还有人在说这个问题
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/51c24901a2bf7e5a326bdbb80dde6f00.png" style="max-width: 100%;">
+  </p>
+  <p>
+   卧槽，这时间，上周都还有人在问啊：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/c9ebcf2ca6fc8c2e91a71e4c0dc7afca.png" style="max-width: 100%;">
+  </p>
+  <p>
+   其中也有说解决办法，看到有个老哥说改h11的源码，改成这样：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f0f82a035b75f00ba78ffcaf8a970187.png" style="max-width: 100%;">
+  </p>
+  <p>
+   但是报错依然在
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/9d4f729758c533407bf365e01c6776e1.png" style="max-width: 100%;">
+  </p>
+  <p>
+   另外有个老哥说了这个方法：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/01b8a451bbcf91bca8ed34f3c1e88ef8.png" style="max-width: 100%;">
+  </p>
+  <pre class="language-python">h11<span class="token punctuation">.</span>readers<span class="token punctuation">.</span>header_field_re <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">b"(?P&lt;field_name&gt;[-!#$%&amp;'*+.^`/|~0-9a-zA-Z]+):[ \t](?P&lt;field_value&gt;([^\\x00\\s]+(?:[ \t]+[^\\x00\\s]+))?)[ \t]*"</span><span class="token punctuation">)</span></pre>
+  <p>
+   我把这个代码直接放我代码里，报错了，根本没有这个属性
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f7f934d7e02105daabc952a1c11ea58a.png" style="max-width: 100%;">
+  </p>
+  <p>
+   经过一顿查阅，他换了个属性名，是这个：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/54b02479288278726624d24be42b8f03.png" style="max-width: 100%;">
+  </p>
+  <pre class="language-python"><span class="token keyword">import</span> h11from h11 <span class="token keyword">import</span> _readersimport re
+
+h11<span class="token punctuation">.</span>_readers<span class="token punctuation">.</span>header_field_re <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">b"(?P&lt;field_name&gt;[-!#$%&amp;'*+.^`/|~0-9a-zA-Z]+):[ \t](?P&lt;field_value&gt;([^\\x00\\s]+(?:[ \t]+[^\\x00\\s]+))?)[ \t]*"</span><span class="token punctuation">)</span></pre>
+  <p>
+   但是我试了，换成了新的报错：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/6e170f97a883f561b5ed5049251220bd.png" style="max-width: 100%;">
+  </p>
+  <p>
+   也许是正则表达式写的不完美：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e88901e03eea74ac325c4307f84260c0.png" style="max-width: 100%;">
+  </p>
+  <p>
+   正则表达式通用匹配一下，然后就可以了：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/4b4cadddf113e50e8b687d068ab8b194.png" style="max-width: 100%;">
+  </p>
+  <pre class="language-python"><span class="token keyword">import</span> httpximport h11from h11 <span class="token keyword">import</span> _readersimport re
+
+<span class="token comment"># h11._readers.header_field_re = re.compile(b"(?P&lt;field_name&gt;[-!#$%&amp;'*+.^`/|~0-9a-zA-Z]+):[ \t](?P&lt;field_value&gt;([^\\x00\\s]+(?:[ \t]+[^\\x00\\s]+))?)[ \t]*")</span>
+
+h11<span class="token punctuation">.</span>_readers<span class="token punctuation">.</span>header_field_re <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token builtin">compile</span><span class="token punctuation">(</span><span class="token string">b"(?P&lt;field_name&gt;.*?):[ \t](?P&lt;field_value&gt;.*?)"</span><span class="token punctuation">)</span>
+
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>  
+
+<span class="token string">'User-Agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'</span>
+<span class="token punctuation">}</span>
+url <span class="token operator">=</span> <span class="token string">'https://scanstatus.sxxxxx'</span>
+<span class="token comment"># url = 'https://club.xxxxxx/thread-26829078-1-1.html'</span>
+
+resp <span class="token operator">=</span> httpx<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>text<span class="token punctuation">)</span></pre>
+  <p>
+   但是，我换了一个网站，也就是那个issue里某华某为的社区地址，不出正常的结果：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/9729308451f8b43c9741c8616a5b7f89.png" style="max-width: 100%;">
+  </p>
+  <p>
+   所以，修改正则表达式并不是一个通用的方案。
+  </p>
+  <p>
+   插一句，在请求的时候，就不要开代理或者抓包软件了，不然他报错更奇怪：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/97cd2a1fa11c645cd7e88b068fed1662.png" style="max-width: 100%;">
+  </p>
+  <p>
+   综上所述，也就是，只要服务器的返回头埋的坑够多，这个方法根本无法完美解决
+  </p>
+  <p>
+   那么这个问题，httpx作者就给了个这个解释就没下文了
+  </p>
+  <blockquote>
+   <p>
+    <code>
+     https:
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     github.com
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     encode
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     httpx
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     issues
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     767
+    </code>
+    <code>
+     #issuecomment-1367498458
+    </code>
+   </p>
+  </blockquote>
+  <p>
+   就这么不了了之了。。。
+  </p>
+  <p>
+   因为根据http协议的响应头原理，确实不会出现这种不标准的字段
+  </p>
+  <p>
+   更官方的解释可以去查查http协议原理，或者看看以下资料：
+  </p>
+  <blockquote>
+   <p>
+    <code>
+     https:
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     zh.wikipedia.org
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     zh
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     HTTP
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     E5
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     A4
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     B4
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     E5
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     AD
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     97
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     E6
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     AE
+    </code>
+    <code>
+     %
+    </code>
+    <code>
+     B5https:
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     developer.mozilla.org
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     zh
+    </code>
+    <code>
+     -
+    </code>
+    <code>
+     CN
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     docs
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     Web
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     API
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     Headerhttps:
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     developer.mozilla.org
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     zh
+    </code>
+    <code>
+     -
+    </code>
+    <code>
+     CN
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     docs
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     Glossary
+    </code>
+    <code>
+     /
+    </code>
+    <code>
+     Response_header
+    </code>
+   </p>
+  </blockquote>
+  <p>
+   我的理解如下：
+  </p>
+  <blockquote>
+   <p>
+    客户端需要先解析响应头，通过响应头的一些规范来解析返回的响应体的，既然你响应头都报错了，那后续的响应体解析自然也不会往下走了，直接报错退出。
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2aiohttp" id="user-content-2aiohttp">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.aiohttp
+  </h3>
+  <p>
+   对于aiohttp来说，像上面那么加正则表达式是无效的：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/a0b59618c7d3993e2d9cc7e6694ebeaa.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/41a3d8e4e30fe2f5ecbcaecd7bce6246.png" style="max-width: 100%;">
+  </p>
+  <p>
+   改完发现并没有用
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/019d7bfbe1caedb899c767942025cf7d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这有说，改成1，也试了，不行
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/c362c9ed0fbbcaf61276b746a9f884e3.png" style="max-width: 100%;">
+  </p>
+  <p>
+   更多的就不演示了
+  </p>
+  <p>
+   反正就是一顿查找，发现aiohttp上并没有合理方案解决
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#针对的解决方案" id="user-content-针对的解决方案">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   针对的解决方案
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1用requests" id="user-content-1用requests">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.用requests
+  </h3>
+  <p>
+   上面有了，这里就不展示了
+  </p>
+  <p>
+   但是requests我们知道，它是不支持http2.0协议的
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2用正则表达式替换" id="user-content-2用正则表达式替换">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.用正则表达式替换
+  </h3>
+  <p>
+   上面也有了，这里不贴了但是不能完美覆盖后续的响应头特殊参数
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#3用urllib3处理" id="user-content-3用urllib3处理">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.用urllib3处理
+  </h3>
+  <p>
+   这个库用的倒不多，可以直接请求：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/081c50c5591bb0d3f0258b55929d23a9.png" style="max-width: 100%;">
+  </p>
+  <p>
+   但是他也是个可以直接拿来请求的库，相比requets，那很多功能还是没有。其实requests本质就是借助了urllib3库的
+   <br>
+   所以，这个库，不出意外应该也是不支持http2.0的
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#用非常规的请求库尝试" id="user-content-用非常规的请求库尝试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   用非常规的请求库尝试
+  </h2>
+  <p>
+   既然目前的方法，除了requests/urllib3，其他都不行，那我在这个基础之上，强制http2，是不是就可以干掉requets库了，python的常规请求库直接无可用的，直接干死这些爬虫？
+  </p>
+  <p>
+   想的挺美的
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1用tls-client试试" id="user-content-1用tls-client试试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.用tls-client试试
+  </h3>
+  <p>
+   虽然他是用来对抗tls的，试试呢：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e6e51ef38a0212074548675554b7fff5.png" style="max-width: 100%;">
+  </p>
+  <p>
+   可行。为啥，因为他原理就是完全模拟浏览器，大概看了它的源码，用curl_impersonate库，打包成了一个dll（具体怎么打包的不可知，这部分没开源，插一句，
+   <strong>
+    据群友反馈，也是因为这个dll，会导致内存泄漏
+   </strong>
+   ），然后可以直接用，上面说过了，浏览器可以访问，那这个库肯定也可以访问了
+  </p>
+  <p>
+   那么测试那个某为的网址：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/fabd54b95ba62372f9cfeddc68725e37.png" style="max-width: 100%;">
+  </p>
+  <p>
+   不行，被识别了，牛吧，还是得是某为啊
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2用curl_cffi试试" id="user-content-2用curl_cffi试试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.用curl_cffi试试
+  </h3>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/389a82bf8549f6cd20cdb2d836e9d411.png" style="max-width: 100%;">
+  </p>
+  <p>
+   测试那个某为的网址：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/9f2f8a5c125958377a3b430dabb5b26c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这么对比，看来curl_cffi才是获胜者啊，只能说，牛逼啊！！！
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#实现一个anti-aiohttphttpx的服务" id="user-content-实现一个anti-aiohttphttpx的服务">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   实现一个anti aiohttp、httpx的服务
+  </h2>
+  <p>
+   简单的用fastapi 实现一个简单的服务，设置了下响应头：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/f98fa0425a76e82a781e38cb11647f5a.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1用httpx请求" id="user-content-1用httpx请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.用httpx请求
+  </h3>
+  <p>
+   httpx代码不变，只是把url换了，果然报错
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/d3f7bd4b02328a3c253f60e158e309a2.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2用aiohttp请求" id="user-content-2用aiohttp请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.用aiohttp请求
+  </h3>
+  <p>
+   再来看aiohttp，果然报错，哈哈哈哈
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/7a0cd0add8656e7c972b9b3626c23097.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2用httpclient请求" id="user-content-2用httpclient请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.用http.client请求
+  </h3>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/94be74f499cd1cd670d5e32d1994381b.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#3用urllib3requests测试" id="user-content-3用urllib3requests测试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.用urllib3、requests测试
+  </h3>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/e95f7a6628a34fa0a6653518903ff206.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/0ecd9cf06d0b2ad9ca3300ce468770c4.png" style="max-width: 100%;">
+  </p>
+  <p>
+   还得是这哥俩啊，直接能跑
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#4用node的request请求看看" id="user-content-4用node的request请求看看">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   4.用node的request请求看看
+  </h3>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/20a0cf6eeb52762446b00041ea6c6178.png" style="max-width: 100%;">
+  </p>
+  <p>
+   刺激，也给防住了。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#5用golang-看看" id="user-content-5用golang-看看">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   5.用golang 看看
+  </h3>
+  <p>
+   刺激啊，也没有正常返回
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/93ede21bd05af8edb9d2334057045279.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#6用postman看看" id="user-content-6用postman看看">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   6.用postman看看
+  </h3>
+  <p>
+   postman也直接无返回
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/fc3c36377e240fde83cc653d240108d2.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#7用安卓看看" id="user-content-7用安卓看看">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   7.用安卓看看
+  </h3>
+  <pre class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>geek<span class="token punctuation">.</span>spiderclient</span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">androidx<span class="token punctuation">.</span>appcompat<span class="token punctuation">.</span>app<span class="token punctuation">.</span></span><span class="token class-name">AppCompatActivity</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span></span><span class="token class-name">Bundle</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">android<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">Log</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">android<span class="token punctuation">.</span>widget<span class="token punctuation">.</span></span><span class="token class-name">TextView</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">UnsupportedEncodingException</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">HttpURLConnection</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>net<span class="token punctuation">.</span></span><span class="token class-name">URL</span></span><span class="token punctuation">;</span>
+
+
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token class-name">TextView</span> textView<span class="token punctuation">;</span>
+
+
+
+    <span class="token annotation punctuation">@Override</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span><span class="token class-name">Bundle</span> savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">setContentView</span><span class="token punctuation">(</span><span class="token class-name">R</span><span class="token punctuation">.</span>layout<span class="token punctuation">.</span>activity_main<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        textView <span class="token operator">=</span> <span class="token function">findViewById</span><span class="token punctuation">(</span><span class="token class-name">R</span><span class="token punctuation">.</span>id<span class="token punctuation">.</span>hello<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+
+        <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token class-name">String</span> result <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+
+
+            <span class="token annotation punctuation">@Override</span>
+
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                <span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+                    <span class="token class-name">String</span> url_string <span class="token operator">=</span> <span class="token string">"http://192.168.30.251:8000/"</span><span class="token punctuation">;</span><span class="token comment">// 由于高版本有https的限制，需要修改targetSdk为27及一下。</span>
+
+                    <span class="token class-name">URL</span> url <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>url_string<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token comment">//得到connection对象。</span>
+
+                    <span class="token class-name">HttpURLConnection</span> connection <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">HttpURLConnection</span><span class="token punctuation">)</span> url<span class="token punctuation">.</span><span class="token function">openConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token comment">//设置请求方式</span>
+
+                    connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token comment">//连接</span>
+
+                    connection<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token comment">//得到响应码</span>
+
+                    <span class="token keyword">int</span> responseCode <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getResponseCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token string">"headers"</span><span class="token punctuation">,</span> <span class="token string">""</span> <span class="token operator">+</span> connection<span class="token punctuation">.</span><span class="token function">getHeaderFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token keyword">if</span> <span class="token punctuation">(</span>responseCode <span class="token operator">==</span> <span class="token class-name">HttpURLConnection</span><span class="token punctuation">.</span><span class="token constant">HTTP_OK</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                        <span class="token comment">//得到响应流</span>
+
+                        <span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                        <span class="token comment">//将响应流转换成字符串</span>
+
+                        result <span class="token operator">=</span> <span class="token function">is2String</span><span class="token punctuation">(</span>inputStream<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//将流转换为字符串。</span>
+
+                        <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token string">"result"</span><span class="token punctuation">,</span> <span class="token string">"result============="</span> <span class="token operator">+</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token punctuation">}</span>
+
+                <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                <span class="token punctuation">}</span>
+
+                <span class="token function">runOnUiThread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                    <span class="token annotation punctuation">@Override</span>
+
+                    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                        <span class="token class-name">Log</span><span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span><span class="token string">"result"</span><span class="token punctuation">,</span> <span class="token string">"runOnUiThread"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                        textView<span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                    <span class="token punctuation">}</span>
+
+                <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span>
+
+        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+    <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">is2String</span><span class="token punctuation">(</span><span class="token class-name">InputStream</span> is<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token comment">//连接后，创建一个输入流来读取response</span>
+
+        <span class="token class-name">BufferedReader</span> bufferedReader <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+            bufferedReader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>is<span class="token punctuation">,</span> <span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token class-name">String</span> line <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+            <span class="token class-name">StringBuilder</span> stringBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token class-name">String</span> response <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+            <span class="token comment">//每次读取一行，若非空则添加至 stringBuilder</span>
+
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> bufferedReader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                stringBuilder<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span>
+
+            <span class="token comment">//读取所有的数据后，赋值给 response</span>
+
+            response <span class="token operator">=</span> stringBuilder<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">return</span> response<span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></pre>
+  <pre><code>
+
+</code></pre>
+  <p>
+   打包好之后：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/86423b647854d35b84153542e9ef74c1.png" style="max-width: 100%;">
+  </p>
+  <p>
+   安卓是可以的
+  </p>
+  <p>
+   再来看看服务端这边，其实是有正常请求的，但是客户端那边无法正常解而已。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/d2cacfa5ff76e4e6183572fab9f6536f.png" style="max-width: 100%;">
+  </p>
+  <p>
+   那么有朋友估计有想法，那既然报错，我捕获异常强制打印结果不行吗？
+   <br>
+   这里还是用回到python httpx库试试
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/6fe7ac8fd532332fc0dc544deb5b6d1f.png" style="max-width: 100%;">
+  </p>
+  <p>
+   不行的哈哈，原因前面说过了
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#配置将服务强制http20协议" id="user-content-配置将服务强制http20协议">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   配置将服务强制http2.0协议
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1配置服务端" id="user-content-1配置服务端">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.配置服务端
+  </h3>
+  <p>
+   说干就干，准备尝试把代码移植刀服务器上，直接启动这边的服务，然后nginx搭建好，配置好http2，我买的服务器它默认没给开80和443等常规的库，问了客服说要申请备案了才行，卧槽，很迷，无所谓，我把这个服务搭建到6363端口上：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/8e323b0ef4021ab71dc36e6cbf629e9d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   nginx如下配置：
+  </p>
+  <pre class="language-shell">server <span class="token punctuation">{</span>
+
+      <span class="token comment"># listen 6363;</span>
+
+      listen <span class="token punctuation">[</span>::<span class="token punctuation">]</span>:6363 ssl  http2<span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span>
+
+      listen <span class="token number">6363</span>  ssl http2<span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span>
+
+      ssl_certificate /root/cert.pem<span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span>
+
+      ssl_certificate_key /root/key.pem<span class="token punctuation">;</span> <span class="token comment"># managed by Certbot</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$server_protocol</span> <span class="token operator">!</span>~* <span class="token string">"HTTP/2.0"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token builtin class-name">return</span> <span class="token number">444</span><span class="token punctuation">;</span>
+
+      <span class="token punctuation">}</span>
+
+      root /data/www/fast-tortoise<span class="token punctuation">;</span>
+
+      server_name <span class="token number">0.0</span>.0.0<span class="token punctuation">;</span>
+
+      location / <span class="token punctuation">{</span>
+
+            proxy_set_header x-Real-IP <span class="token variable">$remote_addr</span><span class="token punctuation">;</span>
+
+            proxy_set_header X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span><span class="token punctuation">;</span>
+
+            proxy_set_header Host <span class="token variable">$http_host</span><span class="token punctuation">;</span>
+
+            proxy_pass http://127.0.0.1:8000/<span class="token punctuation">;</span> <span class="token comment"># gunicorn绑定的fastapi的端口号</span>
+
+        <span class="token punctuation">}</span>
+
+      <span class="token comment"># 配置static的静态文件：</span>
+
+      location ~ ^<span class="token punctuation">\</span>/static<span class="token punctuation">\</span>/.*$ <span class="token punctuation">{</span>
+
+            root /data/www/fast-tortoise/static<span class="token punctuation">;</span>
+
+         <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></pre>
+  <pre><code>&nbsp;```
+
+  
+证书文件用以下命令生成即可：前提得安装openssl库
+
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+</code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2请求测试" id="user-content-2请求测试">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.请求测试
+  </h3>
+  <p>
+   配置好了之后，首先requests肯定是不行了，因为不支持http2.0。这里就不演示了。
+  </p>
+  <p>
+   用httpx测试下，唉？直接就给放行了
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/b9432823f1bd8159acd9b000ac5bdcb9.png" style="max-width: 100%;">
+  </p>
+  <p>
+   卧槽？反爬虫路途创业未半中道崩卒....
+   <br>
+   .....
+  </p>
+  <p>
+   看来http2.0把这个问题修复了呀......
+  </p>
+  <p>
+   ......
+   <br>
+   那就只能在http1.0，http1.1下防住一部分的爬虫了
+  </p>
+  <p>
+   那有朋友估计要问了，你这个操作，好像只是有点奇怪，但实际并没有文章标题说的那么邪乎啊，说直接点，基本没啥用啊
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#解惑" id="user-content-解惑">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   解惑
+  </h2>
+  <p>
+   如果坚持看到这里的朋友，还没有忘记前面说的有关requests问的话。ok，这里开始说说。
+   <br>
+   其实我一开始发现这个所谓的bug的时候，感觉也不是太有用，requests都能跑，没把requests防住，那肯定没啥意思啊。
+   <br>
+   那么这个所谓的bug，真的没用吗？
+   <br>
+   只是这一个的话肯定防不住的，可以用来跟其他反爬手段组合啊，比如tls指纹，或者其他的风控检测手段等等的。
+  </p>
+  <p>
+   其实，我在发这篇文章之前，也开发了两个爬虫练习题
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/c619733f680f1d3deb40db0787f64acc.png" style="max-width: 100%;">
+  </p>
+  <p>
+   第一题就是这个bug
+   <br>
+   第二题是另外一个检测手段，
+   <strong>
+    可以检测到requests和httpx，tls-client，curl_cffi，aiohttp，还有常规的请求软件，而且没有用到tls指纹
+   </strong>
+   。
+  </p>
+  <p>
+   本来说是先让群友拿来玩，然后过几天发文章公开检测手段以及如何bypass的。
+  </p>
+  <p>
+   我没想到，我还没发多久，就有 intellectual disability 搞我服务器.....
+   <br>
+   顿时就觉得没意思了，服务关了，第二题的检测手段和bypass的方法我也不打算公开了。由于这篇文章之前就答应过群友 @十一，且早就写好了，那就继续发吧。
+  </p>
+  <p>
+   想知道第一种检测手段，还有哪些特殊字符不能被正常解析吗？
+  </p>
+  <p>
+   有想知道第二种检测手段的朋友？
+  </p>
+  <p>
+   <strong>
+    可以时不时的关注我的动向，也许我会在某一天用新的形式发出来
+   </strong>
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#结语" id="user-content-结语">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   结语
+  </h2>
+  <p>
+   <strong>
+    爬虫的核心，还是指纹等静态特征完全的模拟浏览器环境，行为等动态特征完全的模拟人为操作
+   </strong>
+  </p>
+  <p>
+   搜ID：
+   <strong>
+    geekbyte
+   </strong>
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>
