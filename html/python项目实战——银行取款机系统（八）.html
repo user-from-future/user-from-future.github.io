@@ -1,0 +1,297 @@
+<html>
+ <head>
+  <title>
+   python项目实战&mdash;&mdash;银行取款机系统（八）
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python项目实战&mdash;&mdash;银行取款机系统（八）
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="项目实战目录">
+    <a href="#user-content-项目实战目录">
+     项目实战目录
+    </a>
+   </li>
+   <li title="转账">
+    <a href="#user-content-转账">
+     转账
+    </a>
+   </li>
+   <li title="改密">
+    <a href="#user-content-改密">
+     改密
+    </a>
+   </li>
+   <li title="补卡">
+    <a href="#user-content-补卡">
+     补卡
+    </a>
+   </li>
+   <li title="销户">
+    <a href="#user-content-销户">
+     销户
+    </a>
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#项目实战目录" id="user-content-项目实战目录">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   项目实战目录
+  </h2>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127703108" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（一）">
+    python项目实战&mdash;&mdash;银行取款机系统（一）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127709126" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（二）">
+    python项目实战&mdash;&mdash;银行取款机系统（二）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127711247" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（三）">
+    python项目实战&mdash;&mdash;银行取款机系统（三）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127722125" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（四）">
+    python项目实战&mdash;&mdash;银行取款机系统（四）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127722405" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（五）">
+    python项目实战&mdash;&mdash;银行取款机系统（五）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127738787" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（六）">
+    python项目实战&mdash;&mdash;银行取款机系统（六）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127739549" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（七）">
+    python项目实战&mdash;&mdash;银行取款机系统（七）
+   </a>
+  </p>
+  <p>
+   python项目实战&mdash;&mdash;银行取款机系统（八）
+  </p>
+  <p>
+   <strong>
+    前言
+   </strong>
+  </p>
+  <p>
+   <strong>
+    环境使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <p>
+   <strong>
+    模块使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    requests
+   </li>
+  </ul>
+  <p>
+   上一篇我们说到了，分析了大致思路，今天，我们将具体实现剩下的所有的功能。基本上程序都差不多，我这里直接放代码了
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#转账" id="user-content-转账">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   转账
+  </h2>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 转账</span>
+
+    <span class="token keyword">def</span> <span class="token function">transferMoney</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        cardNum <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的卡号："</span><span class="token punctuation">)</span>
+        <span class="token comment"># 验证是否存在该卡号</span>
+        user <span class="token operator">=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cardNum<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> user<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡号不存在，转账失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        <span class="token comment"># 判断是否锁定</span>
+        <span class="token keyword">if</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+        <span class="token comment"># 验证密码</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码输入有误，该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+        <span class="token comment"># 开始转账</span>
+        amount <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"验证成功！请输入转账金额："</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> amount <span class="token operator">&gt;</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardMoney <span class="token keyword">or</span> amount <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"金额有误，转账失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+        newcard <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入转入账户："</span><span class="token punctuation">)</span>
+        newuser <span class="token operator">=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span>newcard<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> newuser<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡号不存在，转账失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        <span class="token comment"># 判断是否锁定</span>
+        <span class="token keyword">if</span> newuser<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardMoney <span class="token operator">-=</span> amount
+        newuser<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardMoney <span class="token operator">+=</span> amount
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"转账成功，请稍后&middot;&middot;&middot;"</span><span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"转账金额%d元，余额为%d元！"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>amount<span class="token punctuation">,</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardMoney<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#改密" id="user-content-改密">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   改密
+  </h2>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 改密</span>
+    <span class="token keyword">def</span> <span class="token function">changePasswd</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        cardNum <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的卡号："</span><span class="token punctuation">)</span>
+        <span class="token comment"># 验证是否存在该卡号</span>
+        user <span class="token operator">=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cardNum<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> user<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡号不存在，改密失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        <span class="token comment"># 判断是否锁定</span>
+        <span class="token keyword">if</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+        <span class="token comment"># 验证密码</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码输入有误，该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"正在验证，请稍等&middot;&middot;&middot;"</span><span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"验证成功！"</span><span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+        <span class="token comment"># 开始改密</span>
+        newPasswd <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入新密码："</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>newPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码错误，改密失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardPasswd <span class="token operator">=</span> newPasswd
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"改密成功！请稍后！"</span><span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#补卡" id="user-content-补卡">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   补卡
+  </h2>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 补卡</span>
+    <span class="token keyword">def</span> <span class="token function">newCard</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        cardNum <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的卡号："</span><span class="token punctuation">)</span>
+        <span class="token comment"># 验证是否存在该卡号</span>
+        user <span class="token operator">=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cardNum<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> user<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡号不存在！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        tempname <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的姓名："</span><span class="token punctuation">)</span>
+        tempidcard <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的身份证号码："</span><span class="token punctuation">)</span>
+        tempphone <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的手机号码："</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> tempname <span class="token operator">!=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">[</span>cardNum<span class="token punctuation">]</span><span class="token punctuation">.</span>name \
+                <span class="token keyword">or</span> tempidcard <span class="token operator">!=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>idCard \
+                <span class="token keyword">or</span> tempphone <span class="token operator">!=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>phone<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"信息有误，补卡失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        newPasswd <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的新密码："</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>newPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码错误，补卡失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardPasswd <span class="token operator">=</span> newPasswd
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"补卡成功，请牢记您的新密码！"</span><span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#销户" id="user-content-销户">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   销户
+  </h2>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">def</span> <span class="token function">killUser</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        cardNum <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入您的卡号："</span><span class="token punctuation">)</span>
+        <span class="token comment"># 验证是否存在该卡号</span>
+        user <span class="token operator">=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cardNum<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> user<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡号不存在，转账失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        <span class="token comment"># 判断是否锁定</span>
+        <span class="token keyword">if</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+        <span class="token comment"># 验证密码</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码输入有误，该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+        <span class="token keyword">del</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">[</span>cardNum<span class="token punctuation">]</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"销户成功，请稍后！"</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   到这里，所有的功能都实现了。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

@@ -1,0 +1,305 @@
+<html>
+ <head>
+  <title>
+   Python识别屏幕题目并模拟做题
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    Python识别屏幕题目并模拟做题
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title=" ">
+     <a href="#user-content- ">
+     </a>
+    </li>
+    <ul>
+     <li title="环境使用">
+      <a href="#user-content-环境使用">
+       环境使用
+      </a>
+     </li>
+     <li title="模块使用">
+      <a href="#user-content-模块使用">
+       模块使用
+      </a>
+     </li>
+     <li title="模块介绍">
+      <a href="#user-content-模块介绍">
+       模块介绍
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="代码实现">
+    <a href="#user-content-代码实现">
+     代码实现
+    </a>
+   </li>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <blockquote>
+   <p>
+    马上就要过年了，有许多小伙伴们本本还没拿到，还在苦苦刷题，一直及格不了，现在，我们用Python模拟做题，看看效果。
+   </p>
+  </blockquote>
+  <p>
+   <img alt="c574d5a937014c7692cb3cda53d652a1.gif" src="https://img-blog.csdnimg.cn/c574d5a937014c7692cb3cda53d652a1.gif" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    requests
+   </li>
+   <li>
+    re
+   </li>
+   <li>
+    selenium
+   </li>
+   <li>
+    谷歌驱动
+   </li>
+  </ul>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> re
+
+<span class="token keyword">import</span> requests
+
+<span class="token keyword">from</span> selenium <span class="token keyword">import</span> webdriver</code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块介绍" id="user-content-模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块介绍
+   </strong>
+  </h3>
+  <blockquote>
+   <ul>
+    <li>
+     requests
+    </li>
+   </ul>
+   <p>
+    requests简介：使用requests可以模拟浏览器的请求，比起之前用的
+    <a href="https://so.csdn.net/so/search?q=urllib&amp;spm=1001.2101.3001.7020" rel="nofollow" title="urllib">
+     urllib
+    </a>
+    ，requests模块的api更加便捷（本质就是封装了urllib3）
+   </p>
+   <ul>
+    <li>
+     re
+    </li>
+   </ul>
+   <p>
+    re又名正则表达式，是一种小型语言，其作用范围为字符串，内嵌在python中，通过调用re模块实现，其底层通过C语言编写的匹配法则进行匹配
+   </p>
+   <p>
+    作用目的：通过编写的匹配规则对字符串进行模糊匹配，比字符串内置方法更为强大，字符串内置方法只能进行精准匹配
+   </p>
+   <ul>
+    <li>
+     selenium
+    </li>
+   </ul>
+   <p>
+    之前，我们爬虫是模拟浏览器，但始终不是用的浏览器，但今天我们要说的是另一种爬虫方式，这次不是模拟浏览器，而是用程序去控制浏览器进行一些列操作，也就是selenium。selenium是python的一个第三方库，对外提供的接口可以操控浏览器，比如说输入、点击，跳转，下拉等动作。
+   </p>
+   <p>
+    在使用selenium模块之前要做两件事，一是安装selenium模块，可以用终端用pip，也可以在pycharm里的setting安装；二是我们需要下载一款浏览器驱动程序，下载的驱动程序要和浏览器的版本一致。
+   </p>
+   <ul>
+    <li>
+     谷歌驱动
+    </li>
+   </ul>
+   <p>
+    1.下载网址
+   </p>
+   <p>
+    <a href="https://registry.npmmirror.com/binary.html?path=chromedriver/" rel="nofollow" title="CNPM Binaries Mirror">
+     CNPM Binaries Mirror
+    </a>
+   </p>
+   <p>
+    2.文件安装（放置）位置
+    <br>
+    可以把这个文件理解成一个脚本入口。说它是安装，其实就是把下载的 chromedriver.exe 文件复制到相应的位置。
+   </p>
+   <p>
+    将文件复制到两个位置：1...\python\Scripts复制一份到安装Python的文件夹中的Scripts文件夹中；2.如果用的是Pycharm，再复制一份到..\python\site-packages\selenium\webdriver\chrome文件中。这个地址可以将鼠标放在Pycharm里面安装库的地方的相应库上就能看到。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h1>
+  <p>
+   我们打开在线驾驶员考试科目一考试的
+   <a href="https://www.jsyks.com/kmy-mnks" rel="nofollow" title="网址">
+    网址
+   </a>
+   。代码如下：
+  </p>
+  <pre class="line-numbers"><code class="language-python">driver <span class="token operator">=</span> webdriver<span class="token punctuation">.</span>Chrome<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+driver<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://www.jsyks.com/kmy-mnks'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   运行效果如下：
+  </p>
+  <p>
+   <img alt="3079e65458874de492c4bca25ec41e28.png" src="https://img-blog.csdnimg.cn/3079e65458874de492c4bca25ec41e28.png" style="max-width: 100%;">
+  </p>
+  <p>
+   我们发现每道题目后面都有查看本题分析，点击进去之后，我们就可以看到这题答案，通过对比 分析发现，答案网址有一定的规律，只是后缀不一样，我们称之为该题的编号或者是答案id。后来我们又发现考试页面就有我们所需要的答案id。
+  </p>
+  <p>
+   <img alt="1e1f0f342ffb48eface503e2568ffb2c.png" src="https://img-blog.csdnimg.cn/1e1f0f342ffb48eface503e2568ffb2c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   下面我们提取答案id。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 获取答案id</span>
+
+lis <span class="token operator">=</span> driver<span class="token punctuation">.</span>find_elements<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span> <span class="token string">'div.Exam ul.Content li'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   for循环遍历，获取li标签的c属性 get_attribute
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> li <span class="token keyword">in</span> lis<span class="token punctuation">:</span>
+    
+
+    answer_id <span class="token operator">=</span> li<span class="token punctuation">.</span>get_attribute<span class="token punctuation">(</span><span class="token string">'c'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   接下来，我们开始拼接答案的网址。
+  </p>
+  <pre class="line-numbers"><code class="language-python">answer_url <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'https://tiba.jsyks.com/Post/</span><span class="token interpolation"><span class="token punctuation">{</span>answer_id<span class="token punctuation">}</span></span><span class="token string">.htm'</span></span></code></pre>
+  <p>
+   我们获得网址之后，发起请求，获取数据，解析数据，获得我们想要的数据，使用正则表达式去匹配答案的内容。
+  </p>
+  <pre class="line-numbers"><code class="language-python">html_data <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>answer_url<span class="token punctuation">)</span><span class="token punctuation">.</span>text
+ 
+answer <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'&lt;br/&gt;答案：&lt;u&gt;(.*?)&lt;/u&gt;&lt;/h1&gt;&lt;p&gt;'</span><span class="token punctuation">,</span> html_data<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span></code></pre>
+  <p>
+   我们请求之后，发现答案和我们题目的选项有细微的差别，对和正确，错和错误，我们是只是什么意思，但是机器不知道什么意思，所以需要我们转换数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">if</span> answer <span class="token operator">==</span> <span class="token string">'错'</span><span class="token punctuation">:</span>
+
+        answer <span class="token operator">=</span> <span class="token string">'错误'</span>
+
+    <span class="token keyword">elif</span> answer <span class="token operator">==</span> <span class="token string">'对'</span><span class="token punctuation">:</span>
+
+        answer <span class="token operator">=</span> <span class="token string">'正确'</span></code></pre>
+  <p>
+   做完这些，就需要将选项和答案进行比较，首先是选项匹配：
+  </p>
+  <pre class="line-numbers"><code class="language-python">bs <span class="token operator">=</span> li<span class="token punctuation">.</span>find_elements<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span> <span class="token string">'b'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   答案和选项比较:
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> b <span class="token keyword">in</span> bs<span class="token punctuation">:</span>
+
+        choose <span class="token operator">=</span> b<span class="token punctuation">.</span>text
+
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>choose<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">2</span><span class="token punctuation">:</span>
+
+            choose <span class="token operator">=</span> choose<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+        <span class="token keyword">if</span> answer <span class="token operator">==</span> choose<span class="token punctuation">:</span>
+
+            b<span class="token punctuation">.</span>click<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   到这里我们所有的题目就做完了，接下来是交卷。
+  </p>
+  <pre class="line-numbers"><code class="language-python">driver<span class="token punctuation">.</span>find_element<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span> <span class="token string">'.btnJJ'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>click<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   运行完代码，我们会发现我们获得了满分。
+  </p>
+  <p>
+   <img alt="e5f44c443eca4aad9460c4363b39d923.png" src="https://img-blog.csdnimg.cn/e5f44c443eca4aad9460c4363b39d923.png" style="max-width: 100%;">
+  </p>
+  <p>
+   玩归玩，闹归闹，还是要好好做题。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

@@ -1,0 +1,196 @@
+<html>
+ <head>
+  <title>
+   爬虫的三大库
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    爬虫的三大库
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="requests库">
+    <a href="#user-content-requests库">
+     requests库
+    </a>
+   </li>
+   <li title="BeautifulSoup库">
+    <a href="#user-content-beautifulsoup库">
+     BeautifulSoup库
+    </a>
+   </li>
+   <li title="Lxml库">
+    <a href="#user-content-lxml库">
+     Lxml库
+    </a>
+   </li>
+  </ul>
+  <p>
+   大家好，我是爱吃饼干的小白鼠。大家安装完python的requests，beautifulsoup ，lxml三个库，之后，我们就来说说怎么使用吧。然后我教大家一个简单的爬虫程序。
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#requests库" id="user-content-requests库">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   requests库
+  </h1>
+  <p>
+   requests库的作用就是请求网站获取网页数据的，让我们从最简单的实例说起，requests库的使用方法。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+url<span class="token operator">=</span><span class="token string">'http://www.ceweekly.cn/2022/1017/397973.shtml'</span>
+headers<span class="token operator">=</span><span class="token punctuation">{</span>
+    <span class="token string">'user-agent'</span><span class="token punctuation">:</span><span class="token string">' Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'</span>
+    <span class="token punctuation">}</span>
+<span class="token comment">#发送请求</span>
+response<span class="token operator">=</span>requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">)</span>
+<span class="token comment">#输出</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   程序实现结果如下，&lt;response [200]&gt;表示请求网页成功，若为404，400，则请求失败。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/0adb0da9d1794854a258daeabfd4e0e6.png" style="max-width: 100%;">
+  </p>
+  <p>
+   上面的程序我们加入了请求头，这样可以更好的抓取数据。
+  </p>
+  <p>
+   请求头如下：
+  </p>
+  <pre class="line-numbers"><code class="language-python">headers<span class="token operator">=</span><span class="token punctuation">{</span>
+    <span class="token string">'user-agent'</span><span class="token punctuation">:</span><span class="token string">' Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'</span>
+    <span class="token punctuation">}</span></code></pre>
+  <p>
+   requests库有除了上述的get方法外，还有post方法等。post大多数是需要登录的，不管，get可以爬取大部分网站了。
+  </p>
+  <p>
+   requests库运行
+   <strong>
+    常见报错
+   </strong>
+   如下
+  </p>
+  <p>
+   ConnectionError:网路问题，拒绝连接
+  </p>
+  <p>
+   HTTPError:response返回了不成功的状态码
+  </p>
+  <p>
+   Timout:请求超时
+  </p>
+  <p>
+   TooManyRedirects:请求超过了设定的次数，一般来说，这样是为了反爬而设置的。
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#beautifulsoup库" id="user-content-beautifulsoup库">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   BeautifulSoup库
+  </h1>
+  <p>
+   BeautifulSoup库是一个非常流行的模块，它的作用是用来解析requests库请求的网页，并把网页源代码解析为soup文档，以便过滤数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">from</span> bs4 <span class="token keyword">import</span> BeautifulSoup
+url<span class="token operator">=</span><span class="token string">'http://www.ceweekly.cn/2022/1017/397973.shtml'</span>
+headers<span class="token operator">=</span><span class="token punctuation">{</span>
+    <span class="token string">'user-agent'</span><span class="token punctuation">:</span><span class="token string">' Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'</span>
+    <span class="token punctuation">}</span>
+<span class="token comment">#发送请求</span>
+response<span class="token operator">=</span>requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">)</span>
+<span class="token comment">#输出</span>
+soup<span class="token operator">=</span>BeautifulSoup<span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">,</span><span class="token string">'html.parser'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>soup<span class="token punctuation">.</span>prettify<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   下面是程序实现结果
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/c092363d07694117b936e0b55639f60d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   虽然看上去和我们第一个差不多，但是通过BeautifulSoup库解析得到的Soup文档是按照标准缩进格式的结构输出的，为后面的数据处理做准备。
+  </p>
+  <p>
+   BeautifulSoup库除了可以使用文中的html.parser解析器，还可以支持第三方的解析器，比如讲lxml，xml，html5lib解析器。
+  </p>
+  <p>
+   不管用哪种解析器解析后的soup文档，可以用find(),fing_all()方法定位我们需要的元素，本文篇幅有限，就不说他们的使用方法，我放一个例子吧。
+  </p>
+  <pre class="line-numbers"><code class="language-python">soup<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">,</span><span class="token string">"item"</span><span class="token punctuation">)</span><span class="token comment">##查找div标签，class="item"</span>
+
+soup<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">,</span><span class="token keyword">class</span><span class="token operator">=</span><span class="token string">"item"</span><span class="token punctuation">)</span>
+
+soup<span class="token punctuation">.</span>find_all<span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">,</span>attrs<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">"class"</span><span class="token punctuation">:</span><span class="token string">"item"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token comment">#attrs参数定义一个字典参数来搜索包含特殊属性的tag</span></code></pre>
+  <p>
+   还有一个selector（）方法，这个就更简单了，
+  </p>
+  <pre class="line-numbers"><code class="language-python">soup<span class="token punctuation">.</span>selector<span class="token punctuation">(</span>div<span class="token punctuation">.</span>item<span class="token operator">&gt;</span>a<span class="token operator">&gt;</span>h1<span class="token punctuation">)</span><span class="token comment">#在浏览器开发者模式里右击选择copy，会有一个copy selector选项，即可得到</span></code></pre>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#lxml库" id="user-content-lxml库">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   Lxml库
+  </h1>
+  <p>
+   Lxml库比BeautifulSoup库解析速度更快，我这里放一个案例，就不过多解释。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">import</span> lxml
+<span class="token keyword">from</span> lxml <span class="token keyword">import</span> etree
+
+url<span class="token operator">=</span><span class="token string">'http://www.ceweekly.cn/2022/1017/397973.shtml'</span>
+headers<span class="token operator">=</span><span class="token punctuation">{</span>
+    <span class="token string">'user-agent'</span><span class="token punctuation">:</span><span class="token string">' Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'</span>
+    <span class="token punctuation">}</span>
+<span class="token comment">#发送请求</span>
+response<span class="token operator">=</span>requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">)</span>
+<span class="token comment">#输出</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span></code></pre>
+  <p>
+   今天就说到这里，我们下一期见。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

@@ -1,0 +1,256 @@
+<html>
+ <head>
+  <title>
+   python正则表达式实战&mdash;&mdash;获取图片
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python正则表达式实战&mdash;&mdash;获取图片
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="一、发送请求">
+    <a href="#user-content-一发送请求">
+     一、发送请求
+    </a>
+   </li>
+   <li title="二、获取数据">
+    <a href="#user-content-二获取数据">
+     二、获取数据
+    </a>
+   </li>
+   <li title="三、保存数据">
+    <a href="#user-content-三保存数据">
+     三、保存数据
+    </a>
+   </li>
+  </ul>
+  <p>
+   我最近自学了一段时间爬虫，感觉挺有意思的，逛网页的时候，无意间发现了一个壁纸网站，我就萌生了一个想法，看能不能下下来，说干就干。
+  </p>
+  <p>
+   <strong>
+    前言
+   </strong>
+  </p>
+  <p>
+   <strong>
+    目标网站：首先我们要知道我们的目标位置。
+   </strong>
+  </p>
+  <p>
+   <strong>
+    编程语言：python
+   </strong>
+  </p>
+  <p>
+   <strong>
+    环境使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <p>
+   <strong>
+    模块使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    requests
+   </li>
+  </ul>
+  <p>
+   <strong>
+    请求头
+   </strong>
+  </p>
+  <blockquote>
+   <p>
+    <strong>
+     # python代码对于服务器发送请求 &gt;&gt;&gt; 服务器接收之后(如果没有伪装)被识别出来, 是爬虫程序, &gt;&gt;&gt; 不会给你返回数据
+     <br>
+     # 客户端(浏览器) 对于 服务器发送请求 &gt;&gt;&gt; 服务器接收到请求之后 &gt;&gt;&gt; 浏览器返回一个response响应数据
+     <br>
+     # headers 请求头 就是把python代码伪装成浏览器进行请求
+     <br>
+     # headers参数字段 是可以在开发者工具里面进行查询 复制
+     <br>
+     # 并不是所有的参数字段都是需要的
+     <br>
+     # user-agent: 浏览器的基本信息 (相当于披着羊皮的狼, 这样可以混进羊群里面)
+     <br>
+     # cookie: 用户信息 检测是否登录账号 (某些网站 是需要登录之后才能看到数据, B站一些数据内容)
+     <br>
+     # referer: 防盗链 请求你的网址 是从哪里跳转过来的 (B站视频内容 / 妹子图图片下载 / 唯品会商品数据)
+     <br>
+     # 根据不同的网站内容 具体情况 具体分析
+    </strong>
+   </p>
+  </blockquote>
+  <p>
+   下面就按照爬虫的思路，一步一步的进行。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#一发送请求" id="user-content-一发送请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   一、发送请求
+  </h2>
+  <p>
+   进入主页后，我们随便点击一个标签，我们已这个为例，其他的思路一样，后面，你会发现网址差不多，只要改部分内容即可。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/f90ab161422e4ad09a030750a0216a50.png" style="max-width: 100%;">
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+url <span class="token operator">=</span> <span class="token string">'https://wallhaven.cc/toplist'</span> <span class="token comment">#toplist是可以改动的</span>
+
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'user-agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'</span>
+<span class="token punctuation">}</span>
+
+response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span></code></pre>
+  <p>
+   运行之后，会返回&lt;Response [200]&gt;，说明我们请求到了网页，接下来就是获取数据。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#二获取数据" id="user-content-二获取数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   二、获取数据
+  </h2>
+  <p>
+   我们用开发者工具，查找我们要的源代码。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/028a8d8f7495487da22d403c9b20e065.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这样，我们就找到了源地址，一个是小图（分辨率比较低），一个是图片真实的网址（高分辨率），这里我们用正则表达式去匹配它。
+  </p>
+  <pre class="line-numbers"><code class="language-python">html_url <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'class="preview" href="(.*?)"'</span><span class="token punctuation">,</span>response<span class="token punctuation">.</span>text<span class="token punctuation">,</span>re<span class="token punctuation">.</span>S<span class="token punctuation">)</span></code></pre>
+  <p>
+   通过观察我们发现，所有图片的源地址的位置都差不多。这样我们就获得了图片原网页的列表。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/8bc0f8ebba9a41cf926697648888c0fa.png" style="max-width: 100%;">
+  </p>
+  <p>
+   同理，我这里用图片地址的后缀来做图片的命名。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token builtin">id</span> <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'data-wallpaper-id="(.*?)"'</span><span class="token punctuation">,</span> response<span class="token punctuation">.</span>text<span class="token punctuation">,</span> re<span class="token punctuation">.</span>S<span class="token punctuation">)</span>
+
+html_data <span class="token operator">=</span> <span class="token builtin">zip</span><span class="token punctuation">(</span>html_url<span class="token punctuation">,</span><span class="token builtin">id</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   接下来，我们就接下来就是挨个访问，保存数据就可以了。
+  </p>
+  <p>
+   我们先用for遍历所有图片的地址，在发送请求。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> html_url<span class="token punctuation">,</span><span class="token builtin">id</span> <span class="token keyword">in</span> html_data<span class="token punctuation">:</span>
+
+    html_spon <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>html_url<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span></code></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/3fd7eff4be174e34a0ac40e11117c08b.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这个就是我们要的高清图的地址。我们还是用正则表达式去匹配。
+  </p>
+  <pre class="line-numbers"><code class="language-python">pic_url <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'id="wallpaper" src="(.*?)"'</span><span class="token punctuation">,</span> html_spon<span class="token punctuation">.</span>text<span class="token punctuation">,</span> re<span class="token punctuation">.</span>S<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># 图片地址</span></code></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/3a3d69d5df124f48bdf2e70a6b1bd16e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   下面就是获取高清图的数据
+  </p>
+  <pre class="line-numbers"><code class="language-python">content <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>pic_url<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span><span class="token punctuation">.</span>content</code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#三保存数据" id="user-content-三保存数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   三、保存数据
+  </h2>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'wall高清\\'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">id</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'.jpg'</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> filename<span class="token punctuation">:</span>
+        filename<span class="token punctuation">.</span>write<span class="token punctuation">(</span>content<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">id</span><span class="token punctuation">,</span> <span class="token string">"successful"</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   我们来看看保存之后的效果吧。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/e49a023dc4ff43b980a17bdcaa50fff3.png" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    说明：
+   </p>
+   <ol>
+    <li>
+     我们会发现，随着我们鼠标的滚动，网址发生了一些变化，http://***/page=2，只是page后面的数字不一样，我们只要遍历page就可以实现多页爬取。
+    </li>
+    <li>
+     我们发现选择其他类型的时候，toplist变了，在这里我们只要改动这里，同样是可以运行的。
+    </li>
+    <li>
+     我们还可以尝试从键盘接收类型，page去爬取，还是直接通过网页获取，都是可以的。
+    </li>
+    <li>
+     大家可以设置sleep，防止请求频繁，被封IP。
+    </li>
+    <li>
+     还有就是，os文件处理问题，这里就不赘述，自己手动建立一个wall高清文件夹。
+    </li>
+   </ol>
+  </blockquote>
+  <p>
+   到这里，大体程序就写完了，是可以执行的。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

@@ -1,0 +1,390 @@
+<html>
+ <head>
+  <title>
+   【Python实战】Python采集地震信息
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    【Python实战】Python采集地震信息
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title=" ">
+     <a href="#user-content- ">
+     </a>
+    </li>
+    <ul>
+     <li title="环境使用">
+      <a href="#user-content-环境使用">
+       环境使用
+      </a>
+     </li>
+     <li title="模块使用">
+      <a href="#user-content-模块使用">
+       模块使用
+      </a>
+     </li>
+     <li title="模块介绍">
+      <a href="#user-content-模块介绍">
+       模块介绍
+      </a>
+     </li>
+    </ul>
+    <li title="代码实现">
+     <a href="#user-content-代码实现">
+      代码实现
+     </a>
+    </li>
+    <ul>
+     <li title="全部代码">
+      <a href="#user-content-全部代码">
+       全部代码
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="知识拓展">
+    <a href="#user-content-知识拓展">
+     知识拓展
+    </a>
+   </li>
+   <li title="总结">
+    <a href="#user-content-总结">
+     总结
+    </a>
+   </li>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    昨天，我们这里发生了地震，不过，没有太大的问题，我就想着能不能把近几年发生地震的信息，收集下来，我们发现中国地震台网的官方微博会分布近几年发生地震的信息。我们可以直接在这里获取。
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    requests
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块介绍" id="user-content-模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块介绍
+   </strong>
+  </h3>
+  <blockquote>
+   <ul>
+    <li>
+     <strong>
+      requests
+     </strong>
+    </li>
+   </ul>
+   <p>
+    requests是一个很实用的Python HTTP客户端库，爬虫和测试服务器响应数据时经常会用到，requests是Python语言的第三方的库，专门用于发送HTTP请求，使用起来比urllib简洁很多。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      parsel
+     </strong>
+    </li>
+   </ul>
+   <p>
+    parsel是一个python的第三方库，相当于css选择器+xpath+re。
+   </p>
+   <p>
+    parsel由scrapy团队开发，是将scrapy中的parsel独立抽取出来的，可以轻松解析html，xml内容，获取需要的数据。
+   </p>
+   <p>
+    相比于BeautifulSoup，xpath，parsel效率更高，使用更简单。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      re
+     </strong>
+    </li>
+   </ul>
+   <p>
+    re模块是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的，而正则表达式是对字符串进行模糊匹配，提取自己需要的字符串部分，他对所有的语言都通用。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      os
+     </strong>
+    </li>
+   </ul>
+   <p>
+    os 就是 &ldquo;operating system&rdquo; 的缩写，顾名思义，
+    <a href="https://so.csdn.net/so/search?q=os%E6%A8%A1%E5%9D%97&amp;spm=1001.2101.3001.7020" rel="nofollow" title="os模块">
+     os模块
+    </a>
+    提供的就是各种 Python 程序与操作系统进行交互的接口。通过使用 os 模块，一方面可以方便地与操作系统进行交互，另一方面也可以极大增强代码的可移植性。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      csv
+     </strong>
+    </li>
+   </ul>
+   <p>
+    它是一种文件格式，一般也被叫做逗号分隔值文件，可以使用 Excel 软件或者文本文档打开 。其中数据字段用半角逗号间隔（也可以使用其它字符），使用 Excel 打开时，逗号会被转换为分隔符。csv 文件是以纯文本形式存储了表格数据，并且在兼容各个操作系统。
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    模块安装问题:
+   </strong>
+  </p>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <ul>
+    <li>
+     失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+    </li>
+   </ul>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h2>
+  <p>
+   我们这里直接请求网页，发送请求，获取内容，我们代码内容如下：
+  </p>
+  <pre class="line-numbers"><code class="language-python">url <span class="token operator">=</span> <span class="token string">'https://weibo.com/ajax/statuses/mymblog?uid=2817059020&amp;page=2&amp;feature=0'</span>  
+res<span class="token operator">=</span>requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">)</span>  
+  
+  
+res<span class="token punctuation">.</span>encoding <span class="token operator">=</span> res<span class="token punctuation">.</span>apparent_encoding  
+  
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   我们这里虽然返回了内容，但是，不是我们想要的内容，说明，我们被反爬了，我们看看这里返回了什么内容吧。
+  </p>
+  <pre class="line-numbers"><code class="language-javascript"><span class="token function">wload</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">var</span> need_restore <span class="token operator">=</span> <span class="token string">"1"</span> <span class="token operator">==</span> <span class="token string">"1"</span><span class="token punctuation">;</span> <span class="token comment">// 是否走恢复身份流程。</span>
+
+        <span class="token comment">// 如果需要走恢复身份流程，尝试从 cookie 获取用户身份。</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>need_restore <span class="token operator">||</span> <span class="token operator">!</span>Store<span class="token punctuation">.</span>CookieHelper<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"SRF"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token comment">// 若获取失败走创建访客流程。</span>
+            <span class="token comment">// 流程执行时间过长（超过 3s），则认为出错。</span>
+            <span class="token keyword">var</span> error_timeout <span class="token operator">=</span> window<span class="token punctuation">.</span><span class="token function">setTimeout</span><span class="token punctuation">(</span><span class="token string">"error_back()"</span><span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            tid<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">tid<span class="token punctuation">,</span> where<span class="token punctuation">,</span> confidence</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment">// 取指纹顺利完成，清除出错 timeout 。</span>
+                window<span class="token punctuation">.</span><span class="token function">clearTimeout</span><span class="token punctuation">(</span>error_timeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token function">incarnate</span><span class="token punctuation">(</span>tid<span class="token punctuation">,</span> where<span class="token punctuation">,</span> confidence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 用户身份存在，尝试恢复用户身份。</span>
+            <span class="token function">restore</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 出错。</span>
+        <span class="token function">error_back</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+  <p>
+   我们发现这里，我们少了一些参数，说明了这个网站对cookies做了验证，我们加入cookies试试，在我们把cookies传进去之后，就拿到了我们想要的内容了。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/17106cf872fb3d1627df04bf84f9b1ae.png" style="max-width: 100%;">
+  </p>
+  <p>
+   我们会发现，这里是json格式的数据，接下来，就是字典取值就可以了，我们得到的内容如下。
+  </p>
+  <pre class="line-numbers"><code class="language-python">lists <span class="token operator">=</span> res<span class="token punctuation">.</span>json<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'list'</span><span class="token punctuation">]</span>  
+<span class="token keyword">for</span> <span class="token builtin">list</span> <span class="token keyword">in</span> lists<span class="token punctuation">:</span>  
+text_raw <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token string">'text_raw'</span><span class="token punctuation">]</span>  
+<span class="token keyword">print</span><span class="token punctuation">(</span>text_raw<span class="token punctuation">)</span></code></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/24112aebf7fa518bd4d42cd172cb75a3.webp?x-oss-process=image/format,png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#全部代码" id="user-content-全部代码">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   全部代码
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'cookie'</span><span class="token punctuation">:</span> <span class="token string">'XSRF-TOKEN=i_jwhItBV-N25hG4ByCztsDp; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WW5I6LOLDiQVAchoLQaqJ2V; SUB=_2AkMTCu21f8NxqwJRmf0RxWLqbIxyzwjEieKlVhxuJRMxHRl-yj9vqhAFtRB6OIrDWiYjOrzbl8TwUL-lp2Vruuysazih; WBPSESS=CcKh_7VyRZckvS8BGV3cswGEcJVP8L6xFhCv31UrVROFUvdKWlhGzVyOvd-MNsbpR3rSt54J6liS1X2a7xld9BZTMPyzWXwxaVu4ecgBw8SewBe6cQIVoaI6RoXqejD9UZWmFqAmHcgQXNw8LNFvDnoIk4zE6uUcAhWxq666R2o='</span><span class="token punctuation">,</span>
+    <span class="token string">'referer'</span><span class="token punctuation">:</span> <span class="token string">'https://weibo.com/n/%E4%B8%AD%E5%9B%BD%E5%9C%B0%E9%9C%87%E5%8F%B0%E7%BD%91'</span><span class="token punctuation">,</span>
+    <span class="token string">'traceparent'</span><span class="token punctuation">:</span> <span class="token string">'00-86b5603650ee569365b690bd914780a8-3e286bc027650efc-00'</span><span class="token punctuation">,</span>
+    <span class="token string">'user-agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'</span><span class="token punctuation">,</span>
+    <span class="token string">'x-requested-with'</span><span class="token punctuation">:</span> <span class="token string">'XMLHttpRequest'</span><span class="token punctuation">,</span>
+    <span class="token string">'x-xsrf-token'</span><span class="token punctuation">:</span> <span class="token string">'i_jwhItBV-N25hG4ByCztsDp'</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+url <span class="token operator">=</span> <span class="token string">'https://weibo.com/ajax/statuses/mymblog?uid=2817059020&amp;page=1&amp;feature=0'</span>
+res<span class="token operator">=</span>requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+res<span class="token punctuation">.</span>encoding <span class="token operator">=</span> res<span class="token punctuation">.</span>apparent_encoding
+lists <span class="token operator">=</span> res<span class="token punctuation">.</span>json<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'list'</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> <span class="token builtin">list</span> <span class="token keyword">in</span> lists<span class="token punctuation">:</span>
+    <span class="token comment"># print(list)</span>
+    created_at <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token string">'created_at'</span><span class="token punctuation">]</span>
+    text_raw <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">[</span><span class="token string">'text_raw'</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>created_at<span class="token punctuation">,</span>text_raw<span class="token punctuation">)</span></code></pre>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#知识拓展" id="user-content-知识拓展">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   知识拓展
+  </h1>
+  <p>
+   cookies是一种能够让网站服务器把少量数据储存到客户端的硬盘或内存，或是从客户端的硬盘读取数据的一种技术。
+  </p>
+  <p>
+   Cookies是当你浏览某网站时，由Web服务器置于你硬盘上的一个非常小的文本文件，它可以记录你的用户ID、密码、浏览过的网页、停留的时间等信息。 当你再次来到该网站时，网站通过读取Cookies，得知你的相关信息，就可以做出相应的动作，如在页面显示欢迎你的标语，或者让你不用输入ID、密码就直接登录等等。
+  </p>
+  <p>
+   从本质上讲，它可以看作是你的身份证。 但Cookies不能作为代码执行，也不会传送病毒，且为你所专有，并只能由提供它的服务器来读龋保存的信息片断以&ldquo;名/值&rdquo;对(name-value pairs)的形式储存，一个&ldquo;名/值&rdquo;对仅仅是一条命名的数据。 一个网站只能取得它放在你的电脑中的信息，它无法从其它的Cookies文件中取得信息，也无法得到你的电脑上的其它任何东西。
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#总结" id="user-content-总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   总结
+  </h1>
+  <p>
+   我们发现，我们没有登录，获取的内容很少，我们可以登录之后，把我们的cookies传进去，就可以获取到更多的内容了。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

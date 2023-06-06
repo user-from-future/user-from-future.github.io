@@ -1,0 +1,200 @@
+<html>
+ <head>
+  <title>
+   python项目实战&mdash;&mdash;银行取款机系统（七）
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python项目实战&mdash;&mdash;银行取款机系统（七）
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="项目实战目录">
+    <a href="#user-content-项目实战目录">
+     项目实战目录
+    </a>
+   </li>
+   <li title="存款">
+    <a href="#user-content-存款">
+     存款
+    </a>
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#项目实战目录" id="user-content-项目实战目录">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   项目实战目录
+  </h2>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127703108" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（一）">
+    python项目实战&mdash;&mdash;银行取款机系统（一）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127709126" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（二）">
+    python项目实战&mdash;&mdash;银行取款机系统（二）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127711247" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（三）">
+    python项目实战&mdash;&mdash;银行取款机系统（三）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127722125" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（四）">
+    python项目实战&mdash;&mdash;银行取款机系统（四）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127722405" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（五）">
+    python项目实战&mdash;&mdash;银行取款机系统（五）
+   </a>
+  </p>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127738787" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（六）">
+    python项目实战&mdash;&mdash;银行取款机系统（六）
+   </a>
+  </p>
+  <p>
+   python项目实战&mdash;&mdash;银行取款机系统（七）
+  </p>
+  <p>
+   <strong>
+    前言
+   </strong>
+  </p>
+  <p>
+   <strong>
+    环境使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <p>
+   <strong>
+    模块使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    requests
+   </li>
+  </ul>
+  <p>
+   上一篇我们说到了，分析了大致思路，今天，我们将具体实现其中一部分的功能&mdash;&mdash;存款。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#存款" id="user-content-存款">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    存款
+   </strong>
+  </h2>
+  <p>
+   当工资发下来后，我们会第一时间去ATM机存款，那么，我们在python怎么实现呢。
+  </p>
+  <p>
+   第一步，输入我们的卡号。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">def</span> <span class="token function">searchUserInfo</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        cardNum <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入卡号："</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   第二步，判断卡号是否存在，若存在，继续操作，反之，结束运行。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 验证是否存在卡号</span>
+        user <span class="token operator">=</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span>cardNum<span class="token punctuation">)</span>
+ 
+        <span class="token keyword">if</span> <span class="token keyword">not</span> user<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡号不存在！！！存款失败"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span></code></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/f5c239e9aeea44178c52a78c737fa5d2.png" style="max-width: 100%;">
+  </p>
+  <p>
+   第三步，我们看看卡的状态，是不是处于未锁定状态。如果没有被锁定了就肯定存不了钱了啊。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">if</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"该卡已锁定！请解锁后再使用其功能！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span></code></pre>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/93b6f2614e3341efbfa0a881f68a7ee6.png" style="max-width: 100%;">
+  </p>
+  <p>
+   第四步，如果这些都没有问题，我们就进行下一步，验证密码。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 验证密码</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token comment"># print("密码输入错误！！！查询失败")</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码输入错误次数超过三次,该卡已被锁定,请解锁后操作"</span><span class="token punctuation">)</span>
+            user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardLock <span class="token operator">=</span> <span class="token boolean">True</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span></code></pre>
+  <p>
+   密码正确后，我们就可以存钱了。（不过，我们这里存在一个逻辑错误，存款好像是不需要密码的，不过，不影响我们的大体程序）
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 开始存款</span>
+        amount <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"验证成功！请输入存款金额："</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> amount <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"存款金额有误，存款失败！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardMoney <span class="token operator">+=</span> amount
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"您存款%d元，最新余额为%d元！"</span> <span class="token operator">%</span> <span class="token punctuation">(</span>amount<span class="token punctuation">,</span> user<span class="token punctuation">.</span>card<span class="token punctuation">.</span>cardMoney<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   在这里，我们运行一下。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/7edc7be20b6a42e1b6af003edfe2a4c5.png" style="max-width: 100%;">
+  </p>
+  <p>
+   到这里，存款的所有功能都可以实现了。
+  </p>
+  <p>
+   我们下一期讲介绍关于的转账代码相关讲解。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

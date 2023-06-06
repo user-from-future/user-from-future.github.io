@@ -1,0 +1,458 @@
+<html>
+ <head>
+  <title>
+   【Python实战】Python采集小说文本内容
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    【Python实战】Python采集小说文本内容
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title="环境使用">
+     <a href="#user-content-环境使用">
+      环境使用
+     </a>
+    </li>
+    <li title="模块使用">
+     <a href="#user-content-模块使用">
+      模块使用
+     </a>
+    </li>
+    <li title="模块介绍">
+     <a href="#user-content-模块介绍">
+      模块介绍
+     </a>
+    </li>
+    <li title="模块安装问题:">
+     <a href="#user-content-模块安装问题">
+      模块安装问题:
+     </a>
+    </li>
+   </ul>
+   <li title="代码实现">
+    <a href="#user-content-代码实现">
+     代码实现
+    </a>
+   </li>
+   <ul>
+    <li title="第一章获取">
+     <a href="#user-content-第一章获取">
+      第一章获取
+     </a>
+    </li>
+    <ul>
+     <li title="获取数据">
+      <a href="#user-content-获取数据">
+       获取数据
+      </a>
+     </li>
+     <li title="解析数据">
+      <a href="#user-content-解析数据">
+       解析数据
+      </a>
+     </li>
+    </ul>
+    <li title="获取小说章节链接">
+     <a href="#user-content-获取小说章节链接">
+      获取小说章节链接
+     </a>
+    </li>
+    <li title="整本书获取">
+     <a href="#user-content-整本书获取">
+      整本书获取
+     </a>
+    </li>
+    <li title="小说保存">
+     <a href="#user-content-小说保存">
+      小说保存
+     </a>
+    </li>
+   </ul>
+   <li title="总结">
+    <a href="#user-content-总结">
+     总结
+    </a>
+   </li>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <img alt="1b83b1d3fff541e6844ba7bfc4b8f724.gif" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    今天，我们将采集某小说数据，通过这个案例，加深我们对正则表达式的理解。我们今天来通过使用正则表达式来获取我们想要的文本。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    requests
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#模块介绍" id="user-content-模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块介绍
+   </strong>
+  </h2>
+  <blockquote>
+   <ul>
+    <li>
+     <strong>
+      requests
+     </strong>
+    </li>
+   </ul>
+   <p>
+    requests是一个很实用的Python HTTP客户端库，爬虫和测试服务器响应数据时经常会用到，requests是Python语言的第三方的库，专门用于发送HTTP请求，使用起来比urllib简洁很多。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      parsel
+     </strong>
+    </li>
+   </ul>
+   <p>
+    parsel是一个python的第三方库，相当于css选择器+xpath+re。
+   </p>
+   <p>
+    parsel由scrapy团队开发，是将scrapy中的parsel独立抽取出来的，可以轻松解析html，xml内容，获取需要的数据。
+   </p>
+   <p>
+    相比于BeautifulSoup，xpath，parsel效率更高，使用更简单。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      re
+     </strong>
+    </li>
+   </ul>
+   <p>
+    re模块是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的，而正则表达式是对字符串进行模糊匹配，提取自己需要的字符串部分，他对所有的语言都通用。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      os
+     </strong>
+    </li>
+   </ul>
+   <p>
+    os 就是 &ldquo;operating system&rdquo; 的缩写，顾名思义，
+    <a href="https://so.csdn.net/so/search?q=os%E6%A8%A1%E5%9D%97&amp;spm=1001.2101.3001.7020" rel="nofollow" title="os模块">
+     os模块
+    </a>
+    提供的就是各种 Python 程序与操作系统进行交互的接口。通过使用 os 模块，一方面可以方便地与操作系统进行交互，另一方面也可以极大增强代码的可移植性。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      csv
+     </strong>
+    </li>
+   </ul>
+   <p>
+    它是一种文件格式，一般也被叫做逗号分隔值文件，可以使用 Excel 软件或者文本文档打开 。其中数据字段用半角逗号间隔（也可以使用其它字符），使用 Excel 打开时，逗号会被转换为分隔符。csv 文件是以纯文本形式存储了表格数据，并且在兼容各个操作系统。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#模块安装问题" id="user-content-模块安装问题">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块安装问题:
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <ul>
+    <li>
+     失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+    </li>
+   </ul>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h1>
+  <p>
+   现在我们一步步实现我们的需求，首先，先举个例子，我们来看下某一个小说的
+   <a href="https://www.qb5.tw/book_116659/50912006.html" rel="nofollow" title="URL">
+    URL
+   </a>
+   。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#第一章获取" id="user-content-第一章获取">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   第一章获取
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#获取数据" id="user-content-获取数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   获取数据
+  </h3>
+  <p>
+   我们首先获取网页数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+url <span class="token operator">=</span> 'https<span class="token punctuation">:</span><span class="token operator">//</span>www<span class="token punctuation">.</span>qb5<span class="token punctuation">.</span>tw<span class="token operator">/</span>book_116659<span class="token operator">/</span><span class="token number">50912006</span><span class="token punctuation">.</span>html
+
+response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   运行之后会得到下面反馈的内容，在pycharm是一行显示，不够直观，我把获取到的网页数据单独拿出了。
+  </p>
+  <p>
+   <img alt="290f555f1d3e481b9b095f06603ee544.png" src="https://img-blog.csdnimg.cn/290f555f1d3e481b9b095f06603ee544.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#解析数据" id="user-content-解析数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   解析数据
+  </h3>
+  <p>
+   看到这很多人就会发现有好多都是不需要的，所以我们就要把其中正文部分提取出来，然后，我们使用审查元素方法，查看一下我们的目标页面，你会看到如下内容。
+  </p>
+  <p>
+   <img alt="95709913d0664b7fa93bc1725db0db59.png" src="https://img-blog.csdnimg.cn/95709913d0664b7fa93bc1725db0db59.png" style="max-width: 100%;">
+  </p>
+  <p>
+   不难发现，文章的所有内容都放在了一个名为div的&ldquo;东西下面&rdquo;，这个"东西"就是html标签。HTML标签是HTML语言中最基本的单位，HTML标签是HTML最重要的组成部分。
+  </p>
+  <p>
+   细心的朋友可能就能发现，&lt;a&gt;
+   <strong>
+    标签里面存放的内容，是我们关心的正文部分。
+   </strong>
+   下面我们用正则表达式去提取，大家也可以用xpath去提取。
+  </p>
+  <pre class="line-numbers"><code class="language-python">text <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'&lt;div id="content"&gt;(.*?)&lt;/div&gt;'</span><span class="token punctuation">,</span> html_data<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span>
+        <span class="token string">' 全本小说网 www.qb5.tw，最快更新&lt;a href="https://www.qb5.tw/book_116659/"&gt;宇宙职业选手&lt;/a&gt;最新章节！&lt;br&gt;&lt;br&gt;'</span><span class="token punctuation">,</span>
+        <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'&amp;nbsp;'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'&lt;br /&gt;'</span><span class="token punctuation">,</span> <span class="token string">'\n'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   find_all匹配的返回的结果是一个列表。提取匹配结果后，使用text属性，提取文本内容，滤除br标签。随后使用replace方法，剔除空格，替换为回车进行分段。&amp;nbsp在html中是用来表示空格的。
+  </p>
+  <p>
+   这样我们第一章的内容就获取到了。
+  </p>
+  <p>
+   <img alt="4d3bce05978e45cf92c298f057ae7c5d.png" src="https://img-blog.csdnimg.cn/4d3bce05978e45cf92c298f057ae7c5d.png" style="max-width: 100%;">
+  </p>
+  <p>
+   可以看到，我们很自然的匹配到了所有正文内容，并进行了分段。我们已经顺利获得了一个章节的内容，要想下载正本小说，我们就要获取每个章节的链接。我们先分析下小说目录
+   <a href="https://www.qb5.tw/book_116659/" rel="nofollow" title="URL">
+    URL
+   </a>
+   。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#获取小说章节链接" id="user-content-获取小说章节链接">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   获取小说章节链接
+  </h2>
+  <p>
+   <img alt="6541098673014d99986fa0d870289f9f.png" src="https://img-blog.csdnimg.cn/6541098673014d99986fa0d870289f9f.png" style="max-width: 100%;">
+  </p>
+  <p>
+   通过开发者工具我们可以看到如下：
+  </p>
+  <p>
+   <img alt="a75dae98aa7b40e6a1204df7f67a28f5.png" src="https://img-blog.csdnimg.cn/a75dae98aa7b40e6a1204df7f67a28f5.png" style="max-width: 100%;">
+  </p>
+  <p>
+   我们这里还是用正则表达式获取内容，我们要其中的url和章节标题。
+  </p>
+  <pre class="line-numbers"><code class="language-python">chapter_url <span class="token operator">=</span> <span class="token string">'https://www.qb5.tw/book_116659/'</span>
+
+chapter_html <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>chapter_url<span class="token punctuation">)</span><span class="token punctuation">.</span>text
+
+info_list <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'&lt;dd&gt;&lt;a href="(.*?)"&gt;(.*?)&lt;/a&gt;&lt;/dd&gt;'</span><span class="token punctuation">,</span> chapter_html<span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#整本书获取" id="user-content-整本书获取">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   整本书获取
+  </h2>
+  <p>
+   我们只需要for循环遍历第一章的代码就可以了，不过这里需要稍微变动一下。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> info <span class="token keyword">in</span> info_list<span class="token punctuation">:</span>
+
+    url <span class="token operator">=</span> <span class="token string">'https://www.qb5.tw/book_116659/'</span> <span class="token operator">+</span> info<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#小说保存" id="user-content-小说保存">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   小说保存
+  </h2>
+  <p>
+   最后，保存我们获取到的内容。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'宇宙职业选手.txt'</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>write<span class="token punctuation">(</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   <img alt="b8c650c30ff54a7c888a195128de24c1.png" src="https://img-blog.csdnimg.cn/b8c650c30ff54a7c888a195128de24c1.png" style="max-width: 100%;">
+  </p>
+  <p>
+   到这里，我们就可以免费读自己喜欢的小说了。
+  </p>
+  <p>
+   <em>
+    <strong>
+     最后嘱咐大家一句，爬虫世界确实很有意思，技术是无罪的，学习是可以的，但还是实际操作就要适可而止了，不要触碰到法律的边界线。
+    </strong>
+   </em>
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#总结" id="user-content-总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   总结
+  </h1>
+  <p>
+   通过本文的学习，我们学习了数据采集。我们在采集数据的时候，遇到各种问题，自己在尝试解决问题，也是在一种学习，本次实战，我们明白如何使用正则表达式解析数据。今天就到这里，有什么问题，可以在评论区留言。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

@@ -1,0 +1,162 @@
+<html>
+ <head>
+  <title>
+   Python简单实现人脸识别检测, 对照片进行评分
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    Python简单实现人脸识别检测, 对照片进行评分
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+  </ul>
+  <p>
+   大家好，今天和大家说说如何用Python简单实现人脸识别检测, 对照片进行排名，看看自己有多漂亮。
+  </p>
+  <p>
+   [开发环境]:
+  </p>
+  <blockquote>
+   <p>
+    Python 3.8
+    <br>
+    Pycharm 2021.2
+   </p>
+  </blockquote>
+  <p>
+   [模块使用]:
+  </p>
+  <pre class="line-numbers"><code class="language-python">requests <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> pip install requests
+    tqdm <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> pip install tqdm 简单实现进度条效果
+    os
+    base64</code></pre>
+  <p>
+   模块安装问题:
+   <br>
+   - 如果安装python第三方模块:
+   <br>
+   1. win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   <br>
+   2. 在pycharm中点击Terminal(终端) 输入安装命令
+   <br>
+   - 安装失败原因:
+   <br>
+   - 失败一: pip 不是内部命令
+   <br>
+   解决方法: 设置环境变量
+  </p>
+  <p>
+   - 失败二: 出现大量报红 (read time out)
+   <br>
+   解决方法: 因为是网络链接超时, &nbsp;需要切换镜像源
+   <br>
+   清华：
+   <a href="https://pypi.tuna.tsinghua.edu.cn/simple" rel="nofollow">
+    https://pypi.tuna.tsinghua.edu.cn/simple
+   </a>
+   <br>
+   阿里云：
+   <a href="http://mirrors.aliyun.com/pypi/simple/" rel="nofollow">
+    http://mirrors.aliyun.com/pypi/simple/
+   </a>
+   <br>
+   中国科技大学
+   <a href="https://pypi.mirrors.ustc.edu.cn/simple/" rel="nofollow">
+    https://pypi.mirrors.ustc.edu.cn/simple/
+   </a>
+   <br>
+   华中理工大学：
+   <a href="http://pypi.hustunique.com/" rel="nofollow">
+    http://pypi.hustunique.com/
+   </a>
+   <br>
+   山东理工大学：
+   <a href="http://pypi.sdutlinux.org/" rel="nofollow">
+    http://pypi.sdutlinux.org/
+   </a>
+   <br>
+   豆瓣：
+   <a href="http://pypi.douban.com/simple/" rel="nofollow">
+    http://pypi.douban.com/simple/
+   </a>
+   <br>
+   例如：pip3 install -i
+   <a href="https://pypi.doubanio.com/simple/" rel="nofollow">
+    https://pypi.doubanio.com/simple/
+   </a>
+   模块名
+  </p>
+  <p>
+   - 失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+   <br>
+   解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好。或者你pycharm里面python解释器没有设置好。
+  </p>
+  <p>
+   在弄好这些之后，我们要借用百度的一些接口来实现。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/0cbff259b7794e118fd232a95fda9440.png" style="max-width: 100%;">
+  </p>
+  <p>
+   点击控制台，然后点击产品服务，搜索人脸识别，就可以获取接口了。
+  </p>
+  <pre class="line-numbers"><code class="language-python">host <span class="token operator">=</span> <span class="token string">'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&amp;client_id=[官网获取的AK]&amp;client_secret=[官网获取的SK]'</span>
+    response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>host<span class="token punctuation">)</span>
+    access_token <span class="token operator">=</span> response<span class="token punctuation">.</span>json<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'access_token'</span><span class="token punctuation">]</span></code></pre>
+  <p>
+   选择图片
+  </p>
+  <pre class="line-numbers"><code class="language-python">f <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'</span><span class="token interpolation"><span class="token punctuation">{</span>ImgName<span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'rb'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   图片转码
+  </p>
+  <pre class="line-numbers"><code class="language-python">img_base64 <span class="token operator">=</span> base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   就会返回字符串，里面有个颜值评分，我们提取出来即可。
+  </p>
+  <pre class="line-numbers"><code class="language-python">params <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">"image"</span><span class="token punctuation">:</span> img_base64<span class="token punctuation">,</span>  <span class="token comment"># 需要传递 图片 base64</span>
+            <span class="token string">"image_type"</span><span class="token punctuation">:</span> <span class="token string">"BASE64"</span><span class="token punctuation">,</span>
+            <span class="token string">"face_field"</span><span class="token punctuation">:</span> <span class="token string">"beauty"</span>
+        <span class="token punctuation">}</span></code></pre>
+  <p>
+   这样，我们就获取的了颜值评分。大家还可以在这个基础上，实现对多个照片评分并排名。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

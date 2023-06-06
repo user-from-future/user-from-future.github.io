@@ -1,0 +1,241 @@
+<html>
+ <head>
+  <title>
+   python项目实战&mdash;&mdash;银行取款机系统（二）
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python项目实战&mdash;&mdash;银行取款机系统（二）
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="项目实战目录">
+    <a href="#user-content-项目实战目录">
+     项目实战目录
+    </a>
+   </li>
+   <li title="开户">
+    <a href="#user-content-开户">
+     开户
+    </a>
+   </li>
+   <ul>
+    <li title="用户">
+     <a href="#user-content-用户">
+      用户
+     </a>
+    </li>
+    <li title="卡">
+     <a href="#user-content-卡">
+      卡
+     </a>
+    </li>
+   </ul>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#项目实战目录" id="user-content-项目实战目录">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   项目实战目录
+  </h2>
+  <p>
+   <a href="https://blog.csdn.net/BROKEN__Y/article/details/127703108" rel="nofollow" title="python项目实战&mdash;&mdash;银行取款机系统（一）">
+    python项目实战&mdash;&mdash;银行取款机系统（一）
+   </a>
+  </p>
+  <p>
+   python项目实战&mdash;&mdash;银行取款机系统（二）
+  </p>
+  <p>
+   <strong>
+    前言
+   </strong>
+  </p>
+  <p>
+   <strong>
+    环境使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <p>
+   <strong>
+    模块使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    requests
+   </li>
+   <li>
+    random
+   </li>
+  </ul>
+  <p>
+   上一篇我们说到了，分析了大致思路，今天，我们将具体实现其中一部分的功能&mdash;&mdash; 开户 。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#开户" id="user-content-开户">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   开户
+  </h2>
+  <p>
+   首先，是我们的开户功能，开户首先需要用户的姓名，身份证号码，电话号码之类，卡里面一般有卡号，余额，卡的密码，卡的状态。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#用户" id="user-content-用户">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   用户
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>name<span class="token punctuation">,</span>idCard<span class="token punctuation">,</span>phone<span class="token punctuation">,</span>card<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name<span class="token operator">=</span>name
+        self<span class="token punctuation">.</span>idCard<span class="token operator">=</span>idCard
+        self<span class="token punctuation">.</span>phone<span class="token operator">=</span>phone
+        self<span class="token punctuation">.</span>card<span class="token operator">=</span>card</code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#卡" id="user-content-卡">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   卡
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Card</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>cardId<span class="token punctuation">,</span>cardPasswd<span class="token punctuation">,</span>cardMoney<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>cardId<span class="token operator">=</span>cardId
+        self<span class="token punctuation">.</span>cardPasswd<span class="token operator">=</span>cardPasswd
+        self<span class="token punctuation">.</span>cardMoney<span class="token operator">=</span>cardMoney
+        self<span class="token punctuation">.</span>cardLock <span class="token operator">=</span> <span class="token boolean">False</span></code></pre>
+  <p>
+   在写完什么的代码后，我们就可以写开户的代码了。通过字典的方式把用户信息存储。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment">#开户</span>
+    <span class="token keyword">def</span> <span class="token function">createUser</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment">#目标：向用户字典中添加一对键值对（卡号-用户）</span>
+        name<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入姓名："</span><span class="token punctuation">)</span>
+        idCard<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入身份证号码："</span><span class="token punctuation">)</span>
+        phone<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入电话号码："</span><span class="token punctuation">)</span>
+
+        prestoreMoney<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入存款金额："</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> prestoreMoney<span class="token operator">&lt;</span><span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"预存款输入失误！！开户失败"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span></code></pre>
+  <p>
+   我们来运行一下。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/4e40c8f2345b4e4489820ed567534f25.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这里，存款金额我们设置了是正数，负数是会报错的。
+  </p>
+  <p>
+   接下来，根据我们的生活经验，接下来就是要我们设置密码
+  </p>
+  <pre class="line-numbers"><code class="language-python">onePasswd<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请设置密码："</span><span class="token punctuation">)</span>
+
+        <span class="token comment">#验证密码</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>checkPasswd<span class="token punctuation">(</span>onePasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码输入错误！！！开户失败"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span></code></pre>
+  <p>
+   密码错误三次后会提示。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/114e435ac87b4ec5be5f98a12f4206e7.png" style="max-width: 100%;">
+  </p>
+  <p>
+   密码输入成功后，银行就会给你一个卡号。
+  </p>
+  <pre class="line-numbers"><code class="language-python">cardStr <span class="token operator">=</span> self<span class="token punctuation">.</span>randomCardID<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment">#print(cardId)</span>
+
+
+        card<span class="token operator">=</span>Card<span class="token punctuation">(</span>cardStr<span class="token punctuation">,</span>onePasswd<span class="token punctuation">,</span>prestoreMoney<span class="token punctuation">)</span>
+        user<span class="token operator">=</span>User<span class="token punctuation">(</span>name<span class="token punctuation">,</span>idCard<span class="token punctuation">,</span>phone<span class="token punctuation">,</span>card<span class="token punctuation">)</span><span class="token comment">#创建用户</span>
+
+        <span class="token comment">#存到字典</span>
+        self<span class="token punctuation">.</span>allUsers<span class="token punctuation">[</span>cardStr<span class="token punctuation">]</span><span class="token operator">=</span>user
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"开户成功！！！请牢记卡号</span><span class="token interpolation"><span class="token punctuation">{</span>cardStr<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span></code></pre>
+  <p>
+   我们运行一下。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/0734ca66c536492e88fc499f1c3baeca.png" style="max-width: 100%;">
+  </p>
+  <p>
+   一般卡号都是随机生成的，代码实现如下
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment">#生成卡号</span>
+    <span class="token keyword">def</span> <span class="token function">randomCardID</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            <span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">""</span>
+            <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                ch <span class="token operator">=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>random<span class="token punctuation">.</span>randrange<span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">'0'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">'9'</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token builtin">str</span> <span class="token operator">+=</span> ch
+            <span class="token comment">#判断是否重复</span>
+            <span class="token keyword">if</span> <span class="token keyword">not</span> self<span class="token punctuation">.</span>allUsers<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token builtin">str</span></code></pre>
+  <p>
+   在这里，我们不管进行什么操作，都是需要输入密码，一般密码错误三次，就会被锁定，这些功能python也可以实现，我们会在后期会讲到，这里，就主要说说密码验证的问题。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 验证密码</span>
+    <span class="token keyword">def</span> <span class="token function">checkPasswd</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> readPasswd<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            tempPasswd <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入密码："</span><span class="token punctuation">)</span>
+            <span class="token keyword">if</span> tempPasswd <span class="token operator">==</span> readPasswd<span class="token punctuation">:</span>
+                <span class="token keyword">return</span> <span class="token boolean">True</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span></code></pre>
+  <p>
+   下一期我们将会讲解如何写查询的相关代码。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

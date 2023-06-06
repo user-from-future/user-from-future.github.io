@@ -1,0 +1,1079 @@
+<html>
+ <head>
+  <title>
+   基于OpenCV的图片和视频人脸识别
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    基于OpenCV的图片和视频人脸识别
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="🥩前言">
+    <a href="#user-content-前言">
+     🥩前言
+    </a>
+   </li>
+   <ul>
+    <li title="🍖 环境使用">
+     <a href="#user-content--环境使用">
+      🍖 环境使用
+     </a>
+    </li>
+    <li title="🍖 模块使用">
+     <a href="#user-content--模块使用">
+      🍖 模块使用
+     </a>
+    </li>
+    <li title="🍖 模块介绍">
+     <a href="#user-content--模块介绍">
+      🍖 模块介绍
+     </a>
+    </li>
+    <li title="🍖 模块安装问题:">
+     <a href="#user-content--模块安装问题">
+      🍖 模块安装问题:
+     </a>
+    </li>
+   </ul>
+   <li title="🥩人脸检测">
+    <a href="#user-content-人脸检测">
+     🥩人脸检测
+    </a>
+   </li>
+   <ul>
+    <li title="🍖Haar 级联的概念">
+     <a href="#user-content-haar-级联的概念">
+      🍖Haar 级联的概念
+     </a>
+    </li>
+    <li title="🍖获取 Haar 级联数据">
+     <a href="#user-content-获取-haar-级联数据">
+      🍖获取 Haar 级联数据
+     </a>
+    </li>
+    <ul>
+     <li title="🍗 1.下载所需版本">
+      <a href="#user-content--1下载所需版本">
+       🍗 1.下载所需版本
+      </a>
+     </li>
+     <li title="🍗 2.安装文件">
+      <a href="#user-content--2安装文件">
+       🍗 2.安装文件
+      </a>
+     </li>
+     <li title="🍗 3.XML文件名称">
+      <a href="#user-content--3xml文件名称">
+       🍗 3.XML文件名称
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="🥩使用 OpenCV 进行人脸检测">
+    <a href="#user-content-使用-opencv-进行人脸检测">
+     🥩使用 OpenCV 进行人脸检测
+    </a>
+   </li>
+   <ul>
+    <li title="🍖静态图像中人脸检测">
+     <a href="#user-content-静态图像中人脸检测">
+      🍖静态图像中人脸检测
+     </a>
+    </li>
+    <ul>
+     <li title="🍗【示例】识别图片中的人脸">
+      <a href="#user-content-🍗【示例】识别图片中的人脸">
+       🍗【示例】识别图片中的人脸
+      </a>
+     </li>
+     <li title="🍗 运行效果：">
+      <a href="#user-content--运行效果">
+       🍗 运行效果：
+      </a>
+     </li>
+     <li title="🍗【示例】识别图片中多张人脸">
+      <a href="#user-content-🍗【示例】识别图片中多张人脸">
+       🍗【示例】识别图片中多张人脸
+      </a>
+     </li>
+     <li title="🍗 运行效果：">
+      <a href="#user-content--运行效果-1">
+       🍗 运行效果：
+      </a>
+     </li>
+    </ul>
+    <li title="🍖视频中的人脸检测">
+     <a href="#user-content-视频中的人脸检测">
+      🍖视频中的人脸检测
+     </a>
+    </li>
+    <ul>
+     <li title="🍗【示例】识别视频中人脸">
+      <a href="#user-content-🍗【示例】识别视频中人脸">
+       🍗【示例】识别视频中人脸
+      </a>
+     </li>
+     <li title="🍗 运行效果：">
+      <a href="#user-content--运行效果-2">
+       🍗 运行效果：
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="🥩人脸识别">
+    <a href="#user-content-人脸识别">
+     🥩人脸识别
+    </a>
+   </li>
+   <ul>
+    <li title="🍖训练数据">
+     <a href="#user-content-训练数据">
+      🍖训练数据
+     </a>
+    </li>
+    <ul>
+     <li title="🍗【示例】训练数据">
+      <a href="#user-content-训练数据">
+       🍗【示例】训练数据
+      </a>
+     </li>
+     <li title="🍗【示例】基于 LBPH 的人脸识别">
+      <a href="#user-content-人脸识别">
+       🍗【示例】基于 LBPH 的人脸识别
+      </a>
+     </li>
+     <li title="🍗 运行效果：">
+      <a href="#user-content--运行效果-3">
+       🍗 运行效果：
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="🥩总结">
+    <a href="#user-content-总结">
+     🥩总结
+    </a>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E5%89%8D%E8%A8%80">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    前言
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    环境使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    模块使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    模块介绍
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%A8%A1%E5%9D%97%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%3A">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    模块安装问题:
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    人脸检测
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96Haar%20%E7%BA%A7%E8%81%94%E7%9A%84%E6%A6%82%E5%BF%B5">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    Haar 级联的概念
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E8%8E%B7%E5%8F%96%20Haar%20%E7%BA%A7%E8%81%94%E6%95%B0%E6%8D%AE">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    获取 Haar 级联数据
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%201.%E4%B8%8B%E8%BD%BD%E6%89%80%E9%9C%80%E7%89%88%E6%9C%AC">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    1.下载所需版本
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%202.%E5%AE%89%E8%A3%85%E6%96%87%E4%BB%B6">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    2.安装文件
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A0%F0%9F%8D%97%203.XML%E6%96%87%E4%BB%B6%E5%90%8D%E7%A7%B0">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    3.XML文件名称
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E4%BD%BF%E7%94%A8%20OpenCV%20%E8%BF%9B%E8%A1%8C%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    使用 OpenCV 进行人脸检测
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E9%9D%99%E6%80%81%E5%9B%BE%E5%83%8F%E4%B8%AD%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    静态图像中人脸检测
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E8%AF%86%E5%88%AB%E5%9B%BE%E7%89%87%E4%B8%AD%E7%9A%84%E4%BA%BA%E8%84%B8">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】识别图片中的人脸
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%20%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行效果：
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A0%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E8%AF%86%E5%88%AB%E5%9B%BE%E7%89%87%E4%B8%AD%E5%A4%9A%E5%BC%A0%E4%BA%BA%E8%84%B8">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】识别图片中多张人脸
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%20%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行效果：
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A0%F0%9F%8D%96%E8%A7%86%E9%A2%91%E4%B8%AD%E7%9A%84%E4%BA%BA%E8%84%B8%E6%A3%80%E6%B5%8B">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    视频中的人脸检测
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E8%AF%86%E5%88%AB%E8%A7%86%E9%A2%91%E4%B8%AD%E4%BA%BA%E8%84%B8">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】识别视频中人脸
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%20%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行效果：
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    人脸识别
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    训练数据
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E8%AE%AD%E7%BB%83%E6%95%B0%E6%8D%AE">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】训练数据
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E5%9F%BA%E4%BA%8E%20LBPH%20%E7%9A%84%E4%BA%BA%E8%84%B8%E8%AF%86%E5%88%AB">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】基于 LBPH 的人脸识别
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%20%E8%BF%90%E8%A1%8C%E6%95%88%E6%9E%9C%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行效果：
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E6%80%BB%E7%BB%93">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    总结
+   </a>
+  </p>
+  <hr>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   前言
+  </h1>
+  <p>
+   <img alt="1b83b1d3fff541e6844ba7bfc4b8f724.gif" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    我们身边的人脸识别有车站检票，监控人脸，无人超市，支付宝人脸支付，上班打卡，人脸解锁手机。
+   </p>
+   <p>
+    人脸检测是人脸识别系统组成的关键部分之一，其目的是检测出任意给定图片中的包含的一个或多个人脸，是人脸识别、表情识别等下游任务的基础。人脸识别是通过采集包含人脸的图像或视频数据，通过对比和分析人脸特征信息从而实现身份识别的生物识别技术，是人脸识别系统的核心组件
+   </p>
+   <p>
+    随着人工智能的不断发展，机器学习这门技术也越来越重要，很多人都开启了学习机器学习，本文就介绍了机器学习的基础内容，基于OpenCV的图片和视频人脸识别。介绍Haar的概念，以及如何对图片和视频中进行人脸检测，以及如何训练我们自己的模型，并在自己的模型下进行人脸识别。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-环境使用" id="user-content--环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    环境使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块使用" id="user-content--模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    opencv-python
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块介绍" id="user-content--模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+   </strong>
+   模块介绍
+  </h2>
+  <blockquote>
+   <ol>
+    <li>
+     opencv
+    </li>
+   </ol>
+   <p>
+    关于OpenCv
+   </p>
+   <p>
+    Opencv是一个开源的的跨平台计算机视觉库，内部实现了图像处理和计算机视觉方面的很多通用算法，对于python而言，在引用opencv库的时候需要写为import cv2。其中，cv2是opencv的C++命名空间名称，使用它来表示调用的是C++开发的opencv的接口。
+   </p>
+   <p>
+    目前人脸识别有很多较为成熟的方法，这里调用OpenCv库，而OpenCV又提供了三种人脸识别方法，分别是LBPH方法、EigenFishfaces方法、Fisherfaces方法。本文采用的是LBPH（Local Binary Patterns Histogram，局部二值模式直方图）方法。在OpenCV中，可以用函数cv2.face.LBPHFaceRecognizer_create()生成LBPH识别器实例模型，然后应用cv2.face_FaceRecognizer.train()函数完成训练，最后用cv2.face_FaceRecognizer.predict()函数完成人脸识别。
+   </p>
+   <p>
+    CascadeClassifier，是Opencv中做人脸检测的时候的一个级联分类器。并且既可以使用Haar，也可以使用LBP特征。其中Haar特征是一种反映图像的灰度变化的，像素分模块求差值的一种特征。它分为三类：边缘特征、线性特征、中心特征和对角线特征。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块安装问题" id="user-content--模块安装问题">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+   </strong>
+   模块安装问题:
+  </h2>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <ul>
+    <li>
+     失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+    </li>
+   </ul>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#人脸检测" id="user-content-人脸检测">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   人脸检测
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#haar-级联的概念" id="user-content-haar-级联的概念">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   Haar 级联的概念
+  </h2>
+  <p>
+   <em>
+    <strong>
+     Haar级联
+    </strong>
+   </em>
+   是一种基于Haar特征的目标检测方法，它由多个级联分类器组成，每个级联分类器由多个弱分类器组成。在目标检测中，Haar级联通过逐级检测，将输入图像分成多个子区域，然后在每个子区域中应用Haar特征进行分类。这种级联的方式可以大大减少计算量，提高检测速度，同时保证较高的准确性。Haar级联在人脸识别、车辆识别等领域有着广泛的应用。
+  </p>
+  <p>
+   提取出图像的细节对产生稳定分类结果和跟踪结果很有用。这些提取的结果被称为特征，专业的表述为：从图像数据中提取特征。虽然任意像素都可以能影响多个特征，但特征应该比像素少得多。两个图像的相似程度可以通过它们对应特征的欧氏距离来度量。
+  </p>
+  <p>
+   Haar 特征是一种用于实现实时人脸跟踪的特征。每一个 Haar 特征都描述了相邻图像区域的对比模式。例如，边、顶点和细线都能生成具有判别性的特征。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#获取-haar-级联数据" id="user-content-获取-haar-级联数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   获取 Haar 级联数据
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-1下载所需版本" id="user-content--1下载所需版本">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   1.下载所需版本
+  </h3>
+  <p>
+   首先我们要进入 OpenCV 官网：
+   <a href="https://opencv.org" rel="nofollow">
+    https://opencv.org
+   </a>
+   下载你需要的版本。点击 RELEASES
+  </p>
+  <p>
+   （发布）。如下图所示：
+  </p>
+  <p>
+   <img alt="ebd103675b714a2a987287463d36025e.png" src="https://img-blog.csdnimg.cn/ebd103675b714a2a987287463d36025e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   由于 OpenCV 支持好多平台，比如 Windows, Android, Maemo, FreeBSD, OpenBSD, iOS,
+  </p>
+  <p>
+   Linux 和 Mac OS，一般初学者都是用 windows，点击 Windows。
+  </p>
+  <p>
+   <img alt="faa9ffbcae7640c0a738c5086d682597.png" src="https://img-blog.csdnimg.cn/faa9ffbcae7640c0a738c5086d682597.png" style="max-width: 100%;">
+  </p>
+  <p>
+   点击 Windows 后跳出下面界面，等待 5s 自动下载。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-2安装文件" id="user-content--2安装文件">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   2.安装文件
+  </h3>
+  <p>
+   文件下载好后，然后双击下载的文件，进行安装，实质就是解压一下，解压完出来一个文件夹，其他什么也没发生。安装完后的目录结构如下。其中 build 是 OpenCV 使用时要用到的一些库文件，而 sources 中则是 OpenCV 官方为我们提供的一些 demo 示例源码。
+  </p>
+  <p>
+   <img alt="5f0dc52b8f614cdfa887ae13afb4b06c.png" src="https://img-blog.csdnimg.cn/5f0dc52b8f614cdfa887ae13afb4b06c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   在 sources 的一个文件夹 data/haarcascades。该文件夹包含了所有 OpenCV 的人脸检测的
+  </p>
+  <p>
+   XML 文件，这些可用于检测静止图像、视频和摄像头所得到图像中的人脸。
+  </p>
+  <p>
+   <img alt="1de2d098eaab4350b6b4b5911557dc3d.png" src="https://img-blog.csdnimg.cn/1de2d098eaab4350b6b4b5911557dc3d.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-3xml文件名称" id="user-content--3xml文件名称">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   3.XML文件名称
+  </h3>
+  <blockquote>
+   <p>
+    人脸检测器（默认）：haarcascade_frontalface_default.xml
+   </p>
+   <p>
+    人脸检测器（快速 Harr）：haarcascade_frontalface_alt2.xml
+   </p>
+   <p>
+    人脸检测器（侧视）：haarcascade_profileface.xml
+   </p>
+   <p>
+    眼部检测器（左眼）：haarcascade_lefteye_2splits.xml
+   </p>
+   <p>
+    眼部检测器（右眼）：haarcascade_righteye_2splits.xml
+   </p>
+   <p>
+    嘴部检测器：haarcascade_mcs_mouth.xml
+   </p>
+   <p>
+    鼻子检测器：haarcascade_mcs_nose.xml
+   </p>
+   <p>
+    身体检测器：haarcascade_fullbody.xml
+   </p>
+   <p>
+    人脸检测器（快速 LBP）：lbpcascade_frontalface.xml
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#使用-opencv-进行人脸检测" id="user-content-使用-opencv-进行人脸检测">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   使用 OpenCV 进行人脸检测
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#静态图像中人脸检测" id="user-content-静态图像中人脸检测">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   静态图像中人脸检测
+  </h2>
+  <p>
+   人脸检测首先是加载图像并检测人脸，这也是最基本的一步。为了使所得到的结果有意义，可在原始图像的人脸周围绘制矩形框。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例识别图片中的人脸" id="user-content-示例识别图片中的人脸">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】识别图片中的人脸
+  </h3>
+  <p>
+   我们首先来识别图片中的人脸，我们先识别图片中的一张人脸，假如，我们测试的照片有两张人脸的话，就会只显示一个人脸。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2 <span class="token keyword">as</span> cv
+<span class="token keyword">def</span> <span class="token function">face_detect_demo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment">#将图片转换为灰度图片</span>
+    gray<span class="token operator">=</span>cv<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span>cv<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
+    <span class="token comment">#加载特征数据</span>
+    face_detector<span class="token operator">=</span>cv<span class="token punctuation">.</span>CascadeClassifier<span class="token punctuation">(</span><span class="token string">'E:\Program Files (x86)\Python39\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml'</span><span class="token punctuation">)</span>
+    faces<span class="token operator">=</span>face_detector<span class="token punctuation">.</span>detectMultiScale<span class="token punctuation">(</span>gray<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>w<span class="token punctuation">,</span>h <span class="token keyword">in</span> faces<span class="token punctuation">:</span>
+        cv<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>img<span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token punctuation">)</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+    cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'result'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+<span class="token comment">#加载图片</span>
+img<span class="token operator">=</span>cv<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">'text1.jpg'</span><span class="token punctuation">)</span>
+face_detect_demo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行效果" id="user-content--运行效果">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行效果：
+  </h3>
+  <p>
+   <img alt="e37817b6220c4689ae306c3d7c83711b.png" src="https://img-blog.csdnimg.cn/e37817b6220c4689ae306c3d7c83711b.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例识别图片中多张人脸" id="user-content-示例识别图片中多张人脸">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】识别图片中多张人脸
+  </h3>
+  <p>
+   ​​​​​​​我们前面识别了图片中的一张人脸，假如，我们想测试的照片有两张人脸的话，怎么办？前面的代码就实现不了了，我们来看看多张人脸是怎么实现的。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2 <span class="token keyword">as</span> cv
+<span class="token keyword">def</span> <span class="token function">face_detect_demo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment">#将图片灰度</span>
+    gray<span class="token operator">=</span>cv<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span>cv<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
+    <span class="token comment">#加载特征数据</span>
+    face_detector <span class="token operator">=</span> cv<span class="token punctuation">.</span>CascadeClassifier<span class="token punctuation">(</span>
+        <span class="token string">'E:\Program Files (x86)\Python39\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml'</span><span class="token punctuation">)</span>
+    faces <span class="token operator">=</span> face_detector<span class="token punctuation">.</span>detectMultiScale<span class="token punctuation">(</span>gray<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>w<span class="token punctuation">,</span>h <span class="token keyword">in</span> faces<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>w<span class="token punctuation">,</span>h<span class="token punctuation">)</span>
+        cv<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>img<span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token punctuation">)</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+        cv<span class="token punctuation">.</span>circle<span class="token punctuation">(</span>img<span class="token punctuation">,</span>center<span class="token operator">=</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>radius<span class="token operator">=</span>w<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+    <span class="token comment">#显示图片</span>
+    cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'result'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+
+<span class="token comment">#加载图片</span>
+img<span class="token operator">=</span>cv<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">'text2.jpg'</span><span class="token punctuation">)</span>
+<span class="token comment">#调用人脸检测方法</span>
+face_detect_demo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行效果-1" id="user-content--运行效果-1">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行效果：
+  </h3>
+  <p>
+   我们找了一个多张人脸的照片，相信大家对这张图片并不陌生，我们可以清晰的看到，我们准确无误的识别到了每一张人脸。
+  </p>
+  <p>
+   <img alt="27d6915101d449d0943c55a2974091f6.png" src="https://img-blog.csdnimg.cn/27d6915101d449d0943c55a2974091f6.png" style="max-width: 100%;">
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#视频中的人脸检测" id="user-content-视频中的人脸检测">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   视频中的人脸检测
+  </h2>
+  <p>
+   视频是一张一张图片组成的，在视频的帧上重复这个过程就能完成视频中的人脸检测。
+  </p>
+  <blockquote>
+   <p>
+    视频中的人脸检测可以通过以下步骤实现：
+   </p>
+   <ol>
+    <li>
+     图像预处理：对输入的视频帧进行预处理，包括图像增强、图像滤波、图像二值化等操作，以增强图像的对比度和亮度，减少噪声的影响，提高图像的质量。
+    </li>
+    <li>
+     特征提取：使用图像处理算法，如SIFT、SURF、ORB等，提取视频帧中的特征，如人脸的位置、大小、形状、姿态等信息，作为人脸检测的基础。
+    </li>
+    <li>
+     人脸检测：使用人脸检测算法，如Haar Cascade、LBPH、LBPH-SIFT等，对视频帧中的图像进行人脸检测，得到检测到的人脸的位置、大小、形状等信息。
+    </li>
+    <li>
+     人脸跟踪：使用人脸跟踪算法，如OpenCV中的人脸跟踪算法，对检测到的人脸进行跟踪，得到人脸的位置、大小、形状等信息。
+    </li>
+    <li>
+     人脸识别：使用人脸识别算法，如支持向量机、深度学习等，对人脸跟踪得到的人脸进行识别，得到人脸的身份信息。
+    </li>
+   </ol>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例识别视频中人脸" id="user-content-示例识别视频中人脸">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】识别视频中人脸
+  </h3>
+  <p>
+   视频是一张一张图片组成的，在视频的帧上重复这个过程就能完成视频中的人脸检测。我们看看代码是如何实现的。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2 <span class="token keyword">as</span> cv
+<span class="token keyword">def</span> <span class="token function">face_detect_demo</span><span class="token punctuation">(</span>img<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment">#将图片灰度</span>
+    gray<span class="token operator">=</span>cv<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span>cv<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
+    <span class="token comment">#加载特征数据</span>
+    face_detector <span class="token operator">=</span> cv<span class="token punctuation">.</span>CascadeClassifier<span class="token punctuation">(</span>
+        <span class="token string">'E:\Program Files (x86)\Python39\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml'</span><span class="token punctuation">)</span>
+    faces <span class="token operator">=</span> face_detector<span class="token punctuation">.</span>detectMultiScale<span class="token punctuation">(</span>gray<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>w<span class="token punctuation">,</span>h <span class="token keyword">in</span> faces<span class="token punctuation">:</span>
+        cv<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>img<span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token punctuation">)</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+        cv<span class="token punctuation">.</span>circle<span class="token punctuation">(</span>img<span class="token punctuation">,</span>center<span class="token operator">=</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>radius<span class="token operator">=</span><span class="token punctuation">(</span>w<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+    cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'result'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+<span class="token comment">#读取视频</span>
+cap<span class="token operator">=</span>cv<span class="token punctuation">.</span>VideoCapture<span class="token punctuation">(</span><span class="token string">'video.mp4'</span><span class="token punctuation">)</span>
+<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+    flag<span class="token punctuation">,</span>frame<span class="token operator">=</span>cap<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'flag:'</span><span class="token punctuation">,</span>flag<span class="token punctuation">,</span><span class="token string">'frame.shape:'</span><span class="token punctuation">,</span>frame<span class="token punctuation">.</span>shape<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> flag<span class="token punctuation">:</span>
+        <span class="token keyword">break</span>
+    face_detect_demo<span class="token punctuation">(</span>frame<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">'q'</span><span class="token punctuation">)</span> <span class="token operator">==</span> cv<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">break</span>
+cv<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cap<span class="token punctuation">.</span>release<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行效果-2" id="user-content--运行效果-2">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行效果：
+  </h3>
+  <p>
+   这里我就不放视频了，我放一张视频的截图，我们可以清楚的看到，可以清晰的识别到我们的人脸。
+  </p>
+  <p>
+   <img alt="52dfee8e214747c59ab6b8cdeced3805.png" src="https://img-blog.csdnimg.cn/52dfee8e214747c59ab6b8cdeced3805.png" style="max-width: 100%;">
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#人脸识别" id="user-content-人脸识别">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   人脸识别
+  </h1>
+  <p>
+   人脸检测是 OpenCV 的一个很不错的功能，它是人脸识别的基础。什么是人脸识别呢？
+  </p>
+  <p>
+   其实就是一个程序能识别给定图像或视频中的人脸。实现这一目标的方法之一是用一系列分好类的图像来&ldquo;训练&rdquo;程序，并基于这些图像来进行识别。
+  </p>
+  <p>
+   这就是 OpenCV 及其人脸识别模块进行人脸识别的过程。
+  </p>
+  <p>
+   人脸识别模块的另外一个重要特征是：每个识别都具有转置信（confidence）评分，因此可在实际应用中通过对其设置阈值来进行筛选。
+  </p>
+  <p>
+   人脸识别所需要的人脸可以通过两种方式来得到：自己获得图像或从人脸数据库免费获得可用的人脸图像。互联网上有许多人脸数据库。
+  </p>
+  <p>
+   为了对这些样本进行人脸识别，必须要在包含人脸的样本图像上进行人脸识别。这是一个学习的过程，但并不像自己提供的图像那样令人满意。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#训练数据" id="user-content-训练数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   训练数据
+  </h2>
+  <p>
+   有了数据，需要将这些样本图像加载到人脸识别算法中。所有的人脸识别算法在它们的train()函数中都有两个参数：图像数组和标签数组。这些标签表示进行识别时候某人人脸的ID，因此根据 ID 可以知道被识别的人是谁。要做到这一点，将在「trainer/trainer」目录中保存为.yml文件。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例训练数据" id="user-content-示例训练数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】训练数据
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> sys
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+
+
+<span class="token keyword">def</span> <span class="token function">getImageAndLabels</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    facesSamples <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    ids <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    imagePaths <span class="token operator">=</span> <span class="token punctuation">[</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>path<span class="token punctuation">,</span> f<span class="token punctuation">)</span> <span class="token keyword">for</span> f <span class="token keyword">in</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token comment"># 检测人脸</span>
+    face_detector <span class="token operator">=</span> cv2<span class="token punctuation">.</span>CascadeClassifier<span class="token punctuation">(</span>
+        <span class="token string">'E:\Program Files (x86)\Python39\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml'</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># 遍历列表中的图片</span>
+    <span class="token keyword">for</span> imagePath <span class="token keyword">in</span> imagePaths<span class="token punctuation">:</span>
+        <span class="token comment"># 打开图片</span>
+        PIL_img <span class="token operator">=</span> Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span>imagePath<span class="token punctuation">)</span><span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">'L'</span><span class="token punctuation">)</span>
+        <span class="token comment"># 将图像转换为数组</span>
+        img_numpy <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>PIL_img<span class="token punctuation">,</span> <span class="token string">'uint8'</span><span class="token punctuation">)</span>
+        faces <span class="token operator">=</span> face_detector<span class="token punctuation">.</span>detectMultiScale<span class="token punctuation">(</span>img_numpy<span class="token punctuation">)</span>
+        <span class="token comment"># 获取每张图片的id</span>
+        <span class="token builtin">id</span> <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>split<span class="token punctuation">(</span>imagePath<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token keyword">for</span> x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> w<span class="token punctuation">,</span> h <span class="token keyword">in</span> faces<span class="token punctuation">:</span>
+            facesSamples<span class="token punctuation">.</span>append<span class="token punctuation">(</span>img_numpy<span class="token punctuation">[</span>y<span class="token punctuation">:</span>y <span class="token operator">+</span> h<span class="token punctuation">,</span> x<span class="token punctuation">:</span>x <span class="token operator">+</span> w<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            ids<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token builtin">id</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> facesSamples<span class="token punctuation">,</span> ids
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    <span class="token comment"># 图片路径</span>
+    path <span class="token operator">=</span> <span class="token string">'./data/jm/'</span>
+    <span class="token comment"># 获取图像数组和id标签数组</span>
+    faces<span class="token punctuation">,</span> ids <span class="token operator">=</span> getImageAndLabels<span class="token punctuation">(</span>path<span class="token punctuation">)</span>
+    <span class="token comment"># 获取训练对象</span>
+    recognizer <span class="token operator">=</span> cv2<span class="token punctuation">.</span>face<span class="token punctuation">.</span>LBPHFaceRecognizer_create<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    recognizer<span class="token punctuation">.</span>train<span class="token punctuation">(</span>faces<span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>ids<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment"># 保存文件</span>
+    recognizer<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string">'trainer/trainer.yml'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    基于 LBPH
+   </strong>
+   <strong>
+    的人脸识别
+   </strong>
+  </p>
+  <p>
+   LBPH（Local Binary Pattern Histogram）将检测到的人脸分为小单元，并将其与模型中的对应单元进行比较，对每个区域的匹配值产生一个直方图。由于这种方法的灵活性，LBPH是唯一允许模型样本人脸和检测到的人脸在形状、大小上可以不同的人脸识别算法。
+  </p>
+  <p>
+   调整后的区域中调用 predict()函数，该函数返回两个元素的数组：第一个元素是所识别个体的标签，第二个是置信度评分。所有的算法都有一个置信度评分阈值，置信度评分用来衡量所识别人脸与原模型的差距，0 表示完全匹配。可能有时不想保留所有的识别结果，则需要进一步处理，因此可用自己的算法来估算识别的置信度评分。LBPH 一个好的识别参考值要低于 50 ，任何高于 80 的参考值都会被认为是低的置信度评分。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例基于-lbph-的人脸识别" id="user-content-示例基于-lbph-的人脸识别">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】基于 LBPH 的人脸识别
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">import</span> os
+<span class="token comment">#加载训练数据集文件</span>
+recogizer<span class="token operator">=</span>cv2<span class="token punctuation">.</span>face<span class="token punctuation">.</span>LBPHFaceRecognizer_create<span class="token punctuation">(</span><span class="token punctuation">)</span>
+recogizer<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token string">'trainer/trainer.yml'</span><span class="token punctuation">)</span>
+<span class="token comment">#准备识别的图片</span>
+img<span class="token operator">=</span>cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">'19.pgm'</span><span class="token punctuation">)</span>
+gray<span class="token operator">=</span>cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span>cv2<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
+face_detector <span class="token operator">=</span> cv2<span class="token punctuation">.</span>CascadeClassifier<span class="token punctuation">(</span>
+    <span class="token string">'E:\Program Files (x86)\Python39\Lib\site-packages\cv2\data\haarcascade_frontalface_default.xml'</span><span class="token punctuation">)</span>
+faces <span class="token operator">=</span> face_detector<span class="token punctuation">.</span>detectMultiScale<span class="token punctuation">(</span>gray<span class="token punctuation">)</span>
+<span class="token keyword">for</span> x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>w<span class="token punctuation">,</span>h <span class="token keyword">in</span> faces<span class="token punctuation">:</span>
+    cv2<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>img<span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>
+    <span class="token comment">#人脸识别</span>
+    <span class="token builtin">id</span><span class="token punctuation">,</span>confidence<span class="token operator">=</span>recogizer<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>gray<span class="token punctuation">[</span>y<span class="token punctuation">:</span>y<span class="token operator">+</span>h<span class="token punctuation">,</span>x<span class="token punctuation">:</span>x<span class="token operator">+</span>w<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'标签id:'</span><span class="token punctuation">,</span><span class="token builtin">id</span><span class="token punctuation">,</span><span class="token string">'置信评分：'</span><span class="token punctuation">,</span>confidence<span class="token punctuation">)</span>
+cv2<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'result'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+cv2<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+cv2<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行效果-3" id="user-content--运行效果-3">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行效果：
+  </h3>
+  <blockquote>
+   <p>
+    标签id: 15 置信评分： 84.05495321482604
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#总结" id="user-content-总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   总结
+  </h1>
+  <p>
+   随着人工智能的不断发展，机器学习这门技术也越来越重要，很多人都开启了学习机器学习，本文就介绍了机器学习的基础内容。介绍Haar的概念，以及如何对图片和视频中进行人脸检测，以及如何训练我们自己的模型，并在自己的模型下进行人脸识别。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

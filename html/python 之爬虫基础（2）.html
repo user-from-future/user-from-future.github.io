@@ -1,0 +1,287 @@
+<html>
+ <head>
+  <title>
+   python 之爬虫基础（2）
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python 之爬虫基础（2）
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="爬虫基础">
+    <a href="#user-content-爬虫基础">
+     爬虫基础
+    </a>
+   </li>
+   <ul>
+    <li title="1.2网页基础">
+     <a href="#user-content-12网页基础">
+      1.2网页基础
+     </a>
+    </li>
+    <ul>
+     <li title="1.2.1网页的组成">
+      <a href="#user-content-121网页的组成">
+       1.2.1网页的组成
+      </a>
+     </li>
+     <li title="1.2.2网页的结构">
+      <a href="#user-content-122网页的结构">
+       1.2.2网页的结构
+      </a>
+     </li>
+     <li title="1.2.3选择器">
+      <a href="#user-content-123选择器">
+       1.2.3选择器
+      </a>
+     </li>
+    </ul>
+   </ul>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#" id="">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <img alt="6db413c5d61b4e85ae5708adb9fdb39f.jpg" src="https://img-blog.csdnimg.cn/6db413c5d61b4e85ae5708adb9fdb39f.jpg" style="max-width: 100%;">
+  </h1>
+  <p>
+   今天我们主要介绍网页基础。
+  </p>
+  <hr>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%E7%88%AC%E8%99%AB%E5%9F%BA%E7%A1%80">
+    爬虫基础
+   </a>
+  </p>
+  <p>
+   <a href="#1.2%E7%BD%91%E9%A1%B5%E5%9F%BA%E7%A1%80">
+    1.2网页基础
+   </a>
+  </p>
+  <p>
+   <a href="#1.2.1%E7%BD%91%E9%A1%B5%E7%9A%84%E7%BB%84%E6%88%90">
+    1.2.1网页的组成
+   </a>
+  </p>
+  <p>
+   <a href="#1.2.2%E7%BD%91%E9%A1%B5%E7%9A%84%E7%BB%93%E6%9E%84">
+    1.2.2网页的结构
+   </a>
+  </p>
+  <p>
+   <a href="#1.2.3%E9%80%89%E6%8B%A9%E5%99%A8">
+    1.2.3选择器
+   </a>
+  </p>
+  <hr>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#爬虫基础" id="user-content-爬虫基础">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   爬虫基础
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#12网页基础" id="user-content-12网页基础">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.2网页基础
+  </h2>
+  <p>
+   用浏览器访问网站时，页面各不相同，你有没有想过它为何会呈现这个样子呢？本节中，我们就来了解一下网页的基本组成、结构和节点等内容。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#121网页的组成" id="user-content-121网页的组成">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.2.1网页的组成
+  </h3>
+  <p>
+   网页可以分为三大部分 HTML 、 CSS 和 JavaScript 。如果把网页比作一个人的话， HTML 相当于骨架，JavaScript 相当于肌肉，CSs 相当于皮肤，三者结合起来才能形成一个完善的网页。下面我们分别来介绍一下这三部分的功能。
+   <br>
+   1. HTML
+   <br>
+   HTML 是用来描述网页的一种语言，其全称叫作 Hyper Text Markup Language ，即超文本标记语言。网页包括文字、按钮、图片和视频等各种复杂的元素，其基础架构就是 HTML 。不同类型的文字通过不同类型的标签来表示，如图片用 img 标签表示，视频用 video 标签表示，段落用 p 标签表示，它们之间的布局又常通过布局标签 div 嵌套组合而成，各种标签通过不同的排列和嵌套才形成了网页的框架。
+   <br>
+   在 Chrome 浏览器中打开百度，右击并选择&ldquo;检查&rdquo;项（或按F12键），打开开发者模式，这时在 Elements 选项卡中即可看到网页的源代码，如图2-9所示。
+  </p>
+  <p>
+   <img alt="75edeaad373d4166a871b757b83ddb87.png" src="https://img-blog.csdnimg.cn/75edeaad373d4166a871b757b83ddb87.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这就是HTML ，整个网页就是由各种标签嵌套组合而成的。这些标签定义的节点元素相互嵌套和组合形成了复杂的层次关系，就形成了网页的架构。
+  </p>
+  <p>
+   2. CSS
+   <br>
+   HTML 定义了网页的结构，但是只有 HTML 页面的布局并不美观，可能只是简单的节点元素的排列，为了让网页看起来更好看一些，这里借助了 CSS&nbsp;。
+  </p>
+  <p>
+   CSS&nbsp;，全称叫作 Cascading Style Sheets ，即层叠样式表。&ldquo;层叠&rdquo;是指当在 HTML 中引用了数个样式文件，并且样式发生冲突时，浏览器能依据层叠顺序处理。&ldquo;样式&rdquo;指网页中文字大小、颜色、元素间距、排列等格式。
+  </p>
+  <p>
+   CSS 是目前唯一的网页页面排版样式标准，有了它的帮助，页面才会变得更为美观。
+  </p>
+  <p>
+   在网页中，一般会统一定义整个网页的样式规则，并写人 CSS 文件中（其后缀为 css )。在 HTML 中，只需要用 link 标签即可引人写好的 CSS&nbsp;文件，这样整个页面就会变得美观、优雅。
+  </p>
+  <p>
+   3. JavaScript
+  </p>
+  <p>
+   JavaScript ，简称 JS ，是一种脚本语言。 HTML 和 CSS 配合使用，提供给用户的只是一种静态信息，缺乏交互性。我们在网页里可能会看到一些交互和动画效果，如下载进度条、提示框、轮播图等，这通常就是 JavaScript 的功劳。它的出现使得用户与信息之间不只是一种浏览与显示的关系，而是实现了一种实时、动态、交互的页面功能。
+  </p>
+  <p>
+   JavaScript 通常也是以单独的文件形式加载的，后缀为 js ,在 HTML 中通过 script 标签即可引人，例如：
+  </p>
+  <blockquote>
+   <p>
+    &lt; Script sIc -" jquery -2.1.0.js"&gt;&lt;/ script &gt;
+   </p>
+  </blockquote>
+  <p>
+   综上所述， HTML 定义了网页的内容和结构， CSS 描述了网页的布局， JavaScript 定义了网页的行为。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#122网页的结构" id="user-content-122网页的结构">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.2.2网页的结构
+  </h3>
+  <p>
+   我们首先用例子来感受一下 HTML 的基本结构。新建一个文本文件，名称可以自取，后缀为 html ,
+  </p>
+  <p>
+   内容如下：
+  </p>
+  <blockquote>
+   <p>
+    &lt; !DOCTYPE html &gt;
+    <br>
+    &lt; html &gt;
+    <br>
+    &lt; head &gt;
+    <br>
+    &lt; meta charset =" UTF -8"&gt;
+    <br>
+    &lt; title &gt; This is a Demo &lt;/ title &gt;&lt;/ head &gt;
+    <br>
+    &lt; body &gt;
+    <br>
+    &lt; div id =" container "&gt;
+    <br>
+    &lt; div class=" wrapper "&gt;
+    <br>
+    &lt;h2 class =" title "&gt; Hello World &lt;/h2&gt;
+    <br>
+    &lt; p class =" text "&gt; Hello , this is a paragraph .&lt;/ p &gt;
+   </p>
+   <p>
+    &lt;/ div &gt;
+    <br>
+    &lt;/ div &gt;
+    <br>
+    &lt;/ body &gt;
+    <br>
+    &lt;/html&gt;
+   </p>
+  </blockquote>
+  <p>
+   这就是一个最简单的 HTML 实例。开头用 DOCTYPE 定义了文档类型，其次最外层是 html 标签，最后还有对应的结束标签来表示闭合，其内部是 head 标签和 body 标签，分别代表网页头和网页体，它们也需要结束标签。 head 标签内定义了一些页面的配置和引用，如：
+  </p>
+  <blockquote>
+   <p>
+    &lt; meta charset =" UTF -8"&gt;
+   </p>
+  </blockquote>
+  <p>
+   它指定了网页的编码为 UTF -8。
+  </p>
+  <p>
+   title 标签则定义了网页的标题，会显示在网页的选项卡中，不会显示在正文中。 body 标签内则是在网页正文中显示的内容。 div 标签定义了网页中的区块，它的 id 是 container ，这是一个非常常用的属性，且 id 的内容在网页中是唯一的，我们可以通过它来获取这个区块。然后在此区块内又有一个 div 标签，它的 class 为wrapper ，这也是一个非常常用的属性，经常与 CSS 配合使用来设定样式。然后此区块内部又有一个h2标签，这代表一个二级标题。另外，还有一个 p 标签，这代表一个段落。在这两者中直接写人相应的内容即可在网页中呈现出来，它们也有各自的 class 属性。
+   <br>
+   将代码保存后，在浏览器中打开该文件，可以看到如图所示的内容。
+  </p>
+  <p>
+   <img alt="357d84c5f8cb44d7b6fe463b13d4b8ef.png" src="https://img-blog.csdnimg.cn/357d84c5f8cb44d7b6fe463b13d4b8ef.png" style="max-width: 100%;">
+  </p>
+  <p>
+   可以看到，在选项卡上显示了 This is a Demo 字样，这是我们在 head 中的 title 里定义的文字。而网页正文是 body 标签内部定义的各个元素生成的，可以看到这里显示了二级标题和段落。
+   <br>
+   这个实例便是网页的一般结构。一个网页的标准形式是 html 标签内嵌套 head 和 body 标签， head 内定义网页的配置和引用， body 内定义网页的正文。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#123选择器" id="user-content-123选择器">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.2.3选择器
+  </h3>
+  <p>
+   我们知道网页由一个个节点组成， CSs 选择器会根据不同的节点设置不同的样式规则，那么怎样来定位节点呢？
+   <br>
+   在 Css 中，我们使用 CSS 选择器来定位节点。例如，上例中 div 节点的 id 为 container ，那么就可以表示为＃ container ，其中＃开头代表选择 id ，其后紧跟 id 的名称。另外，如果我们想选择 class 为 wrapper 的节点，便可以使用． wrapper ，这里以点（.）开头代表选择 class ，其后紧跟 class 的名称。另外，还有一种选择方式，那就是根据标签名筛选，例如想选择二级标题，直接用h2即可。这是最常用的3种表示，分别是根据 id 、 class 、标签名筛选，请牢记它们的写法。
+   <br>
+   另外， CSS 选择器还支持嵌套选择，各个选择器之间加上空格分隔开便可以代表嵌套关系，如# container . wrapper p 则代表先选择 id 为 container 的节点，然后选中其内部的 class 为 wrapper 的节点，然后再进一步选中其内部的 p 节点。另外，如果不加空格，则代表并列关系，如 divtcontainer . Wrapper p . text 代表先选择 id 为 container 的 div 节点，然后选中其内部的 class 为 wrapper 的节点，再进一步选中其内部的 class 为 text 的 p 节点。这就是 CSS 选择器，其筛选功能还是非常强大的。
+  </p>
+  <p>
+   另外，还有一种比较常用的选择器是 XPath ，这种选择方式后面会详细介绍。
+   <br>
+   本节介绍了网页的基本结构和节点间的关系，了解了这些内容，我们才有更加清晰的思路去解析
+   <br>
+   和提取网页内容。
+  </p>
+  <hr>
+  <blockquote>
+   <p>
+    今天就介绍到这里，我们下期见。
+   </p>
+  </blockquote>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

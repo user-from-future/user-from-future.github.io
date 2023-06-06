@@ -1,0 +1,193 @@
+<html>
+ <head>
+  <title>
+   多线程比串行进程多出的优势在哪里
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    多线程比串行进程多出的优势在哪里
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+  </ul>
+  <p>
+   当数据的爬虫量越来越大的时候，除了要考虑存储的方式外，还需要考虑爬虫的速度问题。前面的爬虫都是串行爬取，只有当一次爬取完之后才进行下一次爬取，这样极大的限制了爬取的速度和效率。本文主要讲解多线程和多进程的概念，并通过案例对串行爬虫和多进程爬虫的性能进行对比。
+  </p>
+  <p>
+   <strong>
+    多线程和多进程概述
+   </strong>
+  </p>
+  <p>
+   当计算机运行程序时，就会创建包含代码和状态得进程。这些进程会通过计算机的一个和多个CPU执行。不过，同一时刻每个CPU只会执行一个进程，然后再不同进程间快速切换，这样就给人以多个程序同时运行的感觉。同理，在一个进程中，程序的执行也是在不同线程间进行切换的，每个线程执行程序的不同部分。
+  </p>
+  <p>
+   这里简单的做个类比：有一个大型工厂，该工厂负责生产玩具：同时工厂下又有多个车间，每个车间负责不同的功能，生产不同玩具的零件：每个车间里又有多个车间工人，这些工人互相合作，彼此共享资源来共同生产某个玩具零件等。这里的工厂就相当于一个网络爬虫，而每个车间相当于一个进程，每个车间工人相当于线程。这样，通过多线程和多进程，网络爬虫就能高效、快速的进行下去。
+  </p>
+  <p>
+   <strong>
+    多进程的使用方法
+   </strong>
+  </p>
+  <p>
+   Python进行多进程爬虫使用了multiprocessing库，此处使用multiprocessing库的进程池方法进行多进程爬虫，使用方法的代码如下。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">from</span> multiprocessing <span class="token keyword">import</span> Pool
+ 
+pool <span class="token operator">=</span> Pool<span class="token punctuation">(</span>processes<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span>        <span class="token comment">#创建进程池</span>
+ 
+pool<span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>func<span class="token punctuation">,</span>iterable<span class="token punctuation">[</span><span class="token punctuation">,</span>chunksize<span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment">#map函数运行进程，func参数为需要运行的函数，在爬虫实战中为爬虫函数。iterable为迭代参数，为url列表进行迭代</span></code></pre>
+  <p>
+   什么是多任务?
+  </p>
+  <p>
+   什么叫"多任务"呢?简单地说，就是操作系统可以同时运行多个任务。打个比方，你一边在用浏览器上网，一边在听MP3，一边在用Word赶作业，这就是多任务，至少同时v有3个任务正在运行。还有很多任务悄悄地在后台同时运行着，只是桌面上没有显示而已。
+  </p>
+  <p>
+   在了解多任务具体实现方式之前，我们先来了解并发和并行的概念:
+  </p>
+  <p>
+   并发：在一段时间内交替去执行多个任务。
+  </p>
+  <p>
+   对于单核cpu处理多任务,操作系统轮流让各个任务交替执行，假如:软件1执行0.01秒，切换到软件2，软件2执行0.01秒，再切换到软件3，执行0.01秒.....这样反复执行下去，实际上每个软件都是交替执行的.但是，由于CPU的执行速度实在是太快了，表面上我们感觉就像这些软件都在同时执行一样.这里需要注意单核cpu是并发的执行多任务的。
+  </p>
+  <p>
+   并行：在一段时间内真正的同时一起执行多个任务。
+  </p>
+  <p>
+   对于多核cpu处理多任务，操作系统会给cpu的每个内核安排一个执行的任务，多个内核是真正的一起同时执行多个任务。这里需要注意多核cpu是并行的执行多任务，始终有多个任务一起执行。
+  </p>
+  <p>
+   其实并发和并行就是多任务具体的实现方式：多线程和多进程
+  </p>
+  <p>
+   并发可以理解为一件事情由多个人同时去做，相当于我雇佣了很多个工具人帮我抢着做事。对应的在程序中我们可以这么理解:当程序发生阻塞导致程序挂起时，我们可以让程序执行程序后面的任务。需要注意的是程序在同一时间只会执行了个任务。这是多线程的实现原理。
+  </p>
+  <p>
+   并行可以理解为多个人同时做多件事情。相当于多个人在同一时间做不同的事情，每个人做事都是一个独立的个体。这是多进程的实现原理。
+  </p>
+  <p>
+   <strong>
+    要点
+   </strong>
+  </p>
+  <blockquote>
+   <p>
+    使用多任务能充分利用CPU资源，提高程序的执行效率，让你的程序具备处理多个任务的能力。
+   </p>
+   <p>
+    多任务执行方式有两种方式：
+   </p>
+   <p>
+    并发：在一段时间内交替去执行多个任务。
+   </p>
+   <p>
+    并行：在一段时间内真正的同时一起执行多个任务
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    性能对比
+   </strong>
+   <br>
+   这里以某个网站为例。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">import</span> pymongo
+<span class="token keyword">from</span> lxml <span class="token keyword">import</span> etree
+<span class="token keyword">from</span> multiprocessing <span class="token keyword">import</span> Pool
+ 
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token string">'User-Agent'</span><span class="token punctuation">:</span><span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'</span>
+<span class="token punctuation">}</span>
+ 
+client <span class="token operator">=</span> pymongo<span class="token punctuation">.</span>MongoClient<span class="token punctuation">(</span><span class="token string">'localhost'</span><span class="token punctuation">,</span><span class="token number">27017</span><span class="token punctuation">)</span>
+mydb <span class="token operator">=</span> client<span class="token punctuation">[</span><span class="token string">'mydb'</span><span class="token punctuation">]</span>
+jianshu_shouye <span class="token operator">=</span> mydb<span class="token punctuation">[</span><span class="token string">'jianshu_shouye'</span><span class="token punctuation">]</span>   <span class="token comment">#创建数据库和集合</span>
+ 
+<span class="token keyword">def</span> <span class="token function">get_info</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    html <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+    selector <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>html<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+    infos <span class="token operator">=</span> selector<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'//ul[@class="note-list"]/li'</span><span class="token punctuation">)</span>  <span class="token comment"># 取大标签循环</span>
+    <span class="token keyword">for</span> info <span class="token keyword">in</span> infos<span class="token punctuation">:</span>
+        title <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/a/text()'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        content <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/p/text()'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        zuanshis <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/span[1]/text()'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>zuanshis<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            zuanshi <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            zuanshi <span class="token operator">=</span> zuanshis<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        author <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/a[1]/text()'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        comments <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/a[2]/text()'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>comments<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            comment <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            comment <span class="token operator">=</span> comments<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        likes <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/span[2]/text()'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>likes<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            like <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            like <span class="token operator">=</span> likes<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        rewards <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/span[3]/text()'</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>rewards<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            reward <span class="token operator">=</span> <span class="token string">"无"</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            reward <span class="token operator">=</span> rewards<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        data <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">'title'</span><span class="token punctuation">:</span>title<span class="token punctuation">,</span>
+            <span class="token string">'content'</span><span class="token punctuation">:</span>content<span class="token punctuation">,</span>
+            <span class="token string">'zuanshi'</span><span class="token punctuation">:</span>zuanshi<span class="token punctuation">,</span>
+            <span class="token string">'author'</span><span class="token punctuation">:</span>author<span class="token punctuation">,</span>
+            <span class="token string">'comment'</span><span class="token punctuation">:</span>comment<span class="token punctuation">,</span>
+            <span class="token string">'like'</span><span class="token punctuation">:</span>like<span class="token punctuation">,</span>
+            <span class="token string">'reward'</span><span class="token punctuation">:</span>reward
+        <span class="token punctuation">}</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+        jianshu_shouye<span class="token punctuation">.</span>insert_one<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+ 
+<span class="token keyword">if</span> __name__<span class="token operator">==</span><span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    urls <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'https://www.jianshu.com/c/bDHhpK?order_by=top&amp;page={}'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    pool <span class="token operator">=</span> Pool<span class="token punctuation">(</span>processes<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+    pool<span class="token punctuation">.</span><span class="token builtin">map</span><span class="token punctuation">(</span>get_info<span class="token punctuation">,</span>urls<span class="token punctuation">)</span></code></pre>
+  <p>
+   我们运行之后就会发现多线程比串行爬虫要快，多线程可以满足我们批量爬取数据的需要。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

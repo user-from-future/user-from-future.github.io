@@ -1,0 +1,161 @@
+<html>
+ <head>
+  <title>
+   代码没有错，但爬取网页无数据输出，因为遇到了异步加载网页
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    代码没有错，但爬取网页无数据输出，因为遇到了异步加载网页
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+  </ul>
+  <p>
+   我们有时候针对某些网页进行爬虫时，可能会发现代码无错误的情况下爬取不到数据，这是因为我们遇到了采用异步加载技术的网页。本文将讲解异步加载的基本概念，并针对异步加载网页而使用逆向工程抓取数据。
+  </p>
+  <p>
+   我们先认识一下，什么是异步加载？
+  </p>
+  <p>
+   <strong>
+    异步加载技术概述
+   </strong>
+  </p>
+  <blockquote>
+   <p>
+    传统的网页如果需要更新内容，必须重新加载整个网页页面，网页加载速度慢，用户体验差，而且数据传输少，会造成宽带浪费。异步加载技术（AJAX），即异步JavaScript和XML，是指一种创建交互式网页应用的网页开发技术。通过在后台与服务器进行少量数据交换，AJAX可以是网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    那我们怎么知道网页有没有采用异步加载技术呢？
+   </strong>
+  </p>
+  <blockquote>
+   <p>
+    当我们通过下滑进行浏览，并没有分页的信息，而是一直浏览下去，但网址信息并没有改变。传统的网页不可能一次性加载如此庞大的信息。通过分析可判断该网页使用了异步加载技术。
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    那我们该如何应对呢？
+   </strong>
+  </p>
+  <blockquote>
+   <p>
+    <strong>
+     逆向工程
+    </strong>
+    <br>
+    使用异步加载技术，不再是立即加载所有网页内容，而展示的内容也就不再HTML的源代码中。这样通过前面的方法就无法抓取到数据。想要抓取这些通过异步加载方法的网页数据，需要了解网页时如何加载这些数据的，该过程就叫做逆向工程，俗称&ldquo;抓包&rdquo;。
+   </p>
+  </blockquote>
+  <p>
+   下面我们通过具体案例来说说如何解决异步加载问题。
+  </p>
+  <p>
+   我们以爬取某网用户动态信息
+  </p>
+  <p>
+   首先我们要思考一下爬虫思路分析
+  </p>
+  <blockquote>
+   <p>
+    （1）本节爬取的内容为某网用户动态的信息
+   </p>
+   <p>
+    (2)当首次打开该网页URL时，单机&ldquo;动态&rdquo;链接后，发现网页URL并没有发生变化，所以判断该网页采用了异步加载技术。
+   </p>
+   <p>
+    （3）打开Chrome浏览器的开发者工具（按F12），选择Network选项卡，再选择XHR项，可发现网页加载了用户&ldquo;动态&rdquo;内容的文件。
+   </p>
+   <p>
+    （4）观察该文件的Reponse信息发现返回的是XML文件，内容正是用户&ldquo;动态&rdquo;内容，每个li标签就是一个用户动态内容。删除timeline后面的字符串也可以返回正确的内容，以次构造第一页的URL为
+    <a href="http://www.%5C*%5C*%5C*%5C*.com/users/9104ebf5e177/timeline%EF%BC%88%E5%A4%A7%E5%AE%B6%E5%85%B7%E4%BD%93%E9%97%AE%E9%A2%98%E5%85%B7%E4%BD%93%E5%88%86%E6%9E%90%EF%BC%89" rel="nofollow">
+     http://www.\*\*\*\*.com/users/9104ebf5e177/timeline（大家具体问题具体分析）
+    </a>
+   </p>
+   <p>
+    （5）通过下滑浏览发现，该网页也是使用异步加载技术进行分页处理的。以此来记录前几页的URL
+   </p>
+   <p>
+    （6）通过手工删除URL中的max_id字段，发现不能返回正常的内容。说明max_id是一个很关键的字段。而我们可以发现每个页面的max_id都不相同，通过观察数字也没有找到明显的规律。而构造URL的重点就在于如何获取max_id的数字。
+   </p>
+   <p>
+    （7）前面分析到每一个li标签就是用户的一条动态内容，我们发现，li标签的id字段有着一串没有规律的胡子信息。通过观察发现，前一页最后一个li标签中的id数字，刚好是它下一页URL中的max_id数字+1，以此来构造出URL。
+   </p>
+   <p>
+    （8）由于Response返回的是XML的文档，便可以通过Lxml库进行数据的抓取工作，需要抓取的内容为用为&ldquo;动态&rdquo;类型和时间信息。
+   </p>
+  </blockquote>
+  <p>
+   <strong>
+    爬虫代码及分析
+   </strong>
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">from</span> lxml <span class="token keyword">import</span> etree
+<span class="token keyword">import</span> pymongo
+ 
+<span class="token keyword">def</span> <span class="token function">get_time_info</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span>page<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    user_id <span class="token operator">=</span> url<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
+    user_id <span class="token operator">=</span> user_id<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span>
+    <span class="token keyword">if</span> url<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">'page='</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        page <span class="token operator">=</span> page<span class="token operator">+</span><span class="token number">1</span>
+    html <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+    selector <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>html<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+    infos <span class="token operator">=</span> selector<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'//ul[@class="note-list"]/li'</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> info <span class="token keyword">in</span> infos<span class="token punctuation">:</span>
+        dd <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/div/span/@data-datetime'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        <span class="token builtin">type</span> <span class="token operator">=</span> info<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'div/div/div/span/@data-type'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+        timeline<span class="token punctuation">.</span>insert_one<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'data'</span><span class="token punctuation">:</span>dd<span class="token punctuation">,</span><span class="token string">'type'</span><span class="token punctuation">:</span><span class="token builtin">type</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+    id_infos <span class="token operator">=</span> selector<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'//ul[@class="note-list"]/li/@id'</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token builtin">len</span><span class="token punctuation">(</span>infos<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        feed_id <span class="token operator">=</span> id_infos<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+        max_id <span class="token operator">=</span> feed_id<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'-'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        next_url <span class="token operator">=</span> <span class="token string">'https://www.jianshu.com/users/%s/timeline?max_id=%s&amp;page=%s'</span> <span class="token operator">%</span><span class="token punctuation">(</span>user_id<span class="token punctuation">,</span>max_id<span class="token punctuation">,</span>page<span class="token punctuation">)</span>
+        get_time_info<span class="token punctuation">(</span>next_url<span class="token punctuation">,</span>page<span class="token punctuation">)</span>
+ 
+<span class="token keyword">if</span> __name__<span class="token operator">==</span><span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    get_time_info<span class="token punctuation">(</span><span class="token string">'https://www.jianshu.com/users/9104ebf5e177/timeline?max_id'</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   这样就解决了异步加载的问题，其实搞懂原理，不管什么网页，我们都能爬取。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

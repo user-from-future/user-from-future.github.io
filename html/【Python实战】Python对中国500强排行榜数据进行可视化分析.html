@@ -1,0 +1,659 @@
+<html>
+ <head>
+  <title>
+   【Python实战】Python对中国500强排行榜数据进行可视化分析
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    【Python实战】Python对中国500强排行榜数据进行可视化分析
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="🥩前言">
+    <a href="#user-content-前言">
+     🥩前言
+    </a>
+   </li>
+   <ul>
+    <li title="🍖 环境使用">
+     <a href="#user-content--环境使用">
+      🍖 环境使用
+     </a>
+    </li>
+    <li title="🍖 模块使用">
+     <a href="#user-content--模块使用">
+      🍖 模块使用
+     </a>
+    </li>
+    <li title="🍖 模块介绍">
+     <a href="#user-content--模块介绍">
+      🍖 模块介绍
+     </a>
+    </li>
+    <li title="🍖 模块安装问题:">
+     <a href="#user-content--模块安装问题">
+      🍖 模块安装问题:
+     </a>
+    </li>
+   </ul>
+   <li title="🥩数据采集">
+    <a href="#user-content-数据采集">
+     🥩数据采集
+    </a>
+   </li>
+   <ul>
+    <li title="🍖确定网址">
+     <a href="#user-content-确定网址">
+      🍖确定网址
+     </a>
+    </li>
+    <li title="🍖获取数据">
+     <a href="#user-content-获取数据">
+      🍖获取数据
+     </a>
+    </li>
+    <li title="🍖解析数据">
+     <a href="#user-content-解析数据">
+      🍖解析数据
+     </a>
+    </li>
+    <li title="🍖保存数据">
+     <a href="#user-content-保存数据">
+      🍖保存数据
+     </a>
+    </li>
+   </ul>
+   <li title="🥩数据可视化">
+    <a href="#user-content-数据可视化">
+     🥩数据可视化
+    </a>
+   </li>
+   <ul>
+    <li title="🍖代码">
+     <a href="#user-content-代码">
+      🍖代码
+     </a>
+    </li>
+    <li title="🍖效果">
+     <a href="#user-content-效果">
+      🍖效果
+     </a>
+    </li>
+   </ul>
+   <li title="🥩总结">
+    <a href="#user-content-总结">
+     🥩总结
+    </a>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E5%89%8D%E8%A8%80">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    前言
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    环境使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    模块使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    模块介绍
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%A8%A1%E5%9D%97%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%3A">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    模块安装问题:
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    数据采集
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E7%A1%AE%E5%AE%9A%E7%BD%91%E5%9D%80">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    确定网址
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    获取数据
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E8%A7%A3%E6%9E%90%E6%95%B0%E6%8D%AE">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    解析数据
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E4%BF%9D%E5%AD%98%E6%95%B0%E6%8D%AE">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    保存数据
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    数据可视化
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E4%BB%A3%E7%A0%81">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    代码
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%E6%95%88%E6%9E%9C">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    效果
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%E6%80%BB%E7%BB%93">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    总结
+   </a>
+  </p>
+  <hr>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   前言
+  </h1>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    今天来跟大家分析一下2022年
+    <strong>
+     中国500强企业排行榜数据
+    </strong>
+    ，从不同角度去对数据进行统计分析，可视化展示。
+   </p>
+   <p>
+    本文从开始到最后发文，
+    <strong>
+     花费了一天时间（精心制作）
+    </strong>
+    ，保证以
+    <strong>
+     高质量
+    </strong>
+    文章给大家阅读，
+    <strong>
+     麻烦给个赞和在看
+    </strong>
+    ，谢谢.
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-环境使用" id="user-content--环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    环境使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块使用" id="user-content--模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    requests
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块介绍" id="user-content--模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块介绍
+   </strong>
+  </h2>
+  <blockquote>
+   <ul>
+    <li>
+     <strong>
+      requests
+     </strong>
+    </li>
+   </ul>
+   <p>
+    requests是一个很实用的Python HTTP客户端库，爬虫和测试服务器响应数据时经常会用到，requests是Python语言的第三方的库，专门用于发送HTTP请求，使用起来比urllib简洁很多。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      parsel
+     </strong>
+    </li>
+   </ul>
+   <p>
+    parsel是一个python的第三方库，相当于css选择器+xpath+re。
+   </p>
+   <p>
+    parsel由scrapy团队开发，是将scrapy中的parsel独立抽取出来的，可以轻松解析html，xml内容，获取需要的数据。
+   </p>
+   <p>
+    相比于BeautifulSoup，xpath，parsel效率更高，使用更简单。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      re
+     </strong>
+    </li>
+   </ul>
+   <p>
+    re模块是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的，而正则表达式是对字符串进行模糊匹配，提取自己需要的字符串部分，他对所有的语言都通用。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      os
+     </strong>
+    </li>
+   </ul>
+   <p>
+    os 就是 &ldquo;operating system&rdquo; 的缩写，顾名思义，os模块提供的就是各种 Python 程序与操作系统进行交互的接口。通过使用 os 模块，一方面可以方便地与操作系统进行交互，另一方面也可以极大增强代码的可移植性。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      csv
+     </strong>
+    </li>
+   </ul>
+   <p>
+    它是一种文件格式，一般也被叫做逗号分隔值文件，可以使用 Excel 软件或者文本文档打开 。其中数据字段用半角逗号间隔（也可以使用其它字符），使用 Excel 打开时，逗号会被转换为分隔符。csv 文件是以纯文本形式存储了表格数据，并且在兼容各个操作系统。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块安装问题" id="user-content--模块安装问题">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块安装问题:
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <ul>
+    <li>
+     失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+    </li>
+   </ul>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#数据采集" id="user-content-数据采集">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   数据采集
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#确定网址" id="user-content-确定网址">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   确定网址
+  </h2>
+  <p>
+   首先，我们对目标网址进行数据采集。我们可以清楚的看到，在2022年中新财富500富人榜。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/14103f61f8334be8a691a90ed5598577.png" style="max-width: 100%;">
+  </p>
+  <p>
+   确定好我们的目标网址之后，我们要找到我们需要的数据源，通过开发者工具分析，我们不难发现其数据地址。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/0e5e704f2bcc4046bc35eccd20bb813b.png" style="max-width: 100%;">
+  </p>
+  <p>
+   下面，我们开始写代码。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#获取数据" id="user-content-获取数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   获取数据
+  </h2>
+  <p>
+   第一步，发送请求，获得数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+url <span class="token operator">=</span> <span class="token string">'https://service.ikuyu.cn/XinCaiFu2/pcremoting/bdListAction.do?method=getPage&amp;callback=jsonpCallback&amp;sortBy=&amp;order=&amp;type=4&amp;keyword=&amp;pageSize=15&amp;year=2022&amp;pageNo=1&amp;from=jsonp&amp;_=1680092323527'</span>
+
+
+headers <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <span class="token string">'user-agent'</span><span class="token punctuation">:</span> <span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'</span><span class="token punctuation">}</span>
+
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span></code></pre>
+  <p>
+   我们得到数据是这样的，大家可能会以为是一个json数据，其实不是，这个返回值需要我们进一步处理。
+  </p>
+  <blockquote>
+   <p>
+    jsonpCallback({"data":{"pagesize":15,"current":1,"total":500,"rows":[{"assets":4983.5,"year":2022,"sex":"男","name":"钟睒睒","rank":1,"company":"农夫山泉/万泰生物","industry":"矿泉水饮料、医药生物","id":151478,"addr":"浙江杭州/北京","rankLst":"1","age":"68"},{"assets":3348.2,"year":2022,"sex":"男","name":"曾毓群","rank":2,"company":"宁德时代","industry":"动力电池","id":151479,"addr":"福建宁德","rankLst":"11","age":"54"},{"assets":3010.8,"year":2022,"sex":"男","name":"马化腾","rank":3,"company":"腾讯控股","industry":"互联网综合服务","id":151480,"addr":"广东深圳","rankLst":"3","age":"51"},{"assets":2916.0,"year":2022,"sex":"男","name":"张一鸣","rank":4,"company":"今日头条","industry":"推荐引擎产品、短视频","id":151481,"addr":"北京","rankLst":"16","age":"39"},{"assets":1972.0,"year":2022,"sex":"男","name":"黄峥","rank":5,"company":"拼多多","industry":"电商","id":151482,"addr":"上海","rankLst":"2","age":"42"},{"assets":1937.2,"year":2022,"sex":"男","name":"丁磊","rank":6,"company":"网易","industry":"互联网综合服务","id":151483,"addr":"浙江杭州","rankLst":"12","age":"51"},{"assets":1890.1,"year":2022,"sex":"男","name":"何享健家族","rank":7,"company":"美的集团","industry":"家电","id":151484,"addr":"广东佛山","rankLst":"5","age":"79"},{"assets":1860.3,"year":2022,"sex":"男","name":"王卫","rank":8,"company":"顺丰控股","industry":"物流","id":151485,"addr":"广东深圳","rankLst":"6","age":"51"},{"assets":1535.0,"year":2022,"sex":"男","name":"黄世霖","rank":9,"company":"宁德时代","industry":"动力电池","id":151486,"addr":"福建宁德","rankLst":"41","age":"55"},{"assets":1512.7,"year":2022,"sex":"男/女","name":"秦英林/钱瑛","rank":10,"company":"牧原股份","industry":"畜禽养殖","id":151487,"addr":"河南南阳","rankLst":"19","age":"57,56"},{"assets":1401.1,"year":2022,"sex":"男","name":"王传福","rank":11,"company":"比亚迪","industry":"新能源汽车、电池","id":151488,"addr":"广东深圳","rankLst":"39","age":"56"},{"assets":1388.6,"year":2022,"sex":"男","name":"李西廷","rank":12,"company":"迈瑞医疗","industry":"医疗器械","id":151489,"addr":"广东深圳","rankLst":"18","age":"71"},{"assets":1348.1,"year":2022,"sex":"男/女","name":"王来胜/王来春","rank":13,"company":"香港立讯","industry":"连接器","id":151490,"addr":"广东深圳","rankLst":"17","age":"58,55"},{"assets":1327.2,"year":2022,"sex":"男","name":"马云","rank":14,"company":"阿里巴巴","industry":"互联网综合服务","id":151491,"addr":"浙江杭州","rankLst":"7","age":"58"},{"assets":1322.5,"year":2022,"sex":"女","name":"杨惠妍","rank":15,"company":"碧桂园控股","industry":"房地产","id":151492,"addr":"广东佛山","rankLst":"13","age":"40"}],"end":15,"start":1,"pageCount":34,"conditionsMap":{"year":"2022","pageNo":"1","sortOrder":"year desc,rank","pageSize":"15"},"pageSize":15},"success":true})
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#解析数据" id="user-content-解析数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   解析数据
+  </h2>
+  <p>
+   我们发现，我们得到了这样jsonpCallback(）的数据，可能就有人担心了，那这种情况，我们该怎么办呢，不要慌，我们只需要正则表达式就可以。
+  </p>
+  <pre class="line-numbers"><code class="language-python">html_data <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'jsonpCallback\((.*?)\)'</span><span class="token punctuation">,</span>res<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span></code></pre>
+  <p>
+   这样，我们就得到了json数据，接下来，我们就开始解析数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> index <span class="token keyword">in</span> json<span class="token punctuation">.</span>loads<span class="token punctuation">(</span>html_data<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'rows'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    <span class="token comment"># print(index)</span>
+    dit <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <span class="token string">'姓名'</span><span class="token punctuation">:</span>index<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">'财富值'</span><span class="token punctuation">:</span>index<span class="token punctuation">[</span><span class="token string">'assets'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">'主要公司'</span><span class="token punctuation">:</span>index<span class="token punctuation">[</span><span class="token string">'company'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">'相关行业'</span><span class="token punctuation">:</span> index<span class="token punctuation">[</span><span class="token string">'industry'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">'公司总部'</span><span class="token punctuation">:</span>index<span class="token punctuation">[</span><span class="token string">'addr'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token string">'排名'</span><span class="token punctuation">:</span> index<span class="token punctuation">[</span><span class="token string">'rank'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+
+
+    <span class="token punctuation">}</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#保存数据" id="user-content-保存数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   保存数据
+  </h2>
+  <p>
+   我们先把数据存入到字典里面，然后，方便我们写入csv文件里面，我们看看打印出来的字典数值是怎么样子的。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/8d1ff54fa6614fd995680943d4ac9e81.png" style="max-width: 100%;">
+  </p>
+  <p>
+   下面就是数据的写入了。其实，把字典数值写入到csv文件里面，特别简单，只需呀四行代码就可以实现。
+  </p>
+  <pre class="line-numbers"><code class="language-python">f <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'财富榜.csv'</span><span class="token punctuation">,</span>mode<span class="token operator">=</span><span class="token string">'a'</span><span class="token punctuation">,</span>encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">,</span>newline<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span>
+csv_writer <span class="token operator">=</span> csv<span class="token punctuation">.</span>DictWriter<span class="token punctuation">(</span>f<span class="token punctuation">,</span>fieldnames<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'姓名'</span><span class="token punctuation">,</span><span class="token string">'财富值'</span><span class="token punctuation">,</span><span class="token string">'主要公司'</span><span class="token punctuation">,</span><span class="token string">'相关行业'</span><span class="token punctuation">,</span><span class="token string">'公司总部'</span><span class="token punctuation">,</span><span class="token string">'排名'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+csv_writer<span class="token punctuation">.</span>writeheader<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   写入字典数值。
+  </p>
+  <pre class="line-numbers"><code class="language-python">csv_writer<span class="token punctuation">.</span>writerow<span class="token punctuation">(</span>dit<span class="token punctuation">)</span></code></pre>
+  <p>
+   这时候，我们就会在文件夹里面找到财富值的csv文件，我们打开看看效果。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/c12d6601c3fa4f0dbb1b6bc2ccf23c2c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   在这里，我只采集了第一页的数据，也就是前15的数据，如果，我们想进行多页数据采集，只需要对网址进行改变，我们会发现网址有相似的规律。直接for循环遍历就可以，这里，就不过多解释。
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#数据可视化" id="user-content-数据可视化">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   数据可视化
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#代码" id="user-content-代码">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   代码
+  </h2>
+  <p>
+   我们在这里，就要用到pyecharts库，不得不说，这个功能非常强大，我们写这个代码也非常简单，我们只需要去官方文档，复制粘贴就可以，根据自己的数据稍微改动一点代码就可以。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+<span class="token keyword">import</span> pyecharts<span class="token punctuation">.</span>options <span class="token keyword">as</span> opts
+<span class="token keyword">from</span> pyecharts<span class="token punctuation">.</span>charts <span class="token keyword">import</span> Line
+df <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_csv<span class="token punctuation">(</span><span class="token string">'财富榜.csv'</span><span class="token punctuation">)</span>
+x <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'农夫山泉/万泰生物'</span> <span class="token punctuation">,</span><span class="token string">'宁德时代'</span> <span class="token punctuation">,</span><span class="token string">'腾讯控股'</span> <span class="token punctuation">,</span><span class="token string">'今日头条'</span><span class="token punctuation">,</span> <span class="token string">'拼多多'</span><span class="token punctuation">]</span>
+
+c <span class="token operator">=</span> <span class="token punctuation">(</span>
+    Line<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span>add_xaxis<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span>add_yaxis<span class="token punctuation">(</span><span class="token string">"财富值"</span><span class="token punctuation">,</span>df<span class="token punctuation">[</span><span class="token string">'财富值'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>values<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span>set_global_opts<span class="token punctuation">(</span>title_opts<span class="token operator">=</span>opts<span class="token punctuation">.</span>TitleOpts<span class="token punctuation">(</span>title<span class="token operator">=</span><span class="token string">"财富值分布"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">)</span></code></pre>
+  <p>
+   我们直接让它生成一个网页，方便我们直观的感受。
+  </p>
+  <pre class="line-numbers"><code class="language-python">c<span class="token punctuation">.</span>render<span class="token punctuation">(</span><span class="token string">'地图.html'</span><span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#效果" id="user-content-效果">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   效果
+  </h2>
+  <p>
+   这里，我做的图不够好看，但是基本功能都实现了。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/242e7df749db4450a50579727054e520.png" style="max-width: 100%;">
+  </p>
+  <p>
+   大家如果想做更多的图表，可以去官方网站看看，
+   <a href="https://gallery.pyecharts.org/" rel="nofollow" title="官方网站">
+    官方网站
+   </a>
+   有很多示例可以使用。
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#总结" id="user-content-总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   总结
+  </h1>
+  <p>
+   通过本文的学习，我们学习了数据采集以及可视化分析。我们在研究官方文档的时候，也是在一种学习，本次实战，我们明白如何解决返回值是jsonpCallback()的问题。今天就到这里，有什么问题，可以在评论区留言。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

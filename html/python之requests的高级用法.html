@@ -1,0 +1,174 @@
+<html>
+ <head>
+  <title>
+   python之requests的高级用法
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python之requests的高级用法
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="1.文件上传">
+    <a href="#user-content-1文件上传">
+     1.文件上传
+    </a>
+   </li>
+   <li title="2.cookies">
+    <a href="#user-content-2cookies">
+     2.cookies
+    </a>
+   </li>
+   <li title="3.SSL证书验证">
+    <a href="#user-content-3ssl证书验证">
+     3.SSL证书验证
+    </a>
+   </li>
+   <li title="4.代理设置">
+    <a href="#user-content-4代理设置">
+     4.代理设置
+    </a>
+   </li>
+   <li title="5.超时设置">
+    <a href="#user-content-5超时设置">
+     5.超时设置
+    </a>
+   </li>
+  </ul>
+  <p>
+   上一篇我们说了requests的简单用法，知道了如何发送请求，今天我们更深层次的来学习requests。我们看看高级一点的操作，比如讲文件上传，cookies设置，代理设置之类的。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#1文件上传" id="user-content-1文件上传">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.文件上传
+  </h2>
+  <p>
+   我们知道requests可以模拟提交一些数据，比如讲，我们现在想上传文件，我们可以这样做。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+f <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'f'</span><span class="token punctuation">:</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'a.text'</span><span class="token punctuation">,</span><span class="token string">'rb'</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+
+r <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span><span class="token string">'http://httpbin.org/post'</span><span class="token punctuation">,</span>files <span class="token operator">=</span> f<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   运行一下，我们看效果。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/ef5e6ad92af0460382b2832b5d5dc8e2.png" style="max-width: 100%;">
+  </p>
+  <p>
+   我们可以看到里面包含了files的这个字段，而form这个字段是空的，这证明了文件上传部分会单独有一个files字段来标识。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#2cookies" id="user-content-2cookies">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.cookies
+  </h2>
+  <p>
+   我们可以用cookies来维持登录状态，在浏览器里面，在开发者工具里面，我们可以找到cookies字段，我们可以直接复制即可。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/122b633c68f4403984bf59754f65ba88.png" style="max-width: 100%;">
+  </p>
+  <p>
+   我们将cookies设置到headers里面，然后，发送请求，就可以登录了。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#3ssl证书验证" id="user-content-3ssl证书验证">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.SSL证书验证
+  </h2>
+  <p>
+   此外，requests还有证书验证的功能，当发送HTTP请求的时候，它会检查SSL证书，我们可以使用verify参数控制是否检查此证书。一般默认是打开的。
+  </p>
+  <p>
+   那我们的代码怎么写呢？
+  </p>
+  <blockquote>
+   <p>
+    response = requests.get('
+    <a href="http://www.baidu.com',verify" rel="nofollow">
+     http://www.baidu.com',verify
+    </a>
+    = False)
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#4代理设置" id="user-content-4代理设置">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   4.代理设置
+  </h2>
+  <p>
+   对于一些网站，在测试的时候还能获取内容，一旦频繁爬取，就有可能被封IP，导致一段时间无法访问。那么，为了防止这种情况发生，我们就要设置代理来解决，这里就用到了proxies参数。我之前也有说过，我就不过多的赘述。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#5超时设置" id="user-content-5超时设置">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   5.超时设置
+  </h2>
+  <p>
+   在网路不好的时候，或者服务器响应太慢，甚至有时候还会报错，为了防止服务器不能及时响应，我们可以设置一个超时设置，这里就用到了timeout参数。
+  </p>
+  <blockquote>
+   <p>
+    response = requests.get('
+    <a href="http://www.baidu.com',timeout=" rel="nofollow">
+     http://www.baidu.com',timeout=
+    </a>
+    3)
+   </p>
+  </blockquote>
+  <p>
+   我们就简单介绍到这里，更多的可以关注官方的文档。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

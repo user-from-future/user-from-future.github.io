@@ -1,0 +1,147 @@
+<html>
+ <head>
+  <title>
+   论对python面向对象的理解
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    论对python面向对象的理解
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="定义类">
+    <a href="#user-content-定义类">
+     定义类
+    </a>
+   </li>
+  </ul>
+  <p>
+   面对对象都是先定义类和创建对象，我们先说说怎么定义类吧。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#定义类" id="user-content-定义类">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    定义类
+   </strong>
+  </h3>
+  <p>
+   类是用来描述具有相同属性和方法的对象集合。就像人可以通过不同的肤色划分为不同的种族，食物也有不同的种类，商品也是形形色色。但划分为同一类的物体，&nbsp;肯定具有相似的特征和行为方式。
+  </p>
+  <p>
+   举一个简单的例子。对于同一款自行车而言，它们的组成结构都是一样的，&nbsp;如车架、车轮和脚踏板等。那么我们就可以通过Python可以定义这个自行车的类:
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Bike</span><span class="token punctuation">:</span>
+
+compose <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'frame'</span><span class="token punctuation">,</span> <span class="token string">'wheel'</span><span class="token punctuation">,</span> <span class="token string">'pedal'</span><span class="token punctuation">]</span></code></pre>
+  <p>
+   通过使用class定义一个&nbsp;自行车的类，类中的变量compose称为类的变量，专业术语为类的属性。这样，顾客购买的自行车组成结构就是一样的了&nbsp;。
+  </p>
+  <pre class="line-numbers"><code class="language-python">my_ bike <span class="token operator">=</span> Bike<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+you bike <span class="token operator">=</span> Bike<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span> <span class="token punctuation">(</span>my_ bike<span class="token punctuation">.</span> compose<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span> <span class="token punctuation">(</span>you bike <span class="token punctuation">.</span> compose<span class="token punctuation">)</span>     <span class="token operator">//</span><span class="token comment">#类的属性都是一样的</span></code></pre>
+  <p>
+   在左边写上变量名，右边写上类的名称，这个过程称之为类的实例化，而my&nbsp;bike就是类的实例。通过&ldquo;&rdquo;加上类的属性，就是类属性的引用。类的属性会被类的实例共享，所以结果都是样的。
+  </p>
+  <p>
+   实例方法
+  </p>
+  <p>
+   我们引申一下，关于python的实例方法，方法就是函数，方法是对实例进行使用的，所以又叫实例方法。
+  </p>
+  <p>
+   我们还用自行车举例，对于自行车而言，它的方法就是骑行。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Bike</span><span class="token punctuation">:</span>
+
+    compose <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'frame'</span><span class="token punctuation">,</span> <span class="token string">'wheel'</span><span class="token punctuation">,</span> <span class="token string">'pedal'</span><span class="token punctuation">]</span>
+
+    <span class="token keyword">def</span> <span class="token function">use</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'you are riding'</span><span class="token punctuation">)</span>
+
+my_bike<span class="token operator">=</span>bike<span class="token punctuation">(</span><span class="token punctuation">)</span>
+my_bike<span class="token punctuation">.</span>use<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span>运行结果
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span>you are  riding</code></pre>
+  <p>
+   <strong>
+    <em>
+     这里的self参数就是实例的本身。
+    </em>
+   </strong>
+  </p>
+  <p>
+   <strong>
+    和函数一样，实例方法也是可以有参数的。
+   </strong>
+  </p>
+  <p>
+   <strong>
+    下面还是用自行车举例：
+   </strong>
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Bike</span><span class="token punctuation">:</span>
+
+    compose <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'frame'</span><span class="token punctuation">,</span> <span class="token string">'wheel'</span><span class="token punctuation">,</span> <span class="token string">'pedal'</span><span class="token punctuation">]</span>
+
+    <span class="token keyword">def</span> <span class="token function">use</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>time<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'you ride {}m'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>time<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+my_bike<span class="token operator">=</span>bike<span class="token punctuation">(</span><span class="token punctuation">)</span>
+my_bike<span class="token punctuation">.</span>use<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span>运行结果
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span>you ride <span class="token number">10</span> m</code></pre>
+  <p>
+   python的类中有一些&ldquo;魔法方法&rdquo;&mdash;&mdash;_init_(),这些在我们创造实例的时候，不需要引用该方法也是可以被自动执行。
+  </p>
+  <p>
+   到这里，我们就会发现，python的面向对象就这么简单，相信你看完这些例子就能明白，希望大家可以喜欢。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

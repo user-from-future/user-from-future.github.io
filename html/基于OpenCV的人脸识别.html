@@ -1,0 +1,712 @@
+<html>
+ <head>
+  <title>
+   基于OpenCV的人脸识别
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    基于OpenCV的人脸识别
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="🥩 前言">
+    <a href="#user-content--前言">
+     🥩 前言
+    </a>
+   </li>
+   <ul>
+    <li title="🍖 环境使用">
+     <a href="#user-content--环境使用">
+      🍖 环境使用
+     </a>
+    </li>
+    <li title="🍖 模块使用">
+     <a href="#user-content--模块使用">
+      🍖 模块使用
+     </a>
+    </li>
+    <li title="🍖 模块介绍">
+     <a href="#user-content--模块介绍">
+      🍖 模块介绍
+     </a>
+    </li>
+    <li title="🍖 模块安装问题:">
+     <a href="#user-content--模块安装问题">
+      🍖 模块安装问题:
+     </a>
+    </li>
+   </ul>
+   <li title="🥩&nbsp;OpenCV 简介">
+    <a href="#user-content-opencv-简介">
+     🥩&nbsp;OpenCV 简介
+    </a>
+   </li>
+   <ul>
+    <li title="🍖&nbsp;安装 OpenCV 模块">
+     <a href="#user-content-安装-opencv-模块">
+      🍖&nbsp;安装 OpenCV 模块
+     </a>
+    </li>
+   </ul>
+   <li title="🥩&nbsp;OpenCV 基本使用">
+    <a href="#user-content-opencv-基本使用">
+     🥩&nbsp;OpenCV 基本使用
+    </a>
+   </li>
+   <ul>
+    <li title="🍖&nbsp;读取图片">
+     <a href="#user-content-读取图片">
+      🍖&nbsp;读取图片
+     </a>
+    </li>
+    <ul>
+     <li title="🍗&nbsp;【示例】读取图片">
+      <a href="#user-content-读取图片">
+       🍗&nbsp;【示例】读取图片
+      </a>
+     </li>
+     <li title="🍗 运行结果如下：">
+      <a href="#user-content--运行结果如下">
+       🍗 运行结果如下：
+      </a>
+     </li>
+    </ul>
+    <li title="🍖&nbsp;图片灰度转换">
+     <a href="#user-content-图片灰度转换">
+      🍖&nbsp;图片灰度转换
+     </a>
+    </li>
+    <ul>
+     <li title="🍗【示例】将图片灰度">
+      <a href="#user-content-🍗【示例】将图片灰度">
+       🍗【示例】将图片灰度
+      </a>
+     </li>
+     <li title="🍗 运行结果如下：">
+      <a href="#user-content--运行结果如下-1">
+       🍗 运行结果如下：
+      </a>
+     </li>
+    </ul>
+    <li title="🍖&nbsp;画图">
+     <a href="#user-content-画图">
+      🍖&nbsp;画图
+     </a>
+    </li>
+    <ul>
+     <li title="🍗【示例】画图">
+      <a href="#user-content-画图">
+       🍗【示例】画图
+      </a>
+     </li>
+     <li title="🍗 运行结果如下：">
+      <a href="#user-content--运行结果如下-2">
+       🍗 运行结果如下：
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="🥩 总结">
+    <a href="#user-content--总结">
+     🥩 总结
+    </a>
+   </li>
+  </ul>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%20%E5%89%8D%E8%A8%80">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    前言
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;环境使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;模块使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;模块介绍
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E6%A8%A1%E5%9D%97%E5%AE%89%E8%A3%85%E9%97%AE%E9%A2%98%3A">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;模块安装问题:
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%C2%A0OpenCV%20%E7%AE%80%E4%BB%8B">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    &nbsp;OpenCV 简介
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E5%AE%89%E8%A3%85%20OpenCV%20%E6%A8%A1%E5%9D%97">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;安装 OpenCV 模块
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%C2%A0OpenCV%20%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    &nbsp;OpenCV 基本使用
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E8%AF%BB%E5%8F%96%E5%9B%BE%E7%89%87">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;读取图片
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%C2%A0%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E8%AF%BB%E5%8F%96%E5%9B%BE%E7%89%87">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    &nbsp;【示例】读取图片
+   </a>
+  </p>
+  <p>
+   <a href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行结果如下：
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%96%C2%A0%E5%9B%BE%E7%89%87%E7%81%B0%E5%BA%A6%E8%BD%AC%E6%8D%A2">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;图片灰度转换
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E5%B0%86%E5%9B%BE%E7%89%87%E7%81%B0%E5%BA%A6">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】将图片灰度
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%20%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行结果如下：
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A0%F0%9F%8D%96%C2%A0%E7%94%BB%E5%9B%BE">
+    <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+     🍖
+    </g-emoji>
+    &nbsp;画图
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%E3%80%90%E7%A4%BA%E4%BE%8B%E3%80%91%E7%94%BB%E5%9B%BE">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    【示例】画图
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%8D%97%20%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C%E5%A6%82%E4%B8%8B%EF%BC%9A">
+    <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+     🍗
+    </g-emoji>
+    运行结果如下：
+   </a>
+  </p>
+  <p>
+   <a href="#%F0%9F%A5%A9%20%E6%80%BB%E7%BB%93">
+    <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+     🥩
+    </g-emoji>
+    总结
+   </a>
+  </p>
+  <hr>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#-前言" id="user-content--前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   前言
+  </h1>
+  <p>
+   <img alt="1b83b1d3fff541e6844ba7bfc4b8f724.gif" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    我们身边的人脸识别有车站检票，监控人脸，无人超市，支付宝人脸支付，上班打卡，人脸解锁手机。
+   </p>
+   <p>
+    人脸检测是人脸识别系统组成的关键部分之一，其目的是检测出任意给定图片中的包含的一个或多个人脸，是人脸识别、表情识别等下游任务的基础。人脸识别是通过采集包含人脸的图像或视频数据，通过对比和分析人脸特征信息从而实现身份识别的生物识别技术，是人脸识别系统的核心组件。
+   </p>
+   <p>
+    随着人工智能的不断发展，机器学习这门技术也越来越重要，很多人都开启了学习机器学习，本文就介绍了机器学习的基础内容。我们本文介绍简单的OpenCVZ中图像的处理。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-环境使用" id="user-content--环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    环境使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块使用" id="user-content--模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    opencv-python
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块介绍" id="user-content--模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块介绍
+   </strong>
+  </h2>
+  <blockquote>
+   <ol>
+    <li>
+     opencv
+    </li>
+   </ol>
+   <p>
+    关于OpenCv
+    <br>
+    Opencv是一个开源的的跨平台计算机视觉库，内部实现了图像处理和计算机视觉方面的很多通用算法，对于python而言，在引用opencv库的时候需要写为import cv2。其中，cv2是opencv的C++命名空间名称，使用它来表示调用的是C++开发的opencv的接口。
+   </p>
+   <p>
+    目前人脸识别有很多较为成熟的方法，这里调用OpenCv库，而OpenCV又提供了三种人脸识别方法，分别是LBPH方法、EigenFishfaces方法、Fisherfaces方法。本文采用的是LBPH（Local Binary Patterns Histogram，局部二值模式直方图）方法。在OpenCV中，可以用函数cv2.face.LBPHFaceRecognizer_create()生成LBPH识别器实例模型，然后应用cv2.face_FaceRecognizer.train()函数完成训练，最后用cv2.face_FaceRecognizer.predict()函数完成人脸识别。
+   </p>
+   <p>
+    CascadeClassifier，是Opencv中做人脸检测的时候的一个级联分类器。并且既可以使用Haar，也可以使用LBP特征。其中Haar特征是一种反映图像的灰度变化的，像素分模块求差值的一种特征。它分为三类：边缘特征、线性特征、中心特征和对角线特征。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#-模块安装问题" id="user-content--模块安装问题">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   <strong>
+    模块安装问题:
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <ul>
+    <li>
+     失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+    </li>
+   </ul>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#opencv-简介" id="user-content-opencv-简介">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   &nbsp;OpenCV 简介
+  </h1>
+  <p>
+   OpenCV 的全称是 Open Source Computer Vision Library，是一个跨平台的计算机视觉库。
+  </p>
+  <p>
+   OpenCV 是由英特尔公司发起并参与开发，以 BSD 许可证授权发行，可以在商业和研究领
+  </p>
+  <p>
+   域中免费使用。OpenCV 可用于开发实时的图像处理、计算机视觉以及模式识别程序。该程
+  </p>
+  <p>
+   序库也可以使用英特尔公司的 IPP 进行加速处理。
+  </p>
+  <p>
+   OpenCV 用 C++语言编写，它的主要接口也是 C++语言，但是依然保留了大量的 C 语
+  </p>
+  <p>
+   言接口。该库也有大量的Python、Java and MATLAB/OCTAVE（版本 2.5）的接口。这些语
+  </p>
+  <p>
+   言的 API 接口函数可以通过在线文档获得。如今也提供对于 C#、Ch、Ruby、GO 的支持。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#安装-opencv-模块" id="user-content-安装-opencv-模块">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   &nbsp;安装 OpenCV 模块
+  </h2>
+  <p>
+   OpenCV 已经支持 python 的模块了，直接使用 pip 就可以进行安装，命令如下：
+  </p>
+  <blockquote>
+   <p>
+    pip install opencv-python
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#opencv-基本使用" id="user-content-opencv-基本使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   &nbsp;OpenCV 基本使用
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#读取图片" id="user-content-读取图片">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   &nbsp;读取图片
+  </h2>
+  <p>
+   显示图像是 OpenCV 最基本的操作之一，imshow()函数可以实现该操作。如果使用过其
+  </p>
+  <p>
+   他 GUI 框架背景，就会很自然第调用 imshow()来显示一幅图像。imshow()函数有两个参数：
+  </p>
+  <p>
+   显示图像的帧名称以及要显示的图像本身。直接调用 imshow()函数图像确实会显示，但随
+  </p>
+  <p>
+   即会消失。要保证图片一直在窗口上显示，要通过 waitKey()函数。waitKey()函数的参数为
+  </p>
+  <p>
+   等待键盘触发的时间，单位为毫秒，其返回值是-1（表示没有键被按下）
+  </p>
+  <blockquote>
+   <p>
+    image = cv2.imread(imagepath)
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例读取图片" id="user-content-示例读取图片">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   &nbsp;【示例】读取图片
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2 <span class="token keyword">as</span> cv
+img<span class="token operator">=</span>cv<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">'1.png'</span><span class="token punctuation">)</span> 
+cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'input image'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span> 
+cv<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   我们首先是读取我们的图片，在这里"1.png"是相对路径，注意读取图片的路径不能有中文，不然数据读取不出来。我们发现我们不加waitkey，程序运行之后就会一闪而过，所以，waitKey(0) 的作用就是等待键盘的输入。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行结果如下" id="user-content--运行结果如下">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行结果如下：
+  </h3>
+  <p>
+   <img alt="b6f55bd8fcaa4f74b0260531daa83eca.png" src="https://img-blog.csdnimg.cn/b6f55bd8fcaa4f74b0260531daa83eca.png" style="max-width: 100%;">
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#图片灰度转换" id="user-content-图片灰度转换">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   &nbsp;图片灰度转换
+  </h2>
+  <p>
+   OpenCV 中有数百种关于在不同色彩空间之间转换的方法。当前，在计算机视觉中有三
+  </p>
+  <p>
+   种常用的色彩空间：灰度、BGR、以及 HSV（Hue，Saturation，Value）。
+  </p>
+  <ol>
+   <li>
+    （1）灰度色彩空间是通过去除彩色信息来将其转换成灰阶，灰度色彩空间对中间处理
+   </li>
+   <li>
+    特别有效，比如人脸识别。
+   </li>
+   <li>
+    （2）BGR 及蓝、绿、红色彩空间，每一个像素点都由一个三元数组来表示，分别代表
+   </li>
+   <li>
+    蓝、绿、红三种颜色。网页开发者可能熟悉另一个与之相似的颜色空间：RGB 它们只是颜
+   </li>
+   <li>
+    色顺序上不同。
+   </li>
+   <li>
+    （3）HSV，H（Hue）是色调，S（Saturation）是饱和度，V（Value）表示黑暗的程度
+   </li>
+   <li>
+    （或光谱另一端的明亮程度）。
+   </li>
+  </ol>
+  <p>
+   灰度转换的作用就是：转换成灰度的图片的计算强度得以降低。示例如下：
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例将图片灰度" id="user-content-示例将图片灰度">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】将图片灰度
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2 <span class="token keyword">as</span> cv
+img<span class="token operator">=</span>cv<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">'1.png'</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'input image'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+gray_img<span class="token operator">=</span>cv<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>img<span class="token punctuation">,</span>code<span class="token operator">=</span>cv<span class="token punctuation">.</span>COLOR_BGR2GRAY<span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'gray_image'</span><span class="token punctuation">,</span>gray_img<span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'gray_lena.jpg'</span><span class="token punctuation">,</span>gray_img<span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行结果如下-1" id="user-content--运行结果如下-1">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行结果如下：
+  </h3>
+  <p>
+   <img alt="b329d46e4e224f5887e1b3818acd75a6.png" src="https://img-blog.csdnimg.cn/b329d46e4e224f5887e1b3818acd75a6.png" style="max-width: 100%;">
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#画图" id="user-content-画图">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="meat_on_bone" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f356.png">
+    🍖
+   </g-emoji>
+   &nbsp;画图
+  </h2>
+  <p>
+   OpenCV 的强大之处的一个体现就是其可以对图片进行任意编辑，处理。 下面的这个
+  </p>
+  <p>
+   函数最后一个参数指定的就是画笔的大小。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#示例画图" id="user-content-示例画图">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   【示例】画图
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2 <span class="token keyword">as</span> cv
+img<span class="token operator">=</span>cv<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string">'1.png'</span><span class="token punctuation">)</span>
+x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>w<span class="token punctuation">,</span>h<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token number">50</span><span class="token punctuation">,</span><span class="token number">80</span><span class="token punctuation">,</span><span class="token number">80</span>
+cv<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>img<span class="token punctuation">,</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span>y<span class="token punctuation">,</span>x<span class="token operator">+</span>w<span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token punctuation">)</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment">#color=BGR</span>
+cv<span class="token punctuation">.</span>circle<span class="token punctuation">(</span>img<span class="token punctuation">,</span>center<span class="token operator">=</span><span class="token punctuation">(</span>x<span class="token operator">+</span>w<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">,</span>y<span class="token operator">+</span>h<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span>radius<span class="token operator">=</span>w<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">,</span>color<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">,</span>thickness<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'result image'</span><span class="token punctuation">,</span>img<span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>waitKey<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+cv<span class="token punctuation">.</span>destroyAllWindows<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#-运行结果如下-2" id="user-content--运行结果如下-2">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="poultry_leg" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f357.png">
+    🍗
+   </g-emoji>
+   运行结果如下：
+  </h3>
+  <p>
+   <img alt="0a775a92b228456e8aea2e9c39b9dcd0.png" src="https://img-blog.csdnimg.cn/0a775a92b228456e8aea2e9c39b9dcd0.png" style="max-width: 100%;">
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#-总结" id="user-content--总结">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <g-emoji alias="cut_of_meat" class="g-emoji" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f969.png">
+    🥩
+   </g-emoji>
+   总结
+  </h1>
+  <p>
+   随着人工智能的不断发展，机器学习这门技术也越来越重要，很多人都开启了学习机器学习，本文就介绍了机器学习的基础内容。介绍OpenCV中图像的处理。我们学习了如何安装模块，以及读取图片和图片的处理。下一篇，我们将介绍Haar的概念，以及如何对图片和视频中进行人脸检测。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

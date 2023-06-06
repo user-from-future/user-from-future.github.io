@@ -1,0 +1,178 @@
+<html>
+ <head>
+  <title>
+   如何自己搭建本地代理IP池并验证是否可用
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    如何自己搭建本地代理IP池并验证是否可用
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="补充学习：">
+    <a href="#user-content-补充学习">
+     补充学习：
+    </a>
+   </li>
+   <ul>
+    <li title="什么是代理ip池？">
+     <a href="#user-content-什么是代理ip池">
+      什么是代理ip池？
+     </a>
+    </li>
+   </ul>
+  </ul>
+  <p>
+   大家好，我们上一篇讲到关于反爬的相关知识。其中有一种就是检测IP访问次数的，大家都知道用IP代理池。网络上有付费的，也有免费的，这些东西容易失效，需要的自行获取，这里就不多赘述。
+  </p>
+  <p>
+   代理IP在网络爬虫、网络营销、电商等互联网领域得到了广泛的应用，通过代理IP能够轻松解决IP限制的问题。很多有技术的同学搭建了属于自己的代理IP池，当然购买付费代理IP的占大多数。
+  </p>
+  <p>
+   不过付费代理IP也是从代理IP服务商的代理IP池中提取出来的。那么代理IP池是什么样子的呢?
+  </p>
+  <p>
+   所谓代理IP池，其实就是将大量可用的代理IP汇聚到一起，通过技术手段实现管理和提取。代理IP池中的代理IP都是有生命周期的，一旦失效或者临近失效就会被清理出代理IP池。
+  </p>
+  <p>
+   当然，我们不用担心代理IP池中的代理IP都被提取或者失效的问题，因为代理IP池是有相关技术人员维护的，会有源源不断的代理IP补充进来。我们在提取代理IP时，是根据代理IP平台的规则来提取的，在规则的允许范围内可以随意提取。
+  </p>
+  <p>
+   很多小伙伴自建的代理IP池时通过工具收集的免费代理IP，其实用免费代理IP搭建代理IP池是一件比较费心费力还费时的事情，当然对于想去研究代理IP池搭建技术小伙伴，还是非常赞同通过免费代理IP来搭建代理IP池的。
+  </p>
+  <p>
+   大家获取之后，可以保存一个txt文件。或者放在程序里面，然后直接import调用即可，大家可以自己根据习惯学择。
+  </p>
+  <pre class="line-numbers"><code class="language-python">PROXIES <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span><span class="token string">'http'</span><span class="token punctuation">:</span><span class="token string">'47.101.44.122:80'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token string">'http'</span><span class="token punctuation">:</span><span class="token string">'116.63.93.172:8081'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token string">'http'</span><span class="token punctuation">:</span><span class="token string">'42.180.208.43:8070'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span><span class="token string">'http'</span><span class="token punctuation">:</span><span class="token string">'60.255.151.82:80'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">]</span></code></pre>
+  <p>
+   有些IP具有失效性，大家需要自行更新这些，也可以用代码是实现，关于验证IP是否可用的部分代码如下。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#补充学习" id="user-content-补充学习">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   补充学习：
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#什么是代理ip池" id="user-content-什么是代理ip池">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   什么是代理ip池？
+  </h3>
+  <p>
+   通俗地比喻一下，它就是一个池子，里面装了很多代理ip。它有如下的行为特征：
+  </p>
+  <ol>
+   <li>
+    池子里的ip是有生命周期的，它们将被定期验证，其中失效的将被从池子里面剔除。
+   </li>
+   <li>
+    池子里的ip是有补充渠道的，会有新的代理ip不断被加入池子中。
+   </li>
+   <li>
+    池子中的代理ip是可以被随机取出的。
+   </li>
+  </ol>
+  <p>
+   这样，代理池中始终有多个不断更换的、有效的代理ip，且我们可以随机从池子中取出代理ip，然后让爬虫程序使用代理ip访问目标网站，就可以避免爬虫被ban的情况。
+  </p>
+  <p>
+   今天，我们就来说一下如何构建自己的代理ip池。而且，我们要做一个比较灵活的代理池，它提供两种代理方式：
+  </p>
+  <pre class="line-numbers"><code class="language-python">use <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+<span class="token keyword">for</span> proxies <span class="token keyword">in</span> proxies_list<span class="token punctuation">:</span>
+
+    <span class="token keyword">try</span><span class="token punctuation">:</span>
+
+        response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://www.baidu.com'</span><span class="token punctuation">,</span>proxies<span class="token operator">=</span>proxies<span class="token punctuation">,</span>timeout<span class="token operator">=</span><span class="token number">0.1</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> response<span class="token punctuation">.</span>status_code <span class="token operator">==</span> <span class="token number">200</span><span class="token punctuation">:</span>
+
+            use<span class="token punctuation">.</span>append<span class="token punctuation">(</span>proxies<span class="token punctuation">)</span>
+
+    <span class="token keyword">except</span> Exception <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+
+        <span class="token keyword">print</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span>
+
+<span class="token keyword">return</span> use</code></pre>
+  <p>
+   那我们做好了这些，如何调用呢。
+  </p>
+  <p>
+   这里就需要我们从文件中随机取一个IP访问网址，这里用到了random库，有不会安装的，自行百度。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+f <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'IP.txt'</span><span class="token punctuation">,</span><span class="token string">"r"</span><span class="token punctuation">)</span>
+
+<span class="token builtin">file</span> <span class="token operator">=</span> f<span class="token punctuation">.</span>readline
+
+item <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+<span class="token keyword">for</span> proxies <span class="token keyword">in</span> <span class="token builtin">file</span><span class="token punctuation">:</span>
+
+    proxies <span class="token operator">=</span><span class="token builtin">eval</span><span class="token punctuation">(</span>proxies<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\','</span>'<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    item<span class="token punctuation">.</span>append<span class="token punctuation">(</span>proxies<span class="token punctuation">)</span>
+
+proxies <span class="token operator">=</span> random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span>item<span class="token punctuation">)</span>
+
+response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">,</span>proxies<span class="token operator">=</span>proxies<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span></code></pre>
+  <p>
+   那我们在添加了代理IP之后怎么验证使用的ip是否可用？这里我们可以通过访问IP检测网址验证：
+   <a href="http://current.ip.16yun.cn:802%EF%BC%8C%E5%8F%AA%E8%A6%81%E8%BF%94%E5%9B%9E%E7%9A%84%E6%98%AF%E4%BB%A3%E7%90%86IP%E9%82%A3%E4%B9%88%E5%B0%B1%E8%AF%81%E6%98%8E%E4%BB%A3%E7%90%86%E4%BD%BF%E7%94%A8%E6%88%90%E5%8A%9F%E4%BA%86%EF%BC%8C%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9B%B4%E6%8E%A5%E5%8E%BB%E8%AE%BF%E9%97%AE%E9%9C%80%E8%A6%81%E8%8E%B7%E5%8F%96%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BD%91%E7%AB%99%E4%BA%86%E3%80%82" rel="nofollow">
+    http://current.ip.16yun.cn:802，只要返回的是代理IP那么就证明代理使用成功了，我们可以直接去访问需要获取的数据网站了。
+   </a>
+  </p>
+  <p>
+   今天就分享到这里。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

@@ -1,0 +1,234 @@
+<html>
+ <head>
+  <title>
+   python之scrapy框架
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python之scrapy框架
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+  </ul>
+  <p>
+   写程序的时候，别人写好的工具、库、框架被称作轮子。有现成的，写好的东西不用，自己又去写一遍，这叫做重复造轮子。今天来认识爬虫的常见轮子Scrapsdy。
+  </p>
+  <p>
+   我们在学习Scrapy的时候要先做好准备工作，安装相关库文件。
+  </p>
+  <p>
+   Scrapy安装前需要先安装依赖包，不然会因缺少依赖包导致安装失败，如下表
+  </p>
+  <table border="1" cellpadding="1" cellspacing="1">
+   <tbody>
+    <tr>
+     <td>
+      lxml
+     </td>
+     <td>
+      parsel
+     </td>
+     <td>
+      w3lib
+     </td>
+     <td>
+      twisted
+     </td>
+     <td>
+      cryptography
+     </td>
+     <td>
+      pyOenSSL
+     </td>
+    </tr>
+    <tr>
+     <td>
+      解析XML和HTML非常高校的工具
+     </td>
+     <td>
+      HTML.XML数据提取
+     </td>
+     <td>
+      网页解码
+     </td>
+     <td>
+      异步网络编程框架
+     </td>
+     <td>
+      用于加密
+     </td>
+     <td>
+      进行一些加解密操作
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <p>
+   这些包可以通过pip单独安装。也可以先创建一个requirements.txt文件，然后把包名写入并保存即可
+  </p>
+  <blockquote>
+   <p>
+    lxml
+    <br>
+    parsel
+    <br>
+    w3lib
+    <br>
+    twisted
+    <br>
+    crptography
+    <br>
+    pyOpenSSL
+   </p>
+  </blockquote>
+  <p>
+   然后终端输入
+  </p>
+  <pre class="line-numbers"><code class="language-python">pip install <span class="token operator">-</span>r requirements<span class="token punctuation">.</span>txt</code></pre>
+  <p>
+   <strong>
+    什么是scrapy框架？
+   </strong>
+  </p>
+  <p>
+   Scrapy是python开发的一个快速、高层次、轻量级的屏幕抓取和web抓取的python爬虫框架，主要用于抓取特定web站点的信息并从中提取特定结构的数据。
+  </p>
+  <p>
+   <strong>
+    各组件作用
+   </strong>
+  </p>
+  <p>
+   <strong>
+    ScrapyEngine (引擎)
+   </strong>
+  </p>
+  <p>
+   负责Scheduler、Downloader、Spiders、Item Pipeline中间的通讯信号和数据的传递，此组件相当于爬虫的&ldquo;大脑&rdquo;，是整个爬虫的调度中心。
+  </p>
+  <p>
+   <strong>
+    Scheduler(调度器)
+   </strong>
+  </p>
+  <p>
+   简单地说就是一个队列，负责接收引擎发送过来的 request请求，然后将请求排队，当引擎需要请求数据的时候，就将请求队列中的数据交给引擎。
+  </p>
+  <p>
+   初始的爬取URL和后续在页面中获取的待爬取的URL将放入调度器中，等待爬取，同时调度器会自动去除重复的URL（如果特定的URL不需要去重也可以通过设置实现，如post请求的URL）。
+  </p>
+  <p>
+   <strong>
+    下载器(Downloader)
+   </strong>
+  </p>
+  <p>
+   下载引擎发送过来的所有 request请求，并将获得的 response交还给引擎，再由引擎将 response交管给 Spiders来进行解析。
+  </p>
+  <p>
+   <strong>
+    Spiders(爬虫)
+   </strong>
+  </p>
+  <p>
+   它负责处理所有responses，从中分析提取数据，获取Item字段需要的数据，并将需要跟进的URL提交给引擎，再次进入Scheduler(调度器)。
+  </p>
+  <p>
+   <strong>
+    Item Pipeline(项目管道)
+   </strong>
+  </p>
+  <p>
+   就是我们封装去重类、存储类的地方，负责处理 Spiders中获取到的数据并且进行后期的处理，过滤或者存储等等。
+  </p>
+  <p>
+   当页面被爬虫解析所需的数据存入Item后，将被发送到项目管道(Pipeline)，并经过几个特定的次序处理数据，最后存入本地文件或存入数据库。
+  </p>
+  <p>
+   <strong>
+    Downloader Middlewares(下载中间件)
+   </strong>
+  </p>
+  <p>
+   可以当做是一个可自定义扩展下载功能的组件，是在引擎及下载器之间的特定钩子(specific hook)，处理Downloader传递给引擎的response。
+  </p>
+  <p>
+   通过设置下载器中间件可以实现爬虫自动更换user-agent、IP等功能。
+  </p>
+  <p>
+   <strong>
+    Spider Middlewares(爬虫中间件)
+   </strong>
+  </p>
+  <p>
+   Spider中间件是在引擎及Spider之间的特定钩子(specific hook)，处理spider的输入(response)和输出(items及requests)。
+  </p>
+  <p>
+   自定义扩展、引擎和Spider之间通信功能的组件，通过插入自定义代码来扩展Scrapy功能。
+  </p>
+  <p>
+   下面通过具体的实例说说spider
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> scrapy
+<span class="token keyword">from</span> myproject<span class="token punctuation">.</span>items <span class="token keyword">import</span> MyprojectItem
+ 
+<span class="token keyword">class</span> <span class="token class-name">MySpider</span><span class="token punctuation">(</span>scrapy<span class="token punctuation">.</span>Spider<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token comment">#通过xpath提取内容</span>
+    name <span class="token operator">=</span> <span class="token string">"qiushibaike"</span>
+ 
+    start_urls <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"https://www.qiushibaike.com/text"</span><span class="token punctuation">]</span>
+ 
+    <span class="token keyword">def</span> <span class="token function">parse</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        contents <span class="token operator">=</span> response<span class="token punctuation">.</span>selector<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'//div[@class="content"]/span/text()'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>extract<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment">#定义items作为数据暂存容器</span>
+        items <span class="token operator">=</span> MyprojectItem<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token keyword">for</span> i <span class="token keyword">in</span> contents<span class="token punctuation">:</span>
+            items<span class="token punctuation">[</span><span class="token string">'content'</span><span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">yield</span> items
+           <span class="token comment">#通过生成器yield将数据传送到Pipeline进一步处理</span>
+ 
+        self<span class="token punctuation">.</span>log<span class="token punctuation">(</span><span class="token string">'A response from %s just arrived!'</span> <span class="token operator">%</span> response<span class="token punctuation">.</span>url<span class="token punctuation">)</span></code></pre>
+  <p>
+   今天就说到这里。
+  </p>
+  <p>
+   j
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

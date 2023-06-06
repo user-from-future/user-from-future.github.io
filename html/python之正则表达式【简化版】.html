@@ -1,0 +1,264 @@
+<html>
+ <head>
+  <title>
+   python之正则表达式【简化版】
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python之正则表达式【简化版】
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="正则表达式是什么？">
+    <a href="#user-content-正则表达式是什么">
+     正则表达式是什么？
+    </a>
+   </li>
+   <li title="2.match()">
+    <a href="#user-content-2match">
+     2.match()
+    </a>
+   </li>
+   <ul>
+    <li title="匹配目标">
+     <a href="#user-content-匹配目标">
+      匹配目标
+     </a>
+    </li>
+    <li title="贪婪匹配">
+     <a href="#user-content-贪婪匹配">
+      贪婪匹配
+     </a>
+    </li>
+   </ul>
+   <li title="3.findall（）">
+    <a href="#user-content-3findall">
+     3.findall（）
+    </a>
+   </li>
+  </ul>
+  <p>
+   大家好，我们今天说一说正则表达式，在之前我们也介绍了关于正则表达式，今天，我们来深入的了解一下。我们知道正则表达式是处理字符串的强大工具，它有自己的语法结构，什么匹配啊，都不算什么。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#正则表达式是什么" id="user-content-正则表达式是什么">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   正则表达式是什么？
+  </h2>
+  <p>
+   正则表达式，又称规则表达式，(英语:Regular Expression，在代码中常简写为 regex、regexp 或 RE)，它是计算机科学的一个概念。正则表达式通常被用来检索、替换那些符合某个模式的文本。 许多程序设计语言都支持利用正则表达式进行字符串操作。例如在 Perl 中内建了一个功能强大的正则表达式引擎。正则表达式这个概念最初是由 Unix 中的工具软件普及开的。正则表达式是对
+   <strong>
+    字符串(包括普通字符(例如，a 到 z 之间的字母)和特殊字符(称为"元字符"))
+   </strong>
+   操作的一种逻辑公式，就是用事先定义好的一些特定字符、及这些特定字符的组合，组成一个"规则字符串"，这个"规则字符串"用来表达对字符串的一种过滤逻辑。
+   <strong>
+    正则表达式是一种文本模式，模式描述在搜索文本时要匹配的一个或多个字符串。
+   </strong>
+  </p>
+  <p>
+   1.实例引入
+  </p>
+  <p>
+   说了一大堆废话，大家可能还是云里雾里的，我们通过实例来说明一下，我们可以用正则表达式测试工具，或者python都可以，首先，我们输入一段文本。
+  </p>
+  <blockquote>
+   <p>
+    hello，my name is Tina，my phone number is 123456 and my web is
+    <a href="http://tina.com" rel="nofollow">
+     http://tina.com
+    </a>
+    .
+   </p>
+  </blockquote>
+  <p>
+   我们接下来尝试用正则表达式提取出来;
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token punctuation">[</span>a<span class="token operator">-</span>zA<span class="token operator">-</span>z<span class="token punctuation">]</span><span class="token operator">+</span><span class="token punctuation">:</span><span class="token operator">//</span><span class="token punctuation">[</span><span class="token operator">^</span>\s<span class="token punctuation">]</span><span class="token operator">*</span></code></pre>
+  <p>
+   我们就可以获取网页链接，也就是文本中的url，是不是很神奇？
+  </p>
+  <p>
+   这是因为它有自己的匹配规则，部分如下。
+  </p>
+  <table border="1" cellpadding="1" cellspacing="1">
+   <tbody>
+    <tr>
+     <td>
+      模式
+     </td>
+     <td>
+      描述
+     </td>
+    </tr>
+    <tr>
+     <td>
+      .
+     </td>
+     <td>
+      任意字符
+     </td>
+    </tr>
+    <tr>
+     <td>
+      *
+     </td>
+     <td>
+      0个或者多个表达式
+     </td>
+    </tr>
+    <tr>
+     <td>
+      +
+     </td>
+     <td>
+      一个或者多个表达式
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <p>
+   关于更多的匹配规则可自行查阅。
+  </p>
+  <blockquote>
+   <p>
+    <strong>
+     ?,*,+,\d,\w
+    </strong>
+    <strong>
+     都是等价字符
+    </strong>
+   </p>
+   <p>
+    <strong>
+     ?等价于匹配长度{0,1}
+    </strong>
+   </p>
+   <p>
+    <strong>
+     *等价于匹配长度{0,}
+    </strong>
+   </p>
+   <p>
+    <strong>
+     +等价于匹配长度{1,}
+    </strong>
+   </p>
+   <p>
+    <strong>
+     \d 等价于[0-9]
+    </strong>
+   </p>
+   <p>
+    <strong>
+     \D 等价于[^0-9]
+    </strong>
+   </p>
+   <p>
+    <strong>
+     \w 等价于[A-Za-z_0-9]
+    </strong>
+   </p>
+   <p>
+    <strong>
+     \W 等价于[^A-Za-z_0-9]
+    </strong>
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#2match" id="user-content-2match">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.match()
+  </h2>
+  <p>
+   这里介绍一个常用的匹配方法&mdash;&mdash;match（），向他传入要匹配的字符串以及正则表达式，就可以检测这个正则表达式是否匹配字符串。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#匹配目标" id="user-content-匹配目标">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   匹配目标
+  </h3>
+  <pre class="line-numbers"><code class="language-python">res <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span><span class="token string">'hello\s(\d+)sword'</span><span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#贪婪匹配" id="user-content-贪婪匹配">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   贪婪匹配
+  </h3>
+  <pre class="line-numbers"><code class="language-python">res <span class="token operator">=</span> re<span class="token punctuation">.</span><span class="token keyword">match</span><span class="token punctuation">(</span><span class="token string">'hello.*(\d+)sword'</span><span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#3findall" id="user-content-3findall">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.findall（）
+  </h2>
+  <p>
+   我们最常用的就是这个，我们看看这个是如何使用的。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> re
+
+useData <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">'请输入字符串数据:'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token triple-quoted-string string">'''
+匹配字符串中的数字,+是匹配前面的子表达式一次或多次
+'''</span>
+digital <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'\d+'</span><span class="token punctuation">,</span>useData<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>digital<span class="token punctuation">)</span></code></pre>
+  <p>
+   我们看看运行结果
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/img_convert/13829eb8d9c2f7f3fba83eff81346e4e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   findall()函数是返回所有匹配到的字符串,返回值的数据类型为列表。
+  </p>
+  <p>
+   我们今天就介绍到这里。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

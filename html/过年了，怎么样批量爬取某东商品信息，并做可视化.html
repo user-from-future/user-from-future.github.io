@@ -1,0 +1,338 @@
+<html>
+ <head>
+  <title>
+   过年了，怎么样批量爬取某东商品信息，并做可视化
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    过年了，怎么样批量爬取某东商品信息，并做可视化
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title=" ">
+     <a href="#user-content- ">
+     </a>
+    </li>
+    <ul>
+     <li title="环境使用">
+      <a href="#user-content-环境使用">
+       环境使用
+      </a>
+     </li>
+     <li title="模块使用">
+      <a href="#user-content-模块使用">
+       模块使用
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="说明">
+    <a href="#user-content-说明">
+     说明
+    </a>
+   </li>
+   <ul>
+    <li title="一、谷歌驱动安装">
+     <a href="#user-content-一谷歌驱动安装">
+      一、谷歌驱动安装
+     </a>
+    </li>
+    <li title="二、selenium模块">
+     <a href="#user-content-二selenium模块">
+      二、selenium模块
+     </a>
+    </li>
+   </ul>
+   <li title="代码实现">
+    <a href="#user-content-代码实现">
+     代码实现
+    </a>
+   </li>
+   <li title="运行结果">
+    <a href="#user-content-运行结果">
+     运行结果
+    </a>
+   </li>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%E5%89%8D%E8%A8%80">
+    前言
+   </a>
+  </p>
+  <p>
+   <a href="#%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8">
+    环境使用
+   </a>
+  </p>
+  <p>
+   <a href="#%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8">
+    模块使用
+   </a>
+  </p>
+  <p>
+   <a href="#%E8%AF%B4%E6%98%8E">
+    说明
+   </a>
+  </p>
+  <p>
+   <a href="#%E4%B8%80%E3%80%81%E8%B0%B7%E6%AD%8C%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85">
+    一、谷歌驱动安装
+   </a>
+  </p>
+  <p>
+   <a href="#1.%E4%B8%8B%E8%BD%BD%E7%BD%91%E5%9D%80">
+    1.下载网址
+   </a>
+  </p>
+  <p>
+   <a href="#2.%E6%96%87%E4%BB%B6%E5%AE%89%E8%A3%85%EF%BC%88%E6%94%BE%E7%BD%AE%EF%BC%89%E4%BD%8D%E7%BD%AE">
+    2.文件安装（放置）位置
+   </a>
+  </p>
+  <p>
+   <a href="#%E4%BA%8C%E3%80%81selenium%E6%A8%A1%E5%9D%97">
+    二、selenium模块
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A0%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0">
+    代码实现
+   </a>
+  </p>
+  <p>
+   <a href="#%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C">
+    运行结果
+   </a>
+  </p>
+  <hr>
+  <p>
+   马上就要过年了，大家都在屯年货了网络上商品信息太多，不知道如何选择，今天，我们就用python爬取商品信息，并做可视化。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    requests
+   </li>
+   <li>
+    selenium
+   </li>
+   <li>
+    time
+   </li>
+   <li>
+    谷歌驱动
+   </li>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#说明" id="user-content-说明">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    说明
+   </strong>
+  </h1>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#一谷歌驱动安装" id="user-content-一谷歌驱动安装">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   一、谷歌驱动安装
+  </h2>
+  <blockquote>
+   <h3>
+    <a aria-hidden="true" class="anchor" href="#1下载网址" id="user-content-1下载网址">
+     <span aria-hidden="true" class="octicon octicon-link">
+     </span>
+    </a>
+    1.下载网址
+   </h3>
+   <p>
+    <a href="https://registry.npmmirror.com/binary.html?path=chromedriver/" rel="nofollow" title="CNPM Binaries Mirror">
+     CNPM Binaries Mirror
+    </a>
+   </p>
+   <h3>
+    <a aria-hidden="true" class="anchor" href="#2文件安装放置位置" id="user-content-2文件安装放置位置">
+     <span aria-hidden="true" class="octicon octicon-link">
+     </span>
+    </a>
+    2.文件安装（放置）位置
+   </h3>
+   <p>
+    可以把这个文件理解成一个脚本入口。说它是安装，其实就是把下载的
+    <code>
+     chromedriver.exe
+    </code>
+    文件复制到相应的位置。
+   </p>
+   <p>
+    将文件复制到两个位置：1.
+    <code>
+     ..\python\Scripts
+    </code>
+    复制一份到安装Python的文件夹中的Scripts文件夹中；2.如果用的是Pycharm，再复制一份到
+    <code>
+     ..\python\site-packages\selenium\webdriver\chrome
+    </code>
+    文件中。这个地址可以将鼠标放在Pycharm里面安装库的地方的相应库上就能看到。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#二selenium模块" id="user-content-二selenium模块">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   二、selenium模块
+  </h2>
+  <blockquote>
+   <p>
+    之前，我们爬虫是模拟浏览器，但始终不是用的浏览器，但今天我们要说的是另一种爬虫方式，这次不是模拟浏览器，而是用程序去控制浏览器进行一些列操作，也就是selenium。selenium是python的一个第三方库，对外提供的接口可以操控浏览器，比如说输入、点击，跳转，下拉等动作。
+   </p>
+   <p>
+    在使用selenium模块之前要做两件事，一是安装selenium模块，可以用终端用pip，也可以在pycharm里的setting安装；二是我们需要下载一款浏览器驱动程序，下载的驱动程序要和浏览器的版本一致。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h1>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">from</span> selenium <span class="token keyword">import</span> webdriver
+<span class="token keyword">from</span> selenium<span class="token punctuation">.</span>webdriver<span class="token punctuation">.</span>common<span class="token punctuation">.</span>by <span class="token keyword">import</span> By
+<span class="token keyword">from</span> selenium<span class="token punctuation">.</span>webdriver<span class="token punctuation">.</span>common<span class="token punctuation">.</span>keys <span class="token keyword">import</span> Keys
+<span class="token keyword">import</span> time
+
+
+driver <span class="token operator">=</span> webdriver<span class="token punctuation">.</span>Chrome<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># r'C:\Users\YY\AppData\Local\Programs\Python\Python39\chromedriver.exe'</span>
+driver<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://www.jd.com/'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">GetInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    input_tag <span class="token operator">=</span> driver<span class="token punctuation">.</span>find_element<span class="token punctuation">(</span>By<span class="token punctuation">.</span>ID<span class="token punctuation">,</span> <span class="token string">"key"</span><span class="token punctuation">)</span>
+
+    input_tag<span class="token punctuation">.</span>send_keys<span class="token punctuation">(</span><span class="token string">'笔记本'</span><span class="token punctuation">)</span> 
+
+    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+
+    input_tag<span class="token punctuation">.</span>send_keys<span class="token punctuation">(</span>Keys<span class="token punctuation">.</span>ENTER<span class="token punctuation">)</span>
+
+    spider_jd<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">spider_jd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    goods <span class="token operator">=</span> driver<span class="token punctuation">.</span>find_elements<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CLASS_NAME<span class="token punctuation">,</span><span class="token string">"gl-item"</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> good <span class="token keyword">in</span> goods<span class="token punctuation">:</span>
+        
+        name <span class="token operator">=</span> good<span class="token punctuation">.</span>find_element<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span><span class="token string">".p-name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>text<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">,</span><span class="token string">''</span><span class="token punctuation">)</span>
+      
+        price <span class="token operator">=</span> good<span class="token punctuation">.</span>find_element<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span><span class="token string">".p-price"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>text
+
+        link <span class="token operator">=</span> good<span class="token punctuation">.</span>find_element<span class="token punctuation">(</span>By<span class="token punctuation">.</span>TAG_NAME<span class="token punctuation">,</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>get_attribute<span class="token punctuation">(</span><span class="token string">'href'</span><span class="token punctuation">)</span>
+
+        msg <span class="token operator">=</span> <span class="token triple-quoted-string string">'''
+            商品:%s
+            价格:%s
+            链接:%s
+        '''</span><span class="token operator">%</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span>price<span class="token punctuation">,</span>link<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+
+<span class="token comment"># GetInfo()</span>
+
+<span class="token keyword">for</span> page <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'爬取</span><span class="token interpolation"><span class="token punctuation">{</span>page<span class="token punctuation">}</span></span><span class="token string">页'</span></span><span class="token punctuation">)</span>
+    GetInfo<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    driver<span class="token punctuation">.</span>find_element<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span><span class="token string">'.pn-next'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>click<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span></code></pre>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#运行结果" id="user-content-运行结果">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   运行结果
+  </h1>
+  <p>
+   <img alt="f1292d4500b34b598e9076a5d430091e.png" src="https://img-blog.csdnimg.cn/f1292d4500b34b598e9076a5d430091e.png" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

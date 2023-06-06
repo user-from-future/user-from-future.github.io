@@ -1,0 +1,244 @@
+<html>
+ <head>
+  <title>
+   python之requests基础用法
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python之requests基础用法
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="1.准备工作">
+    <a href="#user-content-1准备工作">
+     1.准备工作
+    </a>
+   </li>
+   <li title="2.实例引入">
+    <a href="#user-content-2实例引入">
+     2.实例引入
+    </a>
+   </li>
+   <li title="3.get()请求">
+    <a href="#user-content-3get请求">
+     3.get()请求
+    </a>
+   </li>
+   <ul>
+    <li title="基本实例">
+     <a href="#user-content-基本实例">
+      基本实例
+     </a>
+    </li>
+   </ul>
+   <li title="4.post()请求">
+    <a href="#user-content-4post请求">
+     4.post()请求
+    </a>
+   </li>
+   <li title="5.响应">
+    <a href="#user-content-5响应">
+     5.响应
+    </a>
+   </li>
+  </ul>
+  <p>
+   大家好，今天就来说说requests的基础用法。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#1准备工作" id="user-content-1准备工作">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.准备工作
+  </h2>
+  <p>
+   首先呢，我们要确保我们已经之前安装requests库，如果没有安装，可以自行搜索。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#2实例引入" id="user-content-2实例引入">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.实例引入
+  </h2>
+  <p>
+   requests库请求网页用到的是get()方法，下面通过实例来看一下。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://www.baidu.com/'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">type</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>cookies<span class="token punctuation">)</span></code></pre>
+  <p>
+   这里我们调用get()方法实现，得到一个response对象，然后分别输出response的类型，状态码，内容以及cookies。
+  </p>
+  <p>
+   使用get()方法成功实现一个get()请求这不算什么，更方便的请求还有其他的。比如post(),put()等等。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#3get请求" id="user-content-3get请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.get()请求
+  </h2>
+  <p>
+   HTTP最常见的请求之一就是GET请求，下面我们首先先来了解一下利用requests构建GET的方法
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#基本实例" id="user-content-基本实例">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   基本实例
+  </h3>
+  <p>
+   首先，我们构建一个最简单的get请求，请求的链接如下，该网站会判断如果用户发起的的是get请求的话，它就会返回响应的请求信息。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'http://httpbin.org/get'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   运行的结果如下：
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token punctuation">{</span>
+  <span class="token string">"args"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> 
+  <span class="token string">"headers"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"Accept"</span><span class="token punctuation">:</span> <span class="token string">"*/*"</span><span class="token punctuation">,</span> 
+    <span class="token string">"Accept-Encoding"</span><span class="token punctuation">:</span> <span class="token string">"gzip, deflate"</span><span class="token punctuation">,</span> 
+    <span class="token string">"Host"</span><span class="token punctuation">:</span> <span class="token string">"httpbin.org"</span><span class="token punctuation">,</span> 
+    <span class="token string">"User-Agent"</span><span class="token punctuation">:</span> <span class="token string">"python-requests/2.27.1"</span><span class="token punctuation">,</span> 
+    <span class="token string">"X-Amzn-Trace-Id"</span><span class="token punctuation">:</span> <span class="token string">"Root=1-637ae5d7-35da1bf57b139d152585d12a"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> 
+  <span class="token string">"origin"</span><span class="token punctuation">:</span> <span class="token string">"223.215.67.113"</span><span class="token punctuation">,</span> 
+  <span class="token string">"url"</span><span class="token punctuation">:</span> <span class="token string">"http://httpbin.org/get"</span>
+<span class="token punctuation">}</span></code></pre>
+  <p>
+   可以发现，我们成功发起了get请求，返回结果中包含请求头，url，IP等信息。
+  </p>
+  <p>
+   那么，对于GET请求，如果我们想要附加额外信息，一般怎么添加呢？比如讲，现在想添加两个参数，其中name是Tina，age是18。要构造这个请求链接，是不是可以直接写成：
+  </p>
+  <blockquote>
+   <p>
+    r = requests.get('
+    <a href="http://httpbin.org/get%5C?name=Tina%5C&amp;age=18'%5C" rel="nofollow">
+     http://httpbin.org/get\?name=Tina\&amp;age=18'\
+    </a>
+    )
+   </p>
+  </blockquote>
+  <p>
+   这样也是可以的，我们还可以通过字典来构造。利用params这个参数就好了。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+data <span class="token operator">=</span> <span class="token punctuation">{</span>
+
+    <span class="token string">'name'</span><span class="token punctuation">:</span><span class="token string">'Tina'</span>，
+    
+    <span class="token string">'age'</span><span class="token punctuation">:</span><span class="token string">'18'</span>
+    <span class="token punctuation">}</span>
+
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'http://httpbin.org/get'</span><span class="token punctuation">,</span>params <span class="token operator">=</span> data<span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   运行结果如下：
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token punctuation">{</span>
+  <span class="token string">"args"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"age"</span><span class="token punctuation">:</span> <span class="token string">"18"</span><span class="token punctuation">,</span> 
+    <span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"Tina"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> 
+  <span class="token string">"headers"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"Accept"</span><span class="token punctuation">:</span> <span class="token string">"*/*"</span><span class="token punctuation">,</span> 
+    <span class="token string">"Accept-Encoding"</span><span class="token punctuation">:</span> <span class="token string">"gzip, deflate"</span><span class="token punctuation">,</span> 
+    <span class="token string">"Host"</span><span class="token punctuation">:</span> <span class="token string">"httpbin.org"</span><span class="token punctuation">,</span> 
+    <span class="token string">"User-Agent"</span><span class="token punctuation">:</span> <span class="token string">"python-requests/2.27.1"</span><span class="token punctuation">,</span> 
+    <span class="token string">"X-Amzn-Trace-Id"</span><span class="token punctuation">:</span> <span class="token string">"Root=1-637ae902-695483e87b26b3ad49d15df7"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> 
+  <span class="token string">"origin"</span><span class="token punctuation">:</span> <span class="token string">"223.215.67.113"</span><span class="token punctuation">,</span> 
+  <span class="token string">"url"</span><span class="token punctuation">:</span> <span class="token string">"http://httpbin.org/get?name=Tina&amp;age=18"</span>
+<span class="token punctuation">}</span></code></pre>
+  <p>
+   通过运行结果判断，请求的链接自动变成了带有后缀的链接。
+  </p>
+  <p>
+   另外，网页返回的类型实际上是str，但是它是json()格式的，我们可以用json返回一个字典。如果不是json格式，使用json就会报错，抛出json.decoder.JSONDecodeError异常。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#4post请求" id="user-content-4post请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   4.post()请求
+  </h2>
+  <p>
+   上面我们了解了最基本的get请求，另外一种比较常见的请求方式就是post（）。使用requests实现post请求也是非常简单，示例如下。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> requests
+
+res <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span><span class="token string">'http://httpbin.org/post'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>res<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   运行之后就会发现得到了结果，就说明我们post请求成功。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#5响应" id="user-content-5响应">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   5.响应
+  </h2>
+  <p>
+   发送请求，之后得到的肯定就是响应。除了text，还有状态码，响应头，cookies等等。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

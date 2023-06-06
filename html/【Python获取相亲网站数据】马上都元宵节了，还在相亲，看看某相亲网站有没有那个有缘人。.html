@@ -1,0 +1,531 @@
+<html>
+ <head>
+  <title>
+   【Python获取相亲网站数据】马上都元宵节了，还在相亲，看看某相亲网站有没有那个有缘人。
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    【Python获取相亲网站数据】马上都元宵节了，还在相亲，看看某相亲网站有没有那个有缘人。
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title=" ">
+     <a href="#user-content- ">
+     </a>
+    </li>
+    <ul>
+     <li title="环境使用">
+      <a href="#user-content-环境使用">
+       环境使用
+      </a>
+     </li>
+     <li title="模块使用">
+      <a href="#user-content-模块使用">
+       模块使用
+      </a>
+     </li>
+     <li title="模块介绍">
+      <a href="#user-content-模块介绍">
+       模块介绍
+      </a>
+     </li>
+     <li title="模块安装问题:">
+      <a href="#user-content-模块安装问题">
+       模块安装问题:
+      </a>
+     </li>
+    </ul>
+    <li title="代码实现">
+     <a href="#user-content-代码实现">
+      代码实现
+     </a>
+    </li>
+    <ul>
+     <li title="发送请求">
+      <a href="#user-content-发送请求">
+       发送请求
+      </a>
+     </li>
+     <li title="获取数据">
+      <a href="#user-content-获取数据">
+       获取数据
+      </a>
+     </li>
+     <li title="解析数据">
+      <a href="#user-content-解析数据">
+       解析数据
+      </a>
+     </li>
+     <li title="输出数据">
+      <a href="#user-content-输出数据">
+       输出数据
+      </a>
+     </li>
+     <li title="保存数据">
+      <a href="#user-content-保存数据">
+       保存数据
+      </a>
+     </li>
+    </ul>
+    <li title="运行结果展示">
+     <a href="#user-content-运行结果展示">
+      运行结果展示
+     </a>
+    </li>
+   </ul>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <img alt="1b83b1d3fff541e6844ba7bfc4b8f724.gif" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    马上都元宵节了，还在相亲，看看某相亲网站有没有那个有缘人。今天我们来爬取某相亲网站获取我们想要的数据，比如说，对方的姓名，年龄，身高，体重等等。今天我们主要使用CSS选择的方法来匹配我们想要的数据，通过这篇的学习，可以加深大家对CSS的用法的了解，以及明白不同于正则匹配的地方。话不多说，让我手把手教你，如何获取吧。
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    requests
+   </li>
+   <li>
+    re
+   </li>
+   <li>
+    csv
+   </li>
+   <li>
+    os
+   </li>
+   <li>
+    parsel
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块介绍" id="user-content-模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块介绍
+   </strong>
+  </h3>
+  <blockquote>
+   <ul>
+    <li>
+     <strong>
+      requests
+     </strong>
+    </li>
+   </ul>
+   <p>
+    requests是一个很实用的Python HTTP客户端库，爬虫和测试服务器响应数据时经常会用到，requests是Python语言的第三方的库，专门用于发送HTTP请求，使用起来比urllib简洁很多。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      parsel
+     </strong>
+    </li>
+   </ul>
+   <p>
+    parsel是一个python的第三方库，相当于css选择器+xpath+re。
+   </p>
+   <p>
+    parsel由scrapy团队开发，是将scrapy中的parsel独立抽取出来的，可以轻松解析html，xml内容，获取需要的数据。
+   </p>
+   <p>
+    相比于BeautifulSoup，xpath，parsel效率更高，使用更简单。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      re
+     </strong>
+    </li>
+   </ul>
+   <p>
+    re模块是python独有的匹配字符串的模块，该模块中提供的很多功能是基于正则表达式实现的，而正则表达式是对字符串进行模糊匹配，提取自己需要的字符串部分，他对所有的语言都通用。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      os
+     </strong>
+    </li>
+   </ul>
+   <p>
+    os 就是 &ldquo;operating system&rdquo; 的缩写，顾名思义，
+    <a href="https://so.csdn.net/so/search?q=os%E6%A8%A1%E5%9D%97&amp;spm=1001.2101.3001.7020" rel="nofollow" title="os模块">
+     os模块
+    </a>
+    提供的就是各种 Python 程序与操作系统进行交互的接口。通过使用 os 模块，一方面可以方便地与操作系统进行交互，另一方面也可以极大增强代码的可移植性。
+   </p>
+   <ul>
+    <li>
+     <strong>
+      csv
+     </strong>
+    </li>
+   </ul>
+   <p>
+    它是一种文件格式，一般也被叫做逗号分隔值文件，可以使用 Excel 软件或者文本文档打开 。其中数据字段用半角逗号间隔（也可以使用其它字符），使用 Excel 打开时，逗号会被转换为分隔符。csv 文件是以纯文本形式存储了表格数据，并且在兼容各个操作系统。
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块安装问题" id="user-content-模块安装问题">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块安装问题:
+   </strong>
+  </h3>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <p>
+    失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+   </p>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h2>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#发送请求" id="user-content-发送请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   发送请求
+  </h3>
+  <p>
+   首先我们需要确定我们的
+   <a href="https://love.19lou.com/recommend" rel="nofollow" title="目标网址">
+    目标网址
+   </a>
+   。
+  </p>
+  <p>
+   <img alt="a56cafba3bc942cd998a25c4f5986dcf.png" src="https://img-blog.csdnimg.cn/a56cafba3bc942cd998a25c4f5986dcf.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#获取数据" id="user-content-获取数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   获取数据
+  </h3>
+  <p>
+   我们通过开发者工具会发现，每一个女嘉宾都是有自己单独的网页，而且其网页构成规律明显，都是由固定网页＋uid构成，所以我们只需要找到每一个女嘉宾对应的uid即可。
+  </p>
+  <blockquote>
+   <p>
+    <a href="https://love.19lou.com/detail/51639237" rel="nofollow">
+     https://love.19lou.com/detail/51639237
+    </a>
+   </p>
+   <p>
+    <a href="https://love.19lou.com/detail/51404458" rel="nofollow">
+     https://love.19lou.com/detail/51404458
+    </a>
+   </p>
+   <p>
+    <a href="https://love.19lou.com/detail/51371926" rel="nofollow">
+     https://love.19lou.com/detail/51371926
+    </a>
+   </p>
+  </blockquote>
+  <p>
+   接下来我们目标明确，获取女嘉宾的uid。
+  </p>
+  <p>
+   第一种方法，直接在网页源代码中获取uid。
+  </p>
+  <pre class="line-numbers"><code class="language-python">respnse <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+
+    <span class="token comment"># print(respnse.text)</span>
+    uids <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'uid:(\d+)'</span><span class="token punctuation">,</span> respnse<span class="token punctuation">.</span>text<span class="token punctuation">,</span> re<span class="token punctuation">.</span>S<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>uids<span class="token punctuation">)</span></code></pre>
+  <p>
+   第二种方法，通过找到对应的数据包，里面就有女嘉宾的uid。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token comment"># 第二种方法获取uid，即数据包,xhr刷新。得到下面链接</span>
+<span class="token comment"># https://love.19lou.com/valueApp/api/love/searchLoveUser?page=2&amp;perPage=12&amp;sex=0</span>
+    <span class="token comment">#https://love.19lou.com/valueApp/api/love/searchLoveUserpage=1&amp;perPage=12&amp;sex=0&amp;minWeight=31&amp;maxAge=59</span>
+    url1 <span class="token operator">=</span> <span class="token string">'https://love.19lou.com/valueApp/api/love/searchLoveUser?page=2&amp;perPage=12&amp;sex=0'</span>
+    respnse1 <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url1<span class="token punctuation">,</span>headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+    <span class="token comment">#第1种写法，有局限性</span>
+    uids<span class="token operator">=</span>respnse1<span class="token punctuation">.</span>json<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'items'</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>uids<span class="token punctuation">)</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+         uid <span class="token operator">=</span> uids<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'uid'</span><span class="token punctuation">]</span>
+         <span class="token keyword">print</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span>
+    <span class="token comment">#第2种写法</span>
+    <span class="token keyword">for</span> index <span class="token keyword">in</span> respnse1<span class="token punctuation">.</span>json<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'data'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'items'</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+         <span class="token keyword">print</span><span class="token punctuation">(</span>index<span class="token punctuation">[</span><span class="token string">'uid'</span><span class="token punctuation">]</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   构成我们想要的女嘉宾的网页。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> uid <span class="token keyword">in</span> uids<span class="token punctuation">:</span>
+        html_url <span class="token operator">=</span> <span class="token string">'https://love.19lou.com/detail/'</span> <span class="token operator">+</span> uid
+        <span class="token keyword">print</span><span class="token punctuation">(</span>html_url<span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#解析数据" id="user-content-解析数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   解析数据
+  </h3>
+  <p>
+   我们请求我们刚刚得到的html_url，并做数据转换。
+  </p>
+  <pre class="line-numbers"><code class="language-python">html_response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>html_url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
+        <span class="token comment"># print(html_response)</span>
+        html_data <span class="token operator">=</span> html_response<span class="token punctuation">.</span>text
+        selector <span class="token operator">=</span> parsel<span class="token punctuation">.</span>Selector<span class="token punctuation">(</span>html_data<span class="token punctuation">)</span>
+        <span class="token comment"># css选择器，根据标签属性内容提取数据</span>
+        <span class="token comment"># 会找标签</span></code></pre>
+  <p>
+   今天我们就不用正则去匹配我们想要的数据，用CSS去匹配我们想要的数据。
+  </p>
+  <p>
+   <img alt="9901ef60d37644ed861e850871f5bb7f.jpg" src="https://img-blog.csdnimg.cn/9901ef60d37644ed861e850871f5bb7f.jpg" style="max-width: 100%;">
+  </p>
+  <p>
+   其他的数据内容获取都是类似的，这里我们就不做过多的赘述。直接上代码。
+  </p>
+  <pre class="line-numbers"><code class="language-python">name <span class="token operator">=</span> selector<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'.username::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token punctuation">)</span>
+     
+        <span class="token comment"># print(name)</span>
+        info_list <span class="token operator">=</span> selector<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'.info-tag::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getall<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        
+        sex <span class="token operator">=</span> info_list<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        age <span class="token operator">=</span> info_list<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        height <span class="token operator">=</span> info_list<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+        birth <span class="token operator">=</span> info_list<span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span></code></pre>
+  <p>
+   在这里我和大家简单解释一下里面部分代码（info_list[0].split('：')[1]）的含义。
+  </p>
+  <blockquote>
+   <p>
+    # 提取性别&rdquo;女&ldquo;字
+    <br>
+    # print(info_list)#['性别：女', '年龄：29岁', '身高：164cm', '体重：45kg', '出生年份：1994']
+    <br>
+    # print(info_list[0])#性别：女
+    <br>
+    # print(info_list[0].split('：'))#['性别', '女']
+    <br>
+    # print(info_list[0].split('：')[1])#女
+   </p>
+  </blockquote>
+  <p>
+   接下来我们获取其个人基本信息。
+  </p>
+  <pre class="line-numbers"><code class="language-python">basic_list <span class="token operator">=</span> selector<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'.basic-item span::text'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getall<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># basic_list = selector.css('.basic-item span::text').getall()[2:]#切片</span>
+        <span class="token comment"># print(basic_list)</span>
+        shuxiang <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        xingzuo <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        nativePlace <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        location <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        edu <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        marriage <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        job <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        money <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        house <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+        car <span class="token operator">=</span> basic_list<span class="token punctuation">[</span><span class="token number">11</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'：'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#输出数据" id="user-content-输出数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   输出数据
+  </h3>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> sex<span class="token punctuation">,</span> age<span class="token punctuation">,</span> height<span class="token punctuation">,</span> weight<span class="token punctuation">,</span> birth<span class="token punctuation">,</span> shuxiang<span class="token punctuation">,</span> xingzuo<span class="token punctuation">,</span> nativePlace<span class="token punctuation">,</span> location<span class="token punctuation">,</span> edu<span class="token punctuation">,</span> marriage<span class="token punctuation">,</span> job<span class="token punctuation">,</span> money<span class="token punctuation">,</span>
+              house<span class="token punctuation">,</span> car<span class="token punctuation">)</span></code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#保存数据" id="user-content-保存数据">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   保存数据
+  </h3>
+  <p>
+   我们把这些数据保存的csv文件里面，并把女嘉宾的图片保存下来。
+  </p>
+  <pre class="line-numbers"><code class="language-python">dit <span class="token operator">=</span> <span class="token punctuation">{</span>
+            <span class="token string">'昵称'</span><span class="token punctuation">:</span> name<span class="token punctuation">,</span>
+            <span class="token string">'性别'</span><span class="token punctuation">:</span> sex<span class="token punctuation">,</span>
+            <span class="token string">'身高'</span><span class="token punctuation">:</span> height<span class="token punctuation">,</span>
+            <span class="token string">'体重'</span><span class="token punctuation">:</span> weight<span class="token punctuation">,</span>
+            <span class="token string">'出生年份'</span><span class="token punctuation">:</span> birth<span class="token punctuation">,</span>
+            <span class="token string">'生肖'</span><span class="token punctuation">:</span> shuxiang<span class="token punctuation">,</span>
+            <span class="token string">'星座'</span><span class="token punctuation">:</span> xingzuo<span class="token punctuation">,</span>
+            <span class="token string">'籍贯'</span><span class="token punctuation">:</span> nativePlace<span class="token punctuation">,</span>
+            <span class="token string">'所在地'</span><span class="token punctuation">:</span> location<span class="token punctuation">,</span>
+            <span class="token string">'学历'</span><span class="token punctuation">:</span> edu<span class="token punctuation">,</span>
+            <span class="token string">'婚姻状况'</span><span class="token punctuation">:</span> marriage<span class="token punctuation">,</span>
+            <span class="token string">'工作'</span><span class="token punctuation">:</span> job<span class="token punctuation">,</span>
+            <span class="token string">'年收入'</span><span class="token punctuation">:</span> money<span class="token punctuation">,</span>
+            <span class="token string">'房产'</span><span class="token punctuation">:</span> house<span class="token punctuation">,</span>
+            <span class="token string">'车辆'</span><span class="token punctuation">:</span> car<span class="token punctuation">,</span>
+            <span class="token string">'详情页'</span><span class="token punctuation">:</span> img_url<span class="token punctuation">,</span>
+        <span class="token punctuation">}</span>
+        csv_writer<span class="token punctuation">.</span>writerow<span class="token punctuation">(</span>dit<span class="token punctuation">)</span></code></pre>
+  <p>
+   保存图片就比较简单了，和之前一样，requests，然后二进制保存数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python">img_url <span class="token operator">=</span> selector<span class="token punctuation">.</span>css<span class="token punctuation">(</span><span class="token string">'.page .left-detail .abstract .avatar img::attr(src)'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># img_url = selector.css('.page .left-detail .abstract .avatar img')</span>
+        content <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>img_url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span><span class="token punctuation">.</span>content
+        <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'图片\\'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'.jpg'</span><span class="token punctuation">,</span> mode<span class="token operator">=</span><span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+            f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>content<span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#运行结果展示" id="user-content-运行结果展示">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   运行结果展示
+  </h2>
+  <p>
+   <img alt="8e3adb08710e4fefa83cc1f5aca485f6.png" src="https://img-blog.csdnimg.cn/8e3adb08710e4fefa83cc1f5aca485f6.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="0f02de804a9840f6b7051bff4e3030a2.png" src="https://img-blog.csdnimg.cn/0f02de804a9840f6b7051bff4e3030a2.png" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="285a3f92182846339efceb5b5e005c1c.png" src="https://img-blog.csdnimg.cn/285a3f92182846339efceb5b5e005c1c.png" style="max-width: 100%;">
+  </p>
+  <p>
+   相信大家跟着我一步一步操作，也做出了和我一样的效果，是不是很简单。
+  </p>
+  <p>
+   如果有不会的可以在评论区留言。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+   ​
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

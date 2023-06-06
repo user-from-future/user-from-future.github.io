@@ -1,0 +1,250 @@
+<html>
+ <head>
+  <title>
+   【Python】pandas获取全省人口数据并作可视化分析
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    【Python】pandas获取全省人口数据并作可视化分析
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <li title="代码实现">
+    <a href="#user-content-代码实现">
+     代码实现
+    </a>
+   </li>
+   <li title="可视化分析">
+    <a href="#user-content-可视化分析">
+     可视化分析
+    </a>
+   </li>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%E5%89%8D%E8%A8%80">
+    前言
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A0%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0">
+    代码实现
+   </a>
+  </p>
+  <p>
+   <a href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E5%88%86%E6%9E%90">
+    可视化分析
+   </a>
+  </p>
+  <hr>
+  <p>
+   今天我们看看自己所在的省份的人口人数，使用pandas并作可视化分析。
+  </p>
+  <p>
+   <strong>
+    环境使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <p>
+   <strong>
+    模块使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    pandas
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    Pandas 是基于NumPy的一种工具，该工具是为解决数据分析任务而创建的。Pandas 纳入了大量库和一些标准的数据模型，提供了高效地操作大型数据集所需的工具。pandas提供了大量能使我们快速便捷地处理数据的函数和方法。你很快就会发现，它是使Python成为强大而高效的数据分析环境的重要因素之一。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h1>
+  <p>
+   我们以湖南省为例，我们可以在湖南省统计局官网上获取数据。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/6ca348ed93d748d799d9ceaf74878474.png" style="max-width: 100%;">
+  </p>
+  <p>
+   在里面我们可以看到各个地方的人口数据如下：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/37398bbc8ffe45c6aca0676b5e344852.png" style="max-width: 100%;">
+  </p>
+  <p>
+   有的人说了，我可以右击查看源代码或者自己一个一个敲下来。今天，我们不用这个方法，我们用pandas的方法获取数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> pandas <span class="token keyword">as</span> pd
+
+df <span class="token operator">=</span> pd<span class="token punctuation">.</span>read_html<span class="token punctuation">(</span><span class="token string">'http://tjj.hunan.gov.cn/hntj/tjfx/tjgb/rkpc/202105/t20210519_19050124.html'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   运行得到结果如下：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/7e97bf028b7541f2b6fb77425a59b705.png" style="max-width: 100%;">
+  </p>
+  <p>
+   我们会发现这是一个列表，所以需要我们处理数据。
+  </p>
+  <p>
+   <strong>
+    数据清洗
+   </strong>
+  </p>
+  <blockquote>
+   <p>
+    1.删除（remove）
+   </p>
+   <p>
+    2.重命名列索引字段（rename）
+   </p>
+  </blockquote>
+  <pre class="line-numbers"><code class="language-python">df <span class="token operator">=</span> df<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+df <span class="token operator">=</span> df<span class="token punctuation">.</span>rename<span class="token punctuation">(</span>columns<span class="token operator">=</span><span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">:</span> <span class="token string">'城市'</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">:</span> <span class="token string">'人口数'</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">:</span> <span class="token string">'城市比重'</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">:</span> <span class="token string">'乡村比重'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+df <span class="token operator">=</span> df<span class="token punctuation">.</span>drop<span class="token punctuation">(</span>df<span class="token punctuation">.</span>index<span class="token punctuation">[</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+df <span class="token operator">=</span> df<span class="token punctuation">.</span>reset_index<span class="token punctuation">(</span>drop<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   运行结果如下：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/6a7f2e97b2bc43628d7c4a643dcf600e.png" style="max-width: 100%;">
+  </p>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#可视化分析" id="user-content-可视化分析">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   可视化分析
+  </h1>
+  <p>
+   下面我们做可视化分析：
+  </p>
+  <p>
+   首先导入模块
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">from</span> pyecharts<span class="token punctuation">.</span>charts <span class="token keyword">import</span> Bar</code></pre>
+  <p>
+   这里我们要用到pyecharts模块。
+  </p>
+  <blockquote>
+   <p>
+    Pyecharts是一个用于生成Echarts图表的类库，可以与Python进行对接，方便在Python中直接使用数据生成图。Echarts是百度开源的一个数据可视化JS库，生成的图可视化效果非常棒，凭借着良好的交互性，精巧的图表设计，得到了众多开发者的认可。
+   </p>
+   <p>
+    Pyecharts分为v0.5.X和v1两个大版本，v0.5.X和v1间不兼容，v1是一个全新的版本。Pyecharts经过了半年的沉寂后，终于发布了新版本，新版本号将从v1.0.0开始，这是一个全新的、向下不兼容的Pyecharts版本，类似于Python 3与Python 2。不过，如果开发者以前接触过Pyecharts，新版本就很容易上手。
+   </p>
+  </blockquote>
+  <pre class="line-numbers"><code class="language-python">c <span class="token operator">=</span> <span class="token punctuation">(</span>
+
+    Bar<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">.</span>add_xaxis<span class="token punctuation">(</span>df<span class="token punctuation">[</span><span class="token string">'城市'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token punctuation">.</span>add_yaxis<span class="token punctuation">(</span><span class="token string">'人口数'</span><span class="token punctuation">,</span>df<span class="token punctuation">[</span><span class="token string">'人口数'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">)</span></code></pre>
+  <p>
+   可视化数据输出
+  </p>
+  <pre class="line-numbers"><code class="language-python">c<span class="token punctuation">.</span>render<span class="token punctuation">(</span><span class="token string">'人口数.html'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   运行结果展示：
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/fdf8c52603bb457693f50f9bf4569cee.png" style="max-width: 100%;">
+  </p>
+  <p>
+   大家还可以对图表进行设置，看看自己省份的人口分布地图吧。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">from</span> pyecharts<span class="token punctuation">.</span>charts <span class="token keyword">import</span> Map
+map_show <span class="token operator">=</span> df<span class="token punctuation">.</span>groupby<span class="token punctuation">(</span><span class="token string">'城市'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">'人口数'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">sum</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+a <span class="token operator">=</span> <span class="token punctuation">(</span>
+    Map<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span>add<span class="token punctuation">(</span><span class="token string">'人口数'</span><span class="token punctuation">,</span>maptype<span class="token operator">=</span><span class="token string">'湖南'</span><span class="token punctuation">,</span>data_pair<span class="token operator">=</span><span class="token punctuation">[</span><span class="token builtin">list</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">zip</span><span class="token punctuation">(</span>map_show<span class="token punctuation">.</span>index<span class="token punctuation">,</span>map_show<span class="token punctuation">.</span>values<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">)</span></code></pre>
+  <p>
+   可视化地图输出
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/3c438ceaefe64ca9ae658a979f77a96e.png" style="max-width: 100%;">
+  </p>
+  <p>
+   湖南人口分布可视化
+  </p>
+  <p>
+   到这里，大体的效果就做出来了。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

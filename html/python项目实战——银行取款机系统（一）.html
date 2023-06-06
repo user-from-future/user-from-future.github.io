@@ -1,0 +1,346 @@
+<html>
+ <head>
+  <title>
+   python项目实战&mdash;&mdash;银行取款机系统（一）
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python项目实战&mdash;&mdash;银行取款机系统（一）
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="项目实战目录">
+    <a href="#user-content-项目实战目录">
+     项目实战目录
+    </a>
+   </li>
+   <li title="主要有五大类：">
+    <a href="#user-content-主要有五大类">
+     主要有五大类：
+    </a>
+   </li>
+   <ul>
+    <li title="人">
+     <a href="#user-content-人">
+      人
+     </a>
+    </li>
+    <li title="卡">
+     <a href="#user-content-卡">
+      卡
+     </a>
+    </li>
+    <li title="银行">
+     <a href="#user-content-银行">
+      银行
+     </a>
+    </li>
+    <li title="提款机">
+     <a href="#user-content-提款机">
+      提款机
+     </a>
+    </li>
+    <li title="界面">
+     <a href="#user-content-界面">
+      界面
+     </a>
+    </li>
+   </ul>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#项目实战目录" id="user-content-项目实战目录">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   项目实战目录
+  </h2>
+  <p>
+   python项目实战&mdash;&mdash;银行取款机系统（一）
+  </p>
+  <p>
+   <strong>
+    前言
+   </strong>
+  </p>
+  <p>
+   今天我们将通过python完成简易银行提款机系统的实战，我们一步步实现我们的要求。话不多说，看操作。
+  </p>
+  <p>
+   <strong>
+    环境使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <p>
+   <strong>
+    模块使用
+   </strong>
+  </p>
+  <ul>
+   <li>
+    requests
+   </li>
+   <li>
+    time
+   </li>
+  </ul>
+  <p>
+   要想做银行简易取款系统，首先，我们要知道我们要哪些数据，我们先来分析一下。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#主要有五大类" id="user-content-主要有五大类">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    主要有五大类：
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    人
+   </li>
+   <li>
+    卡
+   </li>
+   <li>
+    银行
+   </li>
+   <li>
+    提款机
+   </li>
+   <li>
+    界面
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#人" id="user-content-人">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   人
+  </h3>
+  <blockquote>
+   <p>
+    类名：Person
+   </p>
+   <p>
+    属性：姓名 身份证号码 电话 卡
+   </p>
+   <p>
+    行为：开户 查询 取款 存款 转账 改密 锁定 解锁 补卡 销户
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#卡" id="user-content-卡">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   卡
+  </h3>
+  <blockquote>
+   <p>
+    类名：Card
+   </p>
+   <p>
+    属性：卡号 密码 余额
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#银行" id="user-content-银行">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   银行
+  </h3>
+  <blockquote>
+   <p>
+    类名：bank
+   </p>
+   <p>
+    属性：用户列表 提款机
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#提款机" id="user-content-提款机">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   提款机
+  </h3>
+  <blockquote>
+   <p>
+    类名：ATM
+   </p>
+   <p>
+    行为：开户 查询 取款 存款 转账 改密 锁定 解锁 补卡 销户 退出
+   </p>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#界面" id="user-content-界面">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   界面
+  </h3>
+  <blockquote>
+   <p>
+    类名：View
+   </p>
+   <p>
+    行为：管理员界面 管理员登录 系统功能界面
+   </p>
+  </blockquote>
+  <p>
+   通过上面的分析，我们知道了每一块的大体内容是什么，下面我们先写界面模块。
+  </p>
+  <p>
+   这里我们定义它的名称是view，首先是我们管理员登录的界面
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">def</span> <span class="token function">printAdminView</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"****************************************"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*                                      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*                                      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*              欢迎登录                *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*                                      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*                                      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"****************************************"</span><span class="token punctuation">)</span>
+        inputAdmin<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入管理员账号："</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>admin <span class="token operator">!=</span>inputAdmin<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"账号输入有误！！！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        inputPasswd<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入管理员密码："</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>passwd <span class="token operator">!=</span>inputPasswd<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"密码输入有误！！！"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"登录成功。请稍后&middot;&middot;&middot;&middot;&middot;&middot;"</span><span class="token punctuation">)</span>
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token number">0</span></code></pre>
+  <p>
+   下面就是用户操作的页面
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">def</span> <span class="token function">printSysFunctionView</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"****************************************"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*    开户(1)              查询(2)      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*    取款(3)              存款(4)      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*    转账(5)              改密(6)      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*    锁定(7)              解锁(8)      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*    补卡(9)              销户(0)      *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"*              退出(t)                 *"</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"****************************************"</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   今天，用户操作里面的具体功能，我们下一次再说，今天就简单展示出来。
+  </p>
+  <p>
+   接下来，就是我们的主函数了。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">def</span> main（）
+    <span class="token comment">#界面对象</span>
+    view<span class="token operator">=</span>View<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment">#管理员开机</span>
+    <span class="token keyword">if</span> view<span class="token punctuation">.</span>printAdminView<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token operator">-</span><span class="token number">1</span>
+
+    <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+        <span class="token comment">#等待用户操作</span>
+        view<span class="token punctuation">.</span>printSysFunctionView<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        option<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"请输入你的操作:"</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> option<span class="token operator">==</span><span class="token string">"1"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"开户"</span><span class="token punctuation">)</span>
+        <span class="token keyword">elif</span> option<span class="token operator">==</span><span class="token string">"2"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"查询"</span><span class="token punctuation">)</span>
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"3"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"取款"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"4"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"存款"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"5"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"转账"</span><span class="token punctuation">)</span>
+
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"6"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"改密"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"7"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"锁定"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"8"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"解锁"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"9"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"补卡"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"0"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"销户"</span><span class="token punctuation">)</span>
+
+        <span class="token keyword">elif</span> option <span class="token operator">==</span> <span class="token string">"t"</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"退出"</span><span class="token punctuation">)</span>
+
+        time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   到这里，我们的基本框架就写好了，我们来运行看看吧。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/f2d594b665824cd8a3a19796cda8f7a7.png" style="max-width: 100%;">
+  </p>
+  <p>
+   接下来，登录我们的管理员账号
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/ee6aeace29534948847c0a7295c40cd8.png" style="max-width: 100%;">
+  </p>
+  <p>
+   下面是我们的用户操作，有用具体的代码还没写，这里就直接print输出了。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/a007e74d68604eeeaae8652fb88d73d9.png" style="max-width: 100%;">
+  </p>
+  <p>
+   下一期，我们继续说说银行提款机系统的简单实现。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

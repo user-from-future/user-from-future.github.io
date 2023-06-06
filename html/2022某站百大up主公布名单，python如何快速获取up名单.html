@@ -1,0 +1,374 @@
+<html>
+ <head>
+  <title>
+   2022某站百大up主公布名单，python如何快速获取up名单
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    2022某站百大up主公布名单，python如何快速获取up名单
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title="环境使用">
+     <a href="#user-content-环境使用">
+      环境使用
+     </a>
+    </li>
+    <li title="模块使用">
+     <a href="#user-content-模块使用">
+      模块使用
+     </a>
+    </li>
+    <ul>
+     <li title="模块介绍">
+      <a href="#user-content-模块介绍">
+       模块介绍
+      </a>
+     </li>
+    </ul>
+   </ul>
+   <li title="代码实现">
+    <a href="#user-content-代码实现">
+     代码实现
+    </a>
+   </li>
+   <ul>
+    <li title=" ">
+     <a href="#user-content- ">
+     </a>
+    </li>
+    <ul>
+     <li title="1.确定我们的目标网址">
+      <a href="#user-content-1确定我们的目标网址">
+       1.确定我们的目标网址
+      </a>
+     </li>
+     <li title="2.通过谷歌确定去访问">
+      <a href="#user-content-2通过谷歌确定去访问">
+       2.通过谷歌确定去访问
+      </a>
+     </li>
+     <li title="3.定位目标元素">
+      <a href="#user-content-3定位目标元素">
+       3.定位目标元素
+      </a>
+     </li>
+    </ul>
+   </ul>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%E5%89%8D%E8%A8%80%C2%A0">
+    前言
+   </a>
+  </p>
+  <p>
+   <a href="#%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8">
+    环境使用
+   </a>
+  </p>
+  <p>
+   <a href="#%E6%A8%A1%E5%9D%97%E4%BD%BF%E7%94%A8">
+    模块使用
+   </a>
+  </p>
+  <p>
+   <a href="#%E6%A8%A1%E5%9D%97%E4%BB%8B%E7%BB%8D%C2%A0">
+    模块介绍
+   </a>
+  </p>
+  <p>
+   <a href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0">
+    代码实现
+   </a>
+  </p>
+  <p>
+   <a href="#1.%E7%A1%AE%E5%AE%9A%E6%88%91%E4%BB%AC%E7%9A%84%E7%9B%AE%E6%A0%87%E7%BD%91%E5%9D%80">
+    1.确定我们的目标网址
+   </a>
+  </p>
+  <p>
+   <a href="#2.%E9%80%9A%E8%BF%87%E8%B0%B7%E6%AD%8C%E7%A1%AE%E5%AE%9A%E5%8E%BB%E8%AE%BF%E9%97%AE">
+    2.通过谷歌确定去访问
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A03.%E5%AE%9A%E4%BD%8D%E7%9B%AE%E6%A0%87%E5%85%83%E7%B4%A0">
+    3.定位目标元素
+   </a>
+  </p>
+  <hr>
+  <blockquote>
+   <p>
+    2022年已经过去，各大厂商都在做年度总结。某站在1月13日中午19点30分公布了2022百大UP主名单，那么今年的某站年度UP主都是谁呢？接下来就让我们一起了解一下吧。不过，我们去用python获取名单，是非常有成就的。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    selenium
+   </li>
+   <li>
+    谷歌驱动
+   </li>
+  </ul>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">from</span> selenium <span class="token keyword">import</span> webdriver</code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块介绍" id="user-content-模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   模块介绍
+  </h3>
+  <blockquote>
+   <ul>
+    <li>
+     selenium
+    </li>
+   </ul>
+   <p>
+    之前，我们爬虫是模拟浏览器，但始终不是用的浏览器，但今天我们要说的是另一种爬虫方式，这次不是模拟浏览器，而是用程序去控制浏览器进行一些列操作，也就是selenium。selenium是python的一个第三方库，对外提供的接口可以操控浏览器，比如说输入、点击，跳转，下拉等动作。
+   </p>
+   <p>
+    在使用selenium模块之前要做两件事，一是安装selenium模块，可以用终端用pip，也可以在pycharm里的setting安装；二是我们需要下载一款浏览器驱动程序，下载的驱动程序要和浏览器的版本一致。
+   </p>
+   <ul>
+    <li>
+     谷歌驱动
+    </li>
+   </ul>
+   <p>
+    1.下载网址
+   </p>
+   <p>
+    CNPM Binaries Mirror
+   </p>
+   <p>
+    2.文件安装（放置）位置
+    <br>
+    可以把这个文件理解成一个脚本入口。说它是安装，其实就是把下载的 chromedriver.exe 文件复制到相应的位置。
+   </p>
+   <p>
+    将文件复制到两个位置：1...\python\Scripts复制一份到安装Python的文件夹中的Scripts文件夹中；2.如果用的是Pycharm，再复制一份到..\python\site-packages\selenium\webdriver\chrome文件中。这个地址可以将鼠标放在Pycharm里面安装库的地方的相应库上就能看到。
+   </p>
+  </blockquote>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h1>
+  <p>
+   今天这个目标要求特别简单，只要几行代码就能实现。话不多说，直接进入正题。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#1确定我们的目标网址" id="user-content-1确定我们的目标网址">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.确定我们的目标网址
+  </h3>
+  <pre class="line-numbers"><code class="language-python">目标网址：https<span class="token punctuation">:</span><span class="token operator">//</span>www<span class="token punctuation">.</span>bilibili<span class="token punctuation">.</span>com<span class="token operator">/</span>blackboard<span class="token operator">/</span>BPU2022<span class="token operator">-</span>poweruplist<span class="token punctuation">.</span>html</code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#2通过谷歌确定去访问" id="user-content-2通过谷歌确定去访问">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   2.通过谷歌确定去访问
+  </h3>
+  <pre class="line-numbers"><code class="language-python">driver <span class="token operator">=</span> webdriver<span class="token punctuation">.</span>Chrome<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+driver<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'https://www.bilibili.com/blackboard/BPU2022-poweruplist.html'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   效果如下：
+  </p>
+  <p>
+   <img alt="548f2eb04b75447b93ac97b4343a0e9b.png" src="https://img-blog.csdnimg.cn/548f2eb04b75447b93ac97b4343a0e9b.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#3定位目标元素" id="user-content-3定位目标元素">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   3.定位目标元素
+  </h3>
+  <p>
+   <img alt="9ce55a25548f4bf38172ad340b08ea90.png" src="https://img-blog.csdnimg.cn/9ce55a25548f4bf38172ad340b08ea90.png" style="max-width: 100%;">
+  </p>
+  <p>
+   使用浏览器的开发者工具，我们找到了目标所在的位置，我们直接右击复制得到我们的selector。
+  </p>
+  <pre class="line-numbers"><code class="language-python">selector <span class="token operator">=</span> <span class="token comment">#app &gt; div &gt; div.main-content &gt; div.list &gt; ul &gt; li &gt; p.name</span></code></pre>
+  <p>
+   我们用一行代码得到我们所需要的数据。
+  </p>
+  <pre class="line-numbers"><code class="language-python">names <span class="token operator">=</span> driver<span class="token punctuation">.</span>find_elements<span class="token punctuation">(</span>By<span class="token punctuation">.</span>CSS_SELECTOR<span class="token punctuation">,</span><span class="token string">'#app &gt; div &gt; div.main-content &gt; div.list &gt; ul &gt; li &gt; p.name'</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   这是一个列表，我们都知道用for循环遍历。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> name <span class="token keyword">in</span> names<span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>name<span class="token punctuation">.</span>text<span class="token punctuation">)</span></code></pre>
+  <p>
+   到这里，我们就用了6行代码就获取到了我们想要的数据，为了看到我们是不是获得了100位up主的数据，我们加一个计数，效果如下：
+  </p>
+  <p>
+   <img alt="ce3c11ae740641d194a5af76c6b7080a.png" src="https://img-blog.csdnimg.cn/ce3c11ae740641d194a5af76c6b7080a.png" style="max-width: 100%;">
+  </p>
+  <p>
+   大家感兴趣的还可以获取up主的个人简介，什么照片的。下面这种效果也可以做，按字母排序。
+  </p>
+  <blockquote>
+   <p>
+    2022百大up主:
+   </p>
+   <p>
+    A&mdash;&mdash;矮乐多Aliga、AHALOLO、阿萨Aza
+   </p>
+   <p>
+    B&mdash;&mdash;本喵叫兔兔、不刷题的吴姥姥
+   </p>
+   <p>
+    C&mdash;&mdash;CSGO久菜合子、翠花不太脆
+   </p>
+   <p>
+    D&mdash;&mdash;大狸子切切里、盗月社食遇记、电影最TOP
+   </p>
+   <p>
+    E&mdash;&mdash;尔东和小明、二喵的饭
+   </p>
+   <p>
+    F&mdash;&mdash;FoFTG、非非宇Fay、泛式、芳斯塔芙、范李猿
+   </p>
+   <p>
+    G&mdash;&mdash;怪力老陈、尴尬的铁根er
+   </p>
+   <p>
+    H&mdash;&mdash;HOPICO、侯翠翠、浑元Rysn、画渣不渣的三查、红警HBK08、HOLA小测佬
+   </p>
+   <p>
+    J&mdash;&mdash;剑客范十三、极客湾Geekerwan、九三的耳朵不是特别好、嘉然今天吃什么
+   </p>
+   <p>
+    L&mdash;&mdash;light是光华、-LKs-、老番茄、拉宏桑、利利那TD25、老实憨厚的笑笑、利维坦mY、老饭骨、凉风Kaze、绫人太太啊、罗翔说刑法、刘庸干净又卫生
+   </p>
+   <p>
+    M&mdash;&mdash;Milk缪客、Mr迷瞪、猫不理咖啡、魔法Zc目录、某幻君、绵羊料理、木鱼水心
+   </p>
+   <p>
+    O&mdash;&mdash;哦呼w、欧阳春晓Aurora
+   </p>
+   <p>
+    P&mdash;&mdash;培根悖论唠唠嗑、怕上火暴王老菊、碰碰彭碰彭
+   </p>
+   <p>
+    Q&mdash;&mdash;祁么么mo
+   </p>
+   <p>
+    S&mdash;&mdash;STN工作室、Super也好君、山城小栗旬的理发日记、苏打baka、深海色带鱼、手工耿、设计师深海、酸梨大王、司墨尧smile、帅农鸟哥、森纳映画、 碎嘴企鹅、帅soserious、柿子菌meow
+   </p>
+   <p>
+    T&mdash;&mdash;天才女友GG、谭乔、天真的和感伤的小说家
+   </p>
+   <p>
+    U&mdash;&mdash;Upspeed盛嘉成
+   </p>
+   <p>
+    W&mdash;&mdash;莴苣某人、王师傅和小毛毛、汪苏泷、网不红萌叔Joey、无穷小亮的科普日常
+   </p>
+   <p>
+    X&mdash;&mdash;小潮院长、徐大虾咯、晓观队长、小Lin说、小片片说大片、吸奇侠、小王Albert、逍遥散人、星有野、咻咻满、小约翰可汗
+   </p>
+   <p>
+    Y&mdash;&mdash;衣戈猜想、伊丽莎白鼠、影视飓风、雨说体育徐静雨、硬核的半佛仙人
+   </p>
+   <p>
+    Z&mdash;&mdash;终极小腾、知了解压萌物、籽岷、真探唐仁杰、正直讲史-李正Str
+   </p>
+  </blockquote>
+  <p>
+   <img alt="7be687bf9af64e0ca5cba789680e34ab.jpeg" src="https://img-blog.csdnimg.cn/7be687bf9af64e0ca5cba789680e34ab.jpeg" style="max-width: 100%;">
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

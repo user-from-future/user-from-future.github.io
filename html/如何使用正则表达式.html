@@ -1,0 +1,223 @@
+<html>
+ <head>
+  <title>
+   如何使用正则表达式
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    如何使用正则表达式
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title=" ">
+    <a href="#user-content- ">
+    </a>
+   </li>
+   <ul>
+    <li title="​持续创作，加速成长！​">
+     <a href="#user-content-持续创作加速成长">
+      ​持续创作，加速成长！​
+     </a>
+    </li>
+   </ul>
+   <li title="特殊字符">
+    <a href="#user-content-特殊字符">
+     特殊字符
+    </a>
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#持续创作加速成长" id="user-content-持续创作加速成长">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   ​持续创作，加速成长！​
+  </h3>
+  <p>
+   大家好，大家都听过正则表达式，却不知道正则表达式干什么的。正则表达式是一个特殊的符号系列，它可以帮助我们检查某个字符串和某种模式匹配。在python中，re库拥有全部的正则表达式的功能。
+  </p>
+  <p>
+   我们先说说正则表达式的常用符号吧。
+  </p>
+  <p>
+   &ldquo;.&rdquo;字符为匹配任意单个字符。
+  </p>
+  <p>
+   &ldquo;\&rdquo;字符为转义字符。
+  </p>
+  <p>
+   &ldquo;[&hellip;]&rdquo;为字符集。
+  </p>
+  <p>
+   &ldquo;(.*?)&rdquo; 是python爬虫最常用的一个字符，叫贪心算法，可以匹配任意的字符。
+  </p>
+  <p>
+   eg.
+  </p>
+  <p>
+   `import re
+  </p>
+  <p>
+   a=&lsquo;xxixxjshdxxlovexxsfhxxpythonxx&rsquo;
+  </p>
+  <p>
+   data=re.findall(&lsquo;xx(.*?)xx&rsquo;)
+  </p>
+  <p>
+   print(data)
+  </p>
+  <p>
+   `
+  </p>
+  <blockquote>
+   <p>
+    运行结果
+    <br>
+    [&lsquo;I&rsquo; ,&lsquo;love&rsquo;,&lsquo;python&rsquo;]
+   </p>
+  </blockquote>
+  <p>
+   python中还有一些特殊字符：
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#特殊字符" id="user-content-特殊字符">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   特殊字符
+  </h2>
+  <p>
+   所谓特殊字符，就是一些有特殊含义的字符，比如讲 runoo*b 中的
+   <em>
+    ，简单的说就是表示任何字符串的意思。如果要查找字符串中的 * 符号，则需要对 * 进行转义，即在其前加一个 \，runo*ob 匹配字符串 **runo
+   </em>
+   ob**。
+  </p>
+  <p>
+   许多元字符要求在试图匹配它们时特别对待。若要匹配这些特殊字符，必须首先使字符"转义"，即，将反斜杠字符\ 放在它们前面。下表列出了正则表达式中的特殊字符：
+  </p>
+  <table>
+   <thead>
+    <tr>
+     <th>
+      特别字符
+     </th>
+     <th>
+      描述
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      $
+     </td>
+     <td>
+      匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 &lsquo;\n&rsquo; 或 &lsquo;\r&rsquo;。要匹配 $ 字符本身，请使用 $。
+     </td>
+    </tr>
+    <tr>
+     <td>
+      ( )
+     </td>
+     <td>
+      标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。要匹配这些字符，请使用 ( 和 )。
+     </td>
+    </tr>
+    <tr>
+     <td>
+      *
+     </td>
+     <td>
+      匹配前面的子表达式零次或多次。要匹配 * 字符，请使用 *。
+     </td>
+    </tr>
+    <tr>
+     <td>
+      +
+     </td>
+     <td>
+      匹配前面的子表达式一次或多次。要匹配 + 字符，请使用 +。
+     </td>
+    </tr>
+    <tr>
+     <td>
+      .
+     </td>
+     <td>
+      匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 . 。
+     </td>
+    </tr>
+   </tbody>
+  </table>
+  <p>
+   概念说了一大堆，大家可能也记不住，我直接说几个案例，大家就能明白其他的道理。
+  </p>
+  <p>
+   这是某网的HTML，部分片段如下：
+  </p>
+  <p>
+   &lt;span class=&ldquo;price&rdquo;&gt;&amp;#167;&lt;i&gt;123&lt;/i&gt;&lt;/span&gt;
+  </p>
+  <p>
+   &lt;span class=&ldquo;price&rdquo;&gt;&amp;#167;&lt;i&gt;133&lt;/i&gt;&lt;/span&gt;
+  </p>
+  <p>
+   &lt;span class=&ldquo;price&rdquo;&gt;&amp;#167;&lt;i&gt;156&lt;/i&gt;&lt;/span&gt;
+  </p>
+  <p>
+   &lt;span class=&ldquo;price&rdquo;&gt;&amp;#167;&lt;i&gt;189&lt;/i&gt;&lt;/span&gt;
+  </p>
+  <p>
+   大家会发现只有中间的一段不一样，而不一样的数据就是我们想要的，我们怎么用正则表达式提取出来呢，&lt;span class=&ldquo;price&rdquo;&gt;&amp;#167;&lt;i&gt;(.*?)&lt;/i&gt;&lt;/span&gt; ,就可以了，我们看看效果吧。
+  </p>
+  <p>
+   123
+   <br>
+   133
+   <br>
+   156
+   <br>
+   189
+  </p>
+  <p>
+   这里要用到re库，我就不细说了，主要说说正则表达式怎么用，基本上都大同小异。今天就简单说到这里，下期见。
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

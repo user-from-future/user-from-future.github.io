@@ -1,0 +1,350 @@
+<html>
+ <head>
+  <title>
+   python之爬虫基础（1）
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    python之爬虫基础（1）
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="爬虫基础">
+    <a href="#user-content-爬虫基础">
+     爬虫基础
+    </a>
+   </li>
+   <ul>
+    <li title="1.1 HTTP 基本原理">
+     <a href="#user-content-11-http-基本原理">
+      1.1 HTTP 基本原理
+     </a>
+    </li>
+    <ul>
+     <li title="1.1.1 URI和 URL">
+      <a href="#user-content-111-uri和-url">
+       1.1.1 URI和 URL
+      </a>
+     </li>
+     <li title="1.1.2超文本">
+      <a href="#user-content-112超文本">
+       1.1.2超文本
+      </a>
+     </li>
+     <li title="1.1.3 HTTP 和HTTPS">
+      <a href="#user-content-113-http-和https">
+       1.1.3 HTTP 和HTTPS
+      </a>
+     </li>
+     <li title="1.1.4 HTTP 请求过程">
+      <a href="#user-content-114-http-请求过程">
+       1.1.4 HTTP 请求过程
+      </a>
+     </li>
+     <li title="1.1.5 请求">
+      <a href="#user-content-115-请求">
+       1.1.5 请求
+      </a>
+     </li>
+    </ul>
+   </ul>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#" id="">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <img alt="" src="https://img-blog.csdnimg.cn/01c4630fc425443486d431fa03572c9b.jpeg" style="max-width: 100%;">
+  </h1>
+  <p>
+   <strong>
+    目录
+   </strong>
+  </p>
+  <p>
+   <a href="#%E7%88%AC%E8%99%AB%E5%9F%BA%E7%A1%80">
+    爬虫基础
+   </a>
+  </p>
+  <p>
+   <a href="#1.1%20HTTP%20%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86">
+    1.1 HTTP 基本原理
+   </a>
+  </p>
+  <p>
+   <a href="#1.1.1%20URI%E5%92%8C%20URL">
+    1.1.1 URI和 URL
+   </a>
+  </p>
+  <p>
+   <a href="#1.1.2%E8%B6%85%E6%96%87%E6%9C%AC">
+    1.1.2超文本
+   </a>
+  </p>
+  <p>
+   <a href="#%C2%A01.1.3%20HTTP%20%E5%92%8CHTTPS">
+    1.1.3 HTTP 和HTTPS
+   </a>
+  </p>
+  <p>
+   <a href="#1.1.4%20HTTP%20%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B">
+    1.1.4 HTTP 请求过程
+   </a>
+  </p>
+  <p>
+   <a href="#1.1.5%20%E8%AF%B7%E6%B1%82">
+    1.1.5 请求
+   </a>
+  </p>
+  <hr>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#爬虫基础" id="user-content-爬虫基础">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   爬虫基础
+  </h1>
+  <p>
+   在写爬虫之前，我们还需要了解一些基础知识，如HTTP原理、网页的基础知识、爬虫的基本原理、Cookies的基本原理等。本章中，我们就对这些基础知识做一个简单的总结。
+  </p>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#11-http-基本原理" id="user-content-11-http-基本原理">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.1 HTTP 基本原理
+  </h2>
+  <p>
+   在本节中，我们会详细了解 HTTP的基本原理，了解在浏览器中敲入URL 到获取网页内容之间发生了什么。了解了这些内容，有助于我们进一步了解爬虫的基本原理。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#111-uri和-url" id="user-content-111-uri和-url">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.1.1 URI和 URL
+  </h3>
+  <p>
+   这里我们先了解一下URI和URL,URI的全称为Uniform Resource Identifier,即统―资源标志符，URL的全称为Universal Resource Locator，即统一资源定位符。
+   <br>
+   举例来说，
+   <a href="https://github.com/favicon.ico%E6%98%AF">
+    https://github.com/favicon.ico是
+   </a>
+   GitHub的网站图标链接，它是一个URL，也是一个URI。即有这样的一个图标资源，我们用URLURI来唯一指定了它的访问方式，这其中包括了访问协议 https、访问路径（/即根目录）和资源名称favicon.ico。通过这样一个链接，我们便可以从互联网上找到这个资源，这就是URL/URI。
+   <br>
+   URL是URI的子集，也就是说每个URL都是URI，但不是每个URI都是 URL。那么，怎样的URI不是URL呢?URI还包括一个子类叫作 URN，它的全称为Universal Resource Name，即统―资源名称。URN 只命名资源而不指定如何定位资源，比如urn:isbn:0451450523指定了一本书的ISBN,可以唯一标识这本书，但是没有指定到哪里定位这本书，这就是URN。URL、URN和URI的关系可以用图2-1表示。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/a12b20d87eef43479ff0ee4420490023.png" style="max-width: 100%;">
+  </p>
+  <p>
+   但是在目前的互联网中，URN用得非常少，所以几乎所有的URI都是URL,一般的网页链接我们既可以称为URL,也可以称为URI,我个人习惯称为URL。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#112超文本" id="user-content-112超文本">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.1.2超文本
+  </h3>
+  <p>
+   接下来，我们再了解一一个概念--超文本， 其英文名称叫作hypertext,我们在浏览器里看到的网
+   <br>
+   页就是超文本解析而成的，其网页源代码是一系列HTML代码，里面包含了-系列标签，比如img显
+   <br>
+   示图片，p指定显示段落等。浏览器解析这些标签后，便形成了我们平常看到的网页，而网页的源代码HTML就可以称作超文本。
+   <br>
+   例如，我们在Chrome浏览器里面打开任意一一个页面，如淘宝首页，右击任一地方并选择 &ldquo;检查&rdquo;
+   <br>
+   项(或者直接按快捷键F12)，即可打开浏览器的开发者工具，这时在Elements 选项卡即可看到当前
+   <br>
+   网页的源代码，这些源代码都是超文本，如图2-2所示。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/88c72bde84284f0a9c2f270856f0f574.png" style="max-width: 100%;">
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#113-http-和https" id="user-content-113-http-和https">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.1.3 HTTP 和HTTPS
+  </h3>
+  <p>
+   在淘宝的首页ht://
+   <a href="http://www.t.obao.com/r，" rel="nofollow">
+    www.t.obao.com/r，
+   </a>
+   URL的开头会有http 或https,这就是访问资源需要的协议类型。有时，我们还会看到ftp、sftp、 smb 开头的URL,它们都是协议类型。在爬虫中，我们抓取的页面通常就是http或https协议的，这里首先了解一下这两 个协议的含义。
+   <br>
+   HTTP的全称是Hyper Text Transfer Protocol, 中文名叫作超文本传输协议。HTTP协议是用于从网络传输超文本数据到本地浏览器的传送协议，它能保证高效而准确地传送超文本文档。HTTP由万维网协会( World Wide Web Consortium )和Internet工作小组IETF ( Internet Engineering Task Force )共同合作制定的规范，目前广泛使用的是HTTP1.1版本。
+  </p>
+  <p>
+   HTTPS的全称是Hyper Text Transfer Protocol over Secure Socket Layer,是以安全为目标的HTTP
+   <br>
+   通道，简单讲是HTTP的安全版，即HTTP下加入SSL层，简称为HTTPS。
+   <br>
+   HTTPS的安全基础是SSL,因此通过它传输的内容都是经过SSL加密的，它的主要作用可以分
+   <br>
+   为两种。
+  </p>
+  <blockquote>
+   <ul>
+    <li>
+     建立一个信息安全通道来保证数据传输的安全。
+    </li>
+    <li>
+     确认网站的真实性，凡是使用了HTTPS的网站，都可以通过点击浏览器地址栏的锁头标志来查看网站认证之后的真实信息，也可以通过CA机构颁发的安全签章来查询。现在越来越多的网站和App都已经向HTTPS方向发展，例如:
+    </li>
+    <li>
+     苹果公司强制所有ioS App在2017年1月1日前全部改为使用HTTPS加密，否则App就无法在应用商店上架;
+    </li>
+    <li>
+     谷歌从2017年1月推出的Chrome 56开始，对未进行HTTPS加密的网址链接亮出风险提示，即在地址栏的显著位置提醒用户&ldquo;此网页不安全" ;
+    </li>
+    <li>
+     腾讯微信小程序的官方需求文档要求后台使用HTTPS请求进行网络通信，不满足条件的域名和协议无法请求。
+    </li>
+   </ul>
+  </blockquote>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#114-http-请求过程" id="user-content-114-http-请求过程">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.1.4 HTTP 请求过程
+  </h3>
+  <p>
+   我们在浏览器中输人一一个URL,回车之后便会在浏览器中观察到页面内容。实际上，这个过程是
+   <br>
+   浏览器向网站所在的服务器发送了一个请求，网站服务器接收到这个请求后进行处理和解析，然后返回对应的响应，接着传回给浏览器。响应里包含了页面的源代码等内容，浏览器再对其进行解析，便将网页呈现了出来，模型如图2-4所示。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/727846f9ee41413ca0e3e99d41b570f1.png" style="max-width: 100%;">
+  </p>
+  <p>
+   此处客户端即代表我们自己的PC或手机浏览器，服务器即要访问的网站所在的服务器。
+  </p>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#115-请求" id="user-content-115-请求">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   1.1.5 请求
+  </h3>
+  <p>
+   请求，由客户端向服务端发出，可以分为4部分内容:请求方法( Request Method)、请求的网址
+   <br>
+   ( Request URL )、请求头( Request Headers )、请求体( Request Body )。
+   <br>
+   1.请求方法
+   <br>
+   常见的请求方法有两种: GET和POST。
+  </p>
+  <p>
+   在浏览器中直接输入URL并回车，这便发起了一个GET请求，请求的参数会直接包含到URL里。例如，在百度中搜索Python,这就是一一个GET请求，链接为htps://www baidu. com/s?wd= Python,其中URL中包含了请求的参数信息，这里参数wd表示要搜寻的关键字。POST 请求大多在表单提交时发起。比如，对于一个登录表单，输人用户名和密码后，点击&ldquo;登录&rdquo;按钮，这通常会发起一个 POST请求，其数据通常以表单的形式传输，而不会体现在URL中。
+  </p>
+  <blockquote>
+   <p>
+    GET和POST请求方法有如下区别：
+   </p>
+  </blockquote>
+  <blockquote>
+   <ul>
+    <li>
+     GET请求中的参数包含在URL里面，数据可以在URL中看到，而POST请求的URL不会包含这些数据，数据都是通过表单形式传输的，会包含在请求体中。
+    </li>
+    <li>
+     GET请求提交的数据最多只有1024字节，而POST方式没有限制。
+    </li>
+   </ul>
+  </blockquote>
+  <p>
+   一般来说，登录时，需要提交用户名和密码，其中包含了敏感信息，使用GET方式请求的话，密码就会暴露在URL里面，造成密码泄露，所以这里最好以POST方式发送。上传文件时，由于文件内容比较大，也会选用POST方式。
+   <br>
+   我们平常遇到的绝大部分请求都是GET或POST请求，另外还有一些请求方法， 如GET、HEAD、
+   <br>
+   POST、PUT、 DELETE、OPTIONS、CONNECT、TRACE等，我们简单将其总结为表2-1。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/b90f910af66a42449766e970f9c99309.png" style="max-width: 100%;">
+  </p>
+  <p>
+   2.请求的网址
+   <br>
+   请求的网址，即统一资源定 位符URL,它可以唯一确定 我们想请求的资源。
+   <br>
+   3.请求头
+   <br>
+   请求头，用来说明服务器要使用的附加信息，比较重要的信息有Cookie . Referer. User-Agent等。
+   <br>
+   4.请求体
+   <br>
+   请求体一般承载的内容是 POST请求中的表单数据，而对于GET请求，请求体则为空。
+  </p>
+  <p>
+   1.1.6 响应
+   <br>
+   响应，由服务端返回给客户端，可以分为三部分:响应状态码( Response Status Code).响应头
+   <br>
+   ( Response Headers )和响应体( Response Body )。
+   <br>
+   1.响应状态码
+   <br>
+   响应状态码表示服务器的响应状态，如200代表服务器正常响应，404代表页面未找到，500代表
+   <br>
+   服务器内部发生错误。在爬虫中，我们可以根据状态码来判断服务器响应状态，如状态码为200,则
+   <br>
+   证明成功返回数据，再进行进一步的处理， 否则直接忽略。
+  </p>
+  <p>
+   2.响应头
+   <br>
+   响应头包含了服务器对请求的应答信息，如Content-Type、Server、 Set-Cookie 等。
+  </p>
+  <p>
+   3.响应体
+   <br>
+   最重要的当属响应体的内容了。响应的正文数据都在响应体中，比如请求网页时，它的响应体就
+   <br>
+   是网页的HTML代码;请求- -张图片时 ,它的响应体就是图片的二进制数据。我们做爬虫请求网页后，要解析的内容就是响应体.
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>

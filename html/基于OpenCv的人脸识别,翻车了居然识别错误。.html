@@ -1,0 +1,338 @@
+<html>
+ <head>
+  <title>
+   基于OpenCv的人脸识别,翻车了居然识别错误。
+  </title>
+  <link data-noprefix="" href="prism.css" rel="stylesheet">
+  <style>
+   a{
+    color: black;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+}
+ul{
+    list-style: none;
+}
+#catalogue {
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    padding: 5px 10px;
+    position: absolute;
+    border: 1px solid blue;
+    background-color: white;
+}
+  </style>
+ </head>
+ <body>
+  <h1>
+   <a>
+    基于OpenCv的人脸识别,翻车了居然识别错误。
+   </a>
+  </h1>
+  <ul id="catalogue">
+   <li title="返回目录">
+    <a href="/html">
+     返回目录
+    </a>
+   </li>
+   <li title="前言">
+    <a href="#user-content-前言">
+     前言
+    </a>
+   </li>
+   <ul>
+    <li title="环境使用">
+     <a href="#user-content-环境使用">
+      环境使用
+     </a>
+    </li>
+    <li title="模块使用">
+     <a href="#user-content-模块使用">
+      模块使用
+     </a>
+    </li>
+    <ul>
+     <li title="模块介绍">
+      <a href="#user-content-模块介绍">
+       模块介绍
+      </a>
+     </li>
+     <li title="模块安装问题:">
+      <a href="#user-content-模块安装问题">
+       模块安装问题:
+      </a>
+     </li>
+    </ul>
+    <li title="代码实现">
+     <a href="#user-content-代码实现">
+      代码实现
+     </a>
+    </li>
+    <li title="效果展示">
+     <a href="#user-content-效果展示">
+      效果展示
+     </a>
+    </li>
+   </ul>
+  </ul>
+  <h1>
+   <a aria-hidden="true" class="anchor" href="#前言" id="user-content-前言">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   前言
+  </h1>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/1b83b1d3fff541e6844ba7bfc4b8f724.gif" style="max-width: 100%;">
+  </p>
+  <blockquote>
+   <p>
+    我们身边的人脸识别有车站检票，监控人脸，无人超市，支付宝人脸支付，上班打卡，人脸解锁手机。
+   </p>
+   <p>
+    人脸检测是人脸识别系统组成的关键部分之一，其目的是检测出任意给定图片中的包含的一个或多个人脸，是人脸识别、表情识别等下游任务的基础。人脸识别是通过采集包含人脸的图像或视频数据，通过对比和分析人脸特征信息从而实现身份识别的生物识别技术，是人脸识别系统的核心组件。
+   </p>
+   <p>
+    如今人脸识别系统广泛应用于学校、医院和车站等需要对入场人员身份信息进行确认和鉴别的场所。进而利用人脸检测算法检测出摄像头拍摄图片中包含的人脸，再使用识别算法对比当前人脸特征和数据库内的人脸特征，确认人员身份，最终输出人员相关的身份信息并生成打卡记录。在实际的运行测试中，针对戴口罩的场景也有优异的表现，满足公司打卡应用的实际需求。
+   </p>
+   <p>
+    今天我们就说说利用opencv打造人脸识别系统。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#环境使用" id="user-content-环境使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    环境使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    python 3.9
+   </li>
+   <li>
+    pycharm
+   </li>
+  </ul>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#模块使用" id="user-content-模块使用">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块使用
+   </strong>
+  </h2>
+  <ul>
+   <li>
+    sys
+   </li>
+   <li>
+    cv2
+   </li>
+   <li>
+    face_recognition
+   </li>
+  </ul>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块介绍" id="user-content-模块介绍">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块介绍
+   </strong>
+  </h3>
+  <blockquote>
+   <p>
+    <strong>
+     1.opencv
+    </strong>
+   </p>
+   <p>
+    关于OpenCv
+    <br>
+    Opencv是一个开源的的跨平台计算机视觉库，内部实现了图像处理和计算机视觉方面的很多通用算法，对于python而言，在引用opencv库的时候需要写为import cv2。其中，cv2是opencv的C++命名空间名称，使用它来表示调用的是C++开发的opencv的接口。
+   </p>
+   <p>
+    目前人脸识别有很多较为成熟的方法，这里调用OpenCv库，而OpenCV又提供了三种人脸识别方法，分别是LBPH方法、EigenFishfaces方法、Fisherfaces方法。本文采用的是LBPH（Local Binary Patterns Histogram，局部二值模式直方图）方法。在OpenCV中，可以用函数cv2.face.LBPHFaceRecognizer_create()生成LBPH识别器实例模型，然后应用cv2.face_FaceRecognizer.train()函数完成训练，最后用cv2.face_FaceRecognizer.predict()函数完成人脸识别。
+   </p>
+   <p>
+    CascadeClassifier，是Opencv中做人脸检测的时候的一个级联分类器。并且既可以使用Haar，也可以使用LBP特征。其中Haar特征是一种反映图像的灰度变化的，像素分模块求差值的一种特征。它分为三类：边缘特征、线性特征、中心特征和对角线特征。
+   </p>
+   <p>
+    <strong>
+     2.face_recognition
+    </strong>
+   </p>
+   <p>
+    face_recognition库是世界上最简洁的人脸识别库，可以使用Python和命令行工具提取、识别、操作人脸。
+   </p>
+   <p>
+    face_recognition库的人脸识别是基于业内领先的C++开源库 dlib中的深度学习模型，用Labeled Faces in the Wild人脸数据集进行测试，有高达99.38%的准确率。但对小孩和亚洲人脸的识别准确率尚待提升。
+   </p>
+   <p>
+    <strong>
+     3.sys
+    </strong>
+   </p>
+   <p>
+    sys模块是最常用的和python解释器交互的模块,sys模块可供访问由解释器(interpreter)使用或维护的变量和与解释器进行交互的函数。
+    <code>
+     sys
+    </code>
+    模块提供了许多函数和变量来处理 Python 运行时环境的不同部分。
+   </p>
+  </blockquote>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">import</span> cv2
+
+<span class="token keyword">import</span> sys
+
+<span class="token keyword">import</span> face_recognition</code></pre>
+  <h3>
+   <a aria-hidden="true" class="anchor" href="#模块安装问题" id="user-content-模块安装问题">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   <strong>
+    模块安装问题:
+   </strong>
+  </h3>
+  <p>
+   <strong>
+    本次比较难库，会出很多问题，比如将dlib库和opencv库。有问题自行百度，可以学到很多东西。
+   </strong>
+  </p>
+  <ul>
+   <li>
+    如果安装python第三方模块:
+   </li>
+  </ul>
+  <blockquote>
+   <p>
+    win + R 输入 cmd 点击确定, 输入安装命令 pip install 模块名 (pip install requests) 回车
+   </p>
+   <p>
+    在pycharm中点击Terminal(终端) 输入安装命令
+   </p>
+  </blockquote>
+  <ul>
+   <li>
+    安装失败原因:
+   </li>
+  </ul>
+  <blockquote>
+   <ul>
+    <li>
+     失败一: pip 不是内部命令
+    </li>
+   </ul>
+   <p>
+    解决方法: 设置环境变量
+   </p>
+   <ul>
+    <li>
+     失败二: 出现大量报红 (read time out)
+    </li>
+   </ul>
+   <p>
+    解决方法: 因为是网络链接超时, 需要切换镜像源
+   </p>
+   <pre class="line-numbers"><code class="language-python">清华：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple
+    阿里云：https<span class="token punctuation">:</span><span class="token operator">//</span>mirrors<span class="token punctuation">.</span>aliyun<span class="token punctuation">.</span>com<span class="token operator">/</span>pypi<span class="token operator">/</span>simple<span class="token operator">/</span>
+    中国科技大学 https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>mirrors<span class="token punctuation">.</span>ustc<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>simple<span class="token operator">/</span>
+    华中理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>hustunique<span class="token punctuation">.</span>com<span class="token operator">/</span>
+    山东理工大学：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>sdutlinux<span class="token punctuation">.</span>org<span class="token operator">/</span>
+    豆瓣：https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>douban<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span>
+    例如：pip3 install <span class="token operator">-</span>i https<span class="token punctuation">:</span><span class="token operator">//</span>pypi<span class="token punctuation">.</span>doubanio<span class="token punctuation">.</span>com<span class="token operator">/</span>simple<span class="token operator">/</span> 模块名</code></pre>
+   <p>
+    失败三: cmd里面显示已经安装过了, 或者安装成功了, 但是在pycharm里面还是无法导入
+   </p>
+   <p>
+    解决方法: 可能安装了多个python版本 (anaconda 或者 python 安装一个即可) 卸载一个就好，或者你pycharm里面python解释器没有设置好。
+   </p>
+  </blockquote>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#代码实现" id="user-content-代码实现">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   代码实现
+  </h2>
+  <p>
+   首先，我们先准备一张有两个人的图片。
+  </p>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/c724c451c6a7443d9b309b0d24d47f45.png" style="max-width: 100%;">
+  </p>
+  <p>
+   这个明显不是一个人吧。下面我们将通过opencv和face_recognition算法，进行人脸识别，看看是不是一个人。
+  </p>
+  <p>
+   首先，安装好我们的库。确保没有问题，接下来，我们开始写代码了。
+  </p>
+  <pre class="line-numbers"><code class="language-python">face_image <span class="token operator">=</span> face_recognition<span class="token punctuation">.</span>load_image_file<span class="token punctuation">(</span><span class="token string">r'1.png'</span><span class="token punctuation">)</span>
+
+face_encodings <span class="token operator">=</span> face_recognition<span class="token punctuation">.</span>face_encodings<span class="token punctuation">(</span>face_image<span class="token punctuation">)</span> 
+face_locations <span class="token operator">=</span> face_recognition<span class="token punctuation">.</span>face_locations<span class="token punctuation">(</span>face_image<span class="token punctuation">)</span>
+
+face1 <span class="token operator">=</span> face_encodings<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+face2 <span class="token operator">=</span> face_encodings<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+
+
+result <span class="token operator">=</span> face_recognition<span class="token punctuation">.</span>compare_faces<span class="token punctuation">(</span><span class="token punctuation">[</span>face1<span class="token punctuation">]</span><span class="token punctuation">,</span> face2<span class="token punctuation">,</span> tolerance<span class="token operator">=</span><span class="token number">0.5</span><span class="token punctuation">)</span></code></pre>
+  <p>
+   下面我们来判断人脸是否一样。
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">if</span> result <span class="token operator">==</span> <span class="token punctuation">[</span><span class="token boolean">True</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    name <span class="token operator">=</span> <span class="token string">'YES'</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+    name <span class="token operator">=</span> <span class="token string">'NO'</span></code></pre>
+  <p>
+   下面进行绘图
+  </p>
+  <pre class="line-numbers"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>face_encodings<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+    face_encoding <span class="token operator">=</span> face_encodings<span class="token punctuation">[</span><span class="token punctuation">(</span>i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+    face_location <span class="token operator">=</span> face_locations<span class="token punctuation">[</span><span class="token punctuation">(</span>i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+    top<span class="token punctuation">,</span> right<span class="token punctuation">,</span> bottom<span class="token punctuation">,</span> left <span class="token operator">=</span> face_location
+
+    cv2<span class="token punctuation">.</span>rectangle<span class="token punctuation">(</span>face_image<span class="token punctuation">,</span> <span class="token punctuation">(</span>left<span class="token punctuation">,</span> top<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>right<span class="token punctuation">,</span> bottom<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+
+face_image_rgb <span class="token operator">=</span> cv2<span class="token punctuation">.</span>cvtColor<span class="token punctuation">(</span>face_image<span class="token punctuation">,</span>cv2<span class="token punctuation">.</span>COLOR_BGR2RGB<span class="token punctuation">)</span>
+
+cv2<span class="token punctuation">.</span>imshow<span class="token punctuation">(</span><span class="token string">'output'</span><span class="token punctuation">,</span>face_image_rgb<span class="token punctuation">)</span></code></pre>
+  <h2>
+   <a aria-hidden="true" class="anchor" href="#效果展示" id="user-content-效果展示">
+    <span aria-hidden="true" class="octicon octicon-link">
+    </span>
+   </a>
+   效果展示
+  </h2>
+  <p>
+   <img alt="" src="https://img-blog.csdnimg.cn/76f3f449425f48a0915f27842e3f31c4.png" style="max-width: 100%;">
+  </p>
+  <p>
+   哎呀，翻车了，怎么判成是一个人呢。等我研究研究。哪里出问题呢，大致就是这样。
+  </p>
+  <p>
+   <img alt="6adf31c8c5dd4e6a83314f4805b30bc1.jpg" src="https://img-blog.csdnimg.cn/6adf31c8c5dd4e6a83314f4805b30bc1.jpg" style="max-width: 100%;">
+  </p>
+  <script src="prism.js">
+  </script>
+  <script>
+   window.onscroll = function() {
+    document.getElementById('catalogue').style.top = window.pageYOffset + 'px';
+}
+  </script>
+ </body>
+</html>
